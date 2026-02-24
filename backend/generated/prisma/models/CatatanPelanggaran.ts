@@ -51,6 +51,7 @@ export type CatatanPelanggaranMinAggregateOutputType = {
   semester: string | null
   time: Date | null
   bukti: string | null
+  tahun_ajaran: string | null
 }
 
 export type CatatanPelanggaranMaxAggregateOutputType = {
@@ -62,6 +63,7 @@ export type CatatanPelanggaranMaxAggregateOutputType = {
   semester: string | null
   time: Date | null
   bukti: string | null
+  tahun_ajaran: string | null
 }
 
 export type CatatanPelanggaranCountAggregateOutputType = {
@@ -73,6 +75,7 @@ export type CatatanPelanggaranCountAggregateOutputType = {
   semester: number
   time: number
   bukti: number
+  tahun_ajaran: number
   _all: number
 }
 
@@ -102,6 +105,7 @@ export type CatatanPelanggaranMinAggregateInputType = {
   semester?: true
   time?: true
   bukti?: true
+  tahun_ajaran?: true
 }
 
 export type CatatanPelanggaranMaxAggregateInputType = {
@@ -113,6 +117,7 @@ export type CatatanPelanggaranMaxAggregateInputType = {
   semester?: true
   time?: true
   bukti?: true
+  tahun_ajaran?: true
 }
 
 export type CatatanPelanggaranCountAggregateInputType = {
@@ -124,6 +129,7 @@ export type CatatanPelanggaranCountAggregateInputType = {
   semester?: true
   time?: true
   bukti?: true
+  tahun_ajaran?: true
   _all?: true
 }
 
@@ -222,6 +228,7 @@ export type CatatanPelanggaranGroupByOutputType = {
   semester: string
   time: Date
   bukti: string
+  tahun_ajaran: string
   _count: CatatanPelanggaranCountAggregateOutputType | null
   _avg: CatatanPelanggaranAvgAggregateOutputType | null
   _sum: CatatanPelanggaranSumAggregateOutputType | null
@@ -256,6 +263,7 @@ export type CatatanPelanggaranWhereInput = {
   semester?: Prisma.StringFilter<"CatatanPelanggaran"> | string
   time?: Prisma.DateTimeFilter<"CatatanPelanggaran"> | Date | string
   bukti?: Prisma.StringFilter<"CatatanPelanggaran"> | string
+  tahun_ajaran?: Prisma.StringFilter<"CatatanPelanggaran"> | string
   pelanggar?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   kelasPelanggar?: Prisma.XOR<Prisma.KelasScalarRelationFilter, Prisma.KelasWhereInput>
   pencatat?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -271,6 +279,7 @@ export type CatatanPelanggaranOrderByWithRelationInput = {
   semester?: Prisma.SortOrder
   time?: Prisma.SortOrder
   bukti?: Prisma.SortOrder
+  tahun_ajaran?: Prisma.SortOrder
   pelanggar?: Prisma.UserOrderByWithRelationInput
   kelasPelanggar?: Prisma.KelasOrderByWithRelationInput
   pencatat?: Prisma.UserOrderByWithRelationInput
@@ -289,6 +298,7 @@ export type CatatanPelanggaranWhereUniqueInput = Prisma.AtLeast<{
   semester?: Prisma.StringFilter<"CatatanPelanggaran"> | string
   time?: Prisma.DateTimeFilter<"CatatanPelanggaran"> | Date | string
   bukti?: Prisma.StringFilter<"CatatanPelanggaran"> | string
+  tahun_ajaran?: Prisma.StringFilter<"CatatanPelanggaran"> | string
   pelanggar?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   kelasPelanggar?: Prisma.XOR<Prisma.KelasScalarRelationFilter, Prisma.KelasWhereInput>
   pencatat?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -304,6 +314,7 @@ export type CatatanPelanggaranOrderByWithAggregationInput = {
   semester?: Prisma.SortOrder
   time?: Prisma.SortOrder
   bukti?: Prisma.SortOrder
+  tahun_ajaran?: Prisma.SortOrder
   _count?: Prisma.CatatanPelanggaranCountOrderByAggregateInput
   _avg?: Prisma.CatatanPelanggaranAvgOrderByAggregateInput
   _max?: Prisma.CatatanPelanggaranMaxOrderByAggregateInput
@@ -323,12 +334,14 @@ export type CatatanPelanggaranScalarWhereWithAggregatesInput = {
   semester?: Prisma.StringWithAggregatesFilter<"CatatanPelanggaran"> | string
   time?: Prisma.DateTimeWithAggregatesFilter<"CatatanPelanggaran"> | Date | string
   bukti?: Prisma.StringWithAggregatesFilter<"CatatanPelanggaran"> | string
+  tahun_ajaran?: Prisma.StringWithAggregatesFilter<"CatatanPelanggaran"> | string
 }
 
 export type CatatanPelanggaranCreateInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
   pelanggar: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPelanggarInput
   kelasPelanggar: Prisma.KelasCreateNestedOneWithoutCatatanPelanggaranInput
   pencatat: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPencatatInput
@@ -344,12 +357,14 @@ export type CatatanPelanggaranUncheckedCreateInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranUpdateInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggar?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPelanggarNestedInput
   kelasPelanggar?: Prisma.KelasUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
   pencatat?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPencatatNestedInput
@@ -365,6 +380,7 @@ export type CatatanPelanggaranUncheckedUpdateInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranCreateManyInput = {
@@ -376,12 +392,14 @@ export type CatatanPelanggaranCreateManyInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranUpdateManyMutationInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranUncheckedUpdateManyInput = {
@@ -393,6 +411,7 @@ export type CatatanPelanggaranUncheckedUpdateManyInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranListRelationFilter = {
@@ -414,6 +433,7 @@ export type CatatanPelanggaranCountOrderByAggregateInput = {
   semester?: Prisma.SortOrder
   time?: Prisma.SortOrder
   bukti?: Prisma.SortOrder
+  tahun_ajaran?: Prisma.SortOrder
 }
 
 export type CatatanPelanggaranAvgOrderByAggregateInput = {
@@ -433,6 +453,7 @@ export type CatatanPelanggaranMaxOrderByAggregateInput = {
   semester?: Prisma.SortOrder
   time?: Prisma.SortOrder
   bukti?: Prisma.SortOrder
+  tahun_ajaran?: Prisma.SortOrder
 }
 
 export type CatatanPelanggaranMinOrderByAggregateInput = {
@@ -444,6 +465,7 @@ export type CatatanPelanggaranMinOrderByAggregateInput = {
   semester?: Prisma.SortOrder
   time?: Prisma.SortOrder
   bukti?: Prisma.SortOrder
+  tahun_ajaran?: Prisma.SortOrder
 }
 
 export type CatatanPelanggaranSumOrderByAggregateInput = {
@@ -630,6 +652,7 @@ export type CatatanPelanggaranCreateWithoutKelasPelanggarInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
   pelanggar: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPelanggarInput
   pencatat: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPencatatInput
   pelanggaran: Prisma.PelanggaranCreateNestedOneWithoutCatatanPelanggaranInput
@@ -643,6 +666,7 @@ export type CatatanPelanggaranUncheckedCreateWithoutKelasPelanggarInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranCreateOrConnectWithoutKelasPelanggarInput = {
@@ -683,12 +707,14 @@ export type CatatanPelanggaranScalarWhereInput = {
   semester?: Prisma.StringFilter<"CatatanPelanggaran"> | string
   time?: Prisma.DateTimeFilter<"CatatanPelanggaran"> | Date | string
   bukti?: Prisma.StringFilter<"CatatanPelanggaran"> | string
+  tahun_ajaran?: Prisma.StringFilter<"CatatanPelanggaran"> | string
 }
 
 export type CatatanPelanggaranCreateWithoutPelanggarInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
   kelasPelanggar: Prisma.KelasCreateNestedOneWithoutCatatanPelanggaranInput
   pencatat: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPencatatInput
   pelanggaran: Prisma.PelanggaranCreateNestedOneWithoutCatatanPelanggaranInput
@@ -702,6 +728,7 @@ export type CatatanPelanggaranUncheckedCreateWithoutPelanggarInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranCreateOrConnectWithoutPelanggarInput = {
@@ -718,6 +745,7 @@ export type CatatanPelanggaranCreateWithoutPencatatInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
   pelanggar: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPelanggarInput
   kelasPelanggar: Prisma.KelasCreateNestedOneWithoutCatatanPelanggaranInput
   pelanggaran: Prisma.PelanggaranCreateNestedOneWithoutCatatanPelanggaranInput
@@ -731,6 +759,7 @@ export type CatatanPelanggaranUncheckedCreateWithoutPencatatInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranCreateOrConnectWithoutPencatatInput = {
@@ -779,6 +808,7 @@ export type CatatanPelanggaranCreateWithoutPelanggaranInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
   pelanggar: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPelanggarInput
   kelasPelanggar: Prisma.KelasCreateNestedOneWithoutCatatanPelanggaranInput
   pencatat: Prisma.UserCreateNestedOneWithoutCatatanSebagaiPencatatInput
@@ -792,6 +822,7 @@ export type CatatanPelanggaranUncheckedCreateWithoutPelanggaranInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranCreateOrConnectWithoutPelanggaranInput = {
@@ -828,12 +859,14 @@ export type CatatanPelanggaranCreateManyKelasPelanggarInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranUpdateWithoutKelasPelanggarInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggar?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPelanggarNestedInput
   pencatat?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPencatatNestedInput
   pelanggaran?: Prisma.PelanggaranUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
@@ -847,6 +880,7 @@ export type CatatanPelanggaranUncheckedUpdateWithoutKelasPelanggarInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranUncheckedUpdateManyWithoutKelasPelanggarInput = {
@@ -857,6 +891,7 @@ export type CatatanPelanggaranUncheckedUpdateManyWithoutKelasPelanggarInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranCreateManyPelanggarInput = {
@@ -867,6 +902,7 @@ export type CatatanPelanggaranCreateManyPelanggarInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranCreateManyPencatatInput = {
@@ -877,12 +913,14 @@ export type CatatanPelanggaranCreateManyPencatatInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranUpdateWithoutPelanggarInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
   kelasPelanggar?: Prisma.KelasUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
   pencatat?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPencatatNestedInput
   pelanggaran?: Prisma.PelanggaranUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
@@ -896,6 +934,7 @@ export type CatatanPelanggaranUncheckedUpdateWithoutPelanggarInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranUncheckedUpdateManyWithoutPelanggarInput = {
@@ -906,12 +945,14 @@ export type CatatanPelanggaranUncheckedUpdateManyWithoutPelanggarInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranUpdateWithoutPencatatInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggar?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPelanggarNestedInput
   kelasPelanggar?: Prisma.KelasUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
   pelanggaran?: Prisma.PelanggaranUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
@@ -925,6 +966,7 @@ export type CatatanPelanggaranUncheckedUpdateWithoutPencatatInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranUncheckedUpdateManyWithoutPencatatInput = {
@@ -935,6 +977,7 @@ export type CatatanPelanggaranUncheckedUpdateManyWithoutPencatatInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranCreateManyPelanggaranInput = {
@@ -945,12 +988,14 @@ export type CatatanPelanggaranCreateManyPelanggaranInput = {
   semester: string
   time?: Date | string
   bukti: string
+  tahun_ajaran: string
 }
 
 export type CatatanPelanggaranUpdateWithoutPelanggaranInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggar?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPelanggarNestedInput
   kelasPelanggar?: Prisma.KelasUpdateOneRequiredWithoutCatatanPelanggaranNestedInput
   pencatat?: Prisma.UserUpdateOneRequiredWithoutCatatanSebagaiPencatatNestedInput
@@ -964,6 +1009,7 @@ export type CatatanPelanggaranUncheckedUpdateWithoutPelanggaranInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CatatanPelanggaranUncheckedUpdateManyWithoutPelanggaranInput = {
@@ -974,6 +1020,7 @@ export type CatatanPelanggaranUncheckedUpdateManyWithoutPelanggaranInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bukti?: Prisma.StringFieldUpdateOperationsInput | string
+  tahun_ajaran?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -987,6 +1034,7 @@ export type CatatanPelanggaranSelect<ExtArgs extends runtime.Types.Extensions.In
   semester?: boolean
   time?: boolean
   bukti?: boolean
+  tahun_ajaran?: boolean
   pelanggar?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   kelasPelanggar?: boolean | Prisma.KelasDefaultArgs<ExtArgs>
   pencatat?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1002,6 +1050,7 @@ export type CatatanPelanggaranSelectCreateManyAndReturn<ExtArgs extends runtime.
   semester?: boolean
   time?: boolean
   bukti?: boolean
+  tahun_ajaran?: boolean
   pelanggar?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   kelasPelanggar?: boolean | Prisma.KelasDefaultArgs<ExtArgs>
   pencatat?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1017,6 +1066,7 @@ export type CatatanPelanggaranSelectUpdateManyAndReturn<ExtArgs extends runtime.
   semester?: boolean
   time?: boolean
   bukti?: boolean
+  tahun_ajaran?: boolean
   pelanggar?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   kelasPelanggar?: boolean | Prisma.KelasDefaultArgs<ExtArgs>
   pencatat?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1032,9 +1082,10 @@ export type CatatanPelanggaranSelectScalar = {
   semester?: boolean
   time?: boolean
   bukti?: boolean
+  tahun_ajaran?: boolean
 }
 
-export type CatatanPelanggaranOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "idPelanggar" | "idKelasPelanggar" | "idPencatat" | "idPelanggaran" | "semester" | "time" | "bukti", ExtArgs["result"]["catatanPelanggaran"]>
+export type CatatanPelanggaranOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "idPelanggar" | "idKelasPelanggar" | "idPencatat" | "idPelanggaran" | "semester" | "time" | "bukti" | "tahun_ajaran", ExtArgs["result"]["catatanPelanggaran"]>
 export type CatatanPelanggaranInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pelanggar?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   kelasPelanggar?: boolean | Prisma.KelasDefaultArgs<ExtArgs>
@@ -1071,6 +1122,7 @@ export type $CatatanPelanggaranPayload<ExtArgs extends runtime.Types.Extensions.
     semester: string
     time: Date
     bukti: string
+    tahun_ajaran: string
   }, ExtArgs["result"]["catatanPelanggaran"]>
   composites: {}
 }
@@ -1506,6 +1558,7 @@ export interface CatatanPelanggaranFieldRefs {
   readonly semester: Prisma.FieldRef<"CatatanPelanggaran", 'String'>
   readonly time: Prisma.FieldRef<"CatatanPelanggaran", 'DateTime'>
   readonly bukti: Prisma.FieldRef<"CatatanPelanggaran", 'String'>
+  readonly tahun_ajaran: Prisma.FieldRef<"CatatanPelanggaran", 'String'>
 }
     
 

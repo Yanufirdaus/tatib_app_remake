@@ -245,15 +245,15 @@ export type SiswaOrderByWithRelationInput = {
 export type SiswaWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   nisn?: string
+  profileId?: number
   AND?: Prisma.SiswaWhereInput | Prisma.SiswaWhereInput[]
   OR?: Prisma.SiswaWhereInput[]
   NOT?: Prisma.SiswaWhereInput | Prisma.SiswaWhereInput[]
-  profileId?: Prisma.IntFilter<"Siswa"> | number
   kelasId?: Prisma.IntFilter<"Siswa"> | number
   poin?: Prisma.IntFilter<"Siswa"> | number
   profileSiswa?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   kelas?: Prisma.XOR<Prisma.KelasScalarRelationFilter, Prisma.KelasWhereInput>
-}, "id" | "nisn">
+}, "id" | "nisn" | "profileId">
 
 export type SiswaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

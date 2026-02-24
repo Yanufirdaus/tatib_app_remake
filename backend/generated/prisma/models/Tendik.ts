@@ -217,12 +217,12 @@ export type TendikOrderByWithRelationInput = {
 export type TendikWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   nip?: string
+  profileId?: number
   AND?: Prisma.TendikWhereInput | Prisma.TendikWhereInput[]
   OR?: Prisma.TendikWhereInput[]
   NOT?: Prisma.TendikWhereInput | Prisma.TendikWhereInput[]
-  profileId?: Prisma.IntFilter<"Tendik"> | number
   profileSiswa?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "nip">
+}, "id" | "nip" | "profileId">
 
 export type TendikOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

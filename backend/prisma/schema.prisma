@@ -42,7 +42,7 @@ model Siswa {
   id Int @id @default(autoincrement())
   nisn String @unique
   profileSiswa User @relation(fields: [profileId], references: [id])
-  profileId Int
+  profileId Int @unique
   kelas Kelas @relation(fields: [kelasId], references: [id])
   kelasId Int
   poin Int
@@ -52,7 +52,7 @@ model Tendik {
   id Int @id @default(autoincrement())
   nip String @unique
   profileSiswa User @relation(fields: [profileId], references: [id])
-  profileId Int
+  profileId Int @unique
 }
 
 model Semester {
@@ -91,6 +91,7 @@ model CatatanPelanggaran {
   semester String
   time DateTime @default(now()) @db.Timestamptz(3)
   bukti String
+  tahun_ajaran String
 }
 
 model RefreshToken {
