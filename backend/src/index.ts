@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import kelasRouter from '../routes/Kelas';
 import userRouter from '../routes/User';
 import pelanggaranRouter from '../routes/Pelanggaran';
+import catatanPelanggaranRouter from '../routes/CatatanPelanggaran';
 
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 dotenv.config({ path: envFile });
@@ -20,6 +21,7 @@ app.use(authRouter);
 app.use(kelasRouter);
 app.use(userRouter);
 app.use(pelanggaranRouter)
+app.use(catatanPelanggaranRouter);
 
 app.listen(3001, () => {
   console.log('server running on port 3001')
