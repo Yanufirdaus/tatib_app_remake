@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Kelas {
+  id Int @id @default(autoincrement())
+  name String @unique
+  grade Int 
+
+  siswa  Siswa[]
+  catatanPelanggaran CatatanPelanggaran[]
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  role String
+  image_profile String?
+  password String
+  failedLoginAttempts Int @default(0)
+  lockoutUntil DateTime?
+
+  tendik Tendik[]
+  siswa Siswa[]
+  catatanSebagaiPelanggar CatatanPelanggaran[] @relation("UserPelanggar")
+  catatanSebagaiPencatat CatatanPelanggaran[] @relation("UserPencatat")
+  refreshToken RefreshToken[]
+}
+
+model Siswa {
+  id Int @id @default(autoincrement())
+  nisn String @unique
+  profileSiswa User @relation(fields: [profileId], references: [id])
+  profileId Int
+  kelas Kelas @relation(fields: [kelasId], references: [id])
+  kelasId Int
+  poin Int
+}
+
+model Tendik {
+  id Int @id @default(autoincrement())
+  nip String @unique
+  profileSiswa User @relation(fields: [profileId], references: [id])
+  profileId Int
+}
+
+model Semester {
+  id Int @id @default(autoincrement())
+  semester String
+  tahun_ajaran String
+}
+
+model JenisPelanggaran {
+  id Int @id @default(autoincrement())
+  jenis_pelanggaran String @unique
+
+  pelanggaran Pelanggaran[]
+}
+
+model Pelanggaran {
+  id Int @id @default(autoincrement())
+  jenis JenisPelanggaran @relation(fields: [jenisId], references: [id])
+  jenisId Int
+  pelanggaran String
+  poin Int
+
+  catatanPelanggaran CatatanPelanggaran[]
+}
+
+model CatatanPelanggaran {
+  id Int @id @default(autoincrement())
+  pelanggar User @relation("UserPelanggar", fields: [idPelanggar], references: [id])
+  idPelanggar Int
+  kelasPelanggar Kelas @relation(fields: [idKelasPelanggar], references: [id])
+  idKelasPelanggar Int
+  pencatat User @relation("UserPencatat", fields: [idPencatat], references: [id])
+  idPencatat Int
+  pelanggaran Pelanggaran @relation(fields: [idPelanggaran], references: [id])
+  idPelanggaran Int
+  semester String
+  time DateTime @default(now()) @db.Timestamptz(3)
+  bukti String
+}
+
+model RefreshToken {
+  id Int @id @default(autoincrement())
+  token String @unique
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

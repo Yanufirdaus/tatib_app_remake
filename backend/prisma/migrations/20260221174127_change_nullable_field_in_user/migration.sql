@@ -1,0 +1,10 @@
+-- DropForeignKey
+ALTER TABLE "User" DROP CONSTRAINT "User_kelasId_fkey";
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "nip" DROP NOT NULL,
+ALTER COLUMN "nisn" DROP NOT NULL,
+ALTER COLUMN "kelasId" DROP NOT NULL;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_kelasId_fkey" FOREIGN KEY ("kelasId") REFERENCES "Kelas"("id") ON DELETE SET NULL ON UPDATE CASCADE;
