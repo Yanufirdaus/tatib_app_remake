@@ -16,4 +16,10 @@ export const Messages = {
   PELANGGARAN_ID_REQUIRED: `Field 'pelanggaranId' wajib diisi`,
   PELANGGARAN_REQUIRED: `Field 'pelanggaran' wajib diisi`,
   POIN_PELANGGARAN_REQUIRED: `Field 'poin' wajib diisi`,
+  ID_PELANGGAR_REQUIRED: `Field 'idPelanggar' wajib diisi`,
+  ID_KELAS_PELANGGAR_REQUIRED: `Field 'idKelasPelanggar' wajib diisi`,
+  ID_PENCATAT_REQUIRED: `Field 'idPencatat' wajib diisi`,
+  BUKTI_PELANGGARAN_REQUIRED: `Field 'bukti' wajib diisi`,
+  SEMESTER_PELANGGARAN_REQUIRED: `Field 'semester' wajib diisi`,
+  TIME_PELANGGARAN_REQUIRED: `Field 'time' wajib diisi`,
 };
