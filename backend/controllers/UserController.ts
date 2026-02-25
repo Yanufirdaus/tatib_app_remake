@@ -96,4 +96,32 @@ export class UserController {
             });
         }
     }
+
+    static async deleteSiswa(req: Request<{ id: string }>, res: Response) {
+        try {
+            const siswaId = parseInt(req.params.id);
+            await UserService.deleteSiswa(siswaId);
+            res.json({ message: "Siswa berhasil dihapus" });
+        } catch (err: any) {
+            console.error(err.message);
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                message: err.message || Messages.SERVER_ERROR,
+            });
+        }
+    }
+
+    static async deleteTendik(req: Request<{ id: string }>, res: Response) {
+        try {
+            const tendikId = parseInt(req.params.id);
+            await UserService.deleteTendik(tendikId);
+            res.json({ message: "Tendik berhasil dihapus" });
+        } catch (err: any) {
+            console.error(err.message);
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                message: err.message || Messages.SERVER_ERROR,
+            });
+        }
+    }
 }

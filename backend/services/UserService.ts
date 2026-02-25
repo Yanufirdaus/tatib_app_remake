@@ -86,4 +86,46 @@ export class UserService {
         });
         return updatedTendik;
     }
+
+    static async deleteSiswa(id: number) {
+        const getSiswaById = await this.getSiswaById(id);
+
+        if (!getSiswaById) {
+            throw { status: 404, message: "Siswa not found" };
+        }
+        const profileId = getSiswaById.profileSiswa.id;
+
+        console.log(id, profileId);
+
+        const deleteCatatanPelanggaran = await prisma.catatanPelanggaran.deleteMany({
+            where: { idPelanggar: profileId },
+        });
+
+        const deleteSiswa = await prisma.siswa.delete({
+            where: { id: id },
+            include: {
+                profileSiswa: true,
+            },
+        });
+
+        const deleteProfileSiswa = await prisma.user.delete({
+            where: { id: profileId },
+        });
+
+        return { deleteSiswa, deleteProfileSiswa, deleteCatatanPelanggaran };
+    }
+
+    static async deleteTendik(id: number) {
+        const deleteTendik = await prisma.tendik.delete({
+            where: { id: id },
+            include: {  
+                profileSiswa: true,
+            },
+        });
+
+        const deleteProfileTendik = await prisma.user.delete({
+            where: { id: deleteTendik.profileSiswa.id },
+        });
+        return { deleteTendik, deleteProfileTendik };
+    }
 }
