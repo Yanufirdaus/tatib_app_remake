@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../utils/jwt";
 import { Messages } from "../constant/message";
+import { CreateTendikSchema, CreateUserSchema } from "../validation/CreateUserSchema";
+import { ZodError } from "zod";
+import { LoginSchema } from "../validation/LoginSchema";
 
 export const AuthMidleware = (req: Request, res: Response, next: NextFunction) => {
     
     const authHeader = req.headers.authorization;
 
-    console.log("Auth Header:", authHeader); // Debug log for auth header
-
+    console.log("Auth Header:", authHeader);
     if (!authHeader) {
         return res.status(401).json({ message: "Authorization header missing" });
     }
@@ -51,20 +53,22 @@ export const validateLoginMiddleware = (
 ) => {
   const { nomor_induk, password } = req.body;
 
-  if (!nomor_induk || nomor_induk.trim() === "") {
-    return res.status(400).json({ message: Messages.NISN_REQUIRED });
-  }
+  try {
+    LoginSchema.parse({ nomor_induk, password });
+    next();
+  } catch (err: unknown) {
 
-  if (!password || password.trim() === "") {
-    return res.status(400).json({ message: Messages.PASSWORD_REQUIRED });
-  }
+    if (err instanceof ZodError) {
+        return res.status(400).json({
+            message: err.issues.map(issue => issue.message)
+        });
+    }
+    console.error("Unexpected error:", err);
 
-  if (password.length < 6) {
-    return res.status(400).json({ message: Messages.PASSWORD_TOO_SHORT });
-  }
-  
-
-  next();
+    return res.status(500).json({
+        message: "Internal server error"
+    });
+}
 };
 
 
@@ -75,19 +79,22 @@ export const validateRegisterTendikMiddleware = (
 ) => {
     const input: CreateTendikDTO = req.body[0];
 
-    if (!input.name || input.name.trim() === "") {
-        return res.status(400).json({ message: Messages.NAME_REQUIRED });
+    try {
+        CreateTendikSchema.parse(input);
+        next();
+    } catch (err: unknown) {
+
+        if (err instanceof ZodError) {
+            return res.status(400).json({
+                message: err.issues.map(issue => issue.message)
+            });
+        }
+        console.error("Unexpected error:", err);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
-    if (!input.nip || input.nip.trim() === "") {
-        return res.status(400).json({ message: Messages.NIP_REQUIRED });
-    }
-    if (!input.password || input.password.trim() === "") {
-        return res.status(400).json({ message: Messages.PASSWORD_REQUIRED });
-    }
-    if (input.password.length < 6) {
-        return res.status(400).json({ message: Messages.PASSWORD_TOO_SHORT });
-    }
-    next();
 };
 
 export const validateRegisterSiswaMiddleware = (
@@ -95,24 +102,25 @@ export const validateRegisterSiswaMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateSiswaDTO  = req.body[0]; // Assuming req.body is an array of students
-
-    console.log("Input data:", req.body[0]); // Debug log for input validation
+    const input: CreateSiswaDTO  = req.body[0];
+    console.log("Input data:", req.body[0]);
     
-    if (!input.name || input.name.trim() === "") {
-        return res.status(400).json({ message: Messages.NAME_REQUIRED });
+    try {
+        CreateUserSchema.parse(input);
+
+        next();
+    } catch (err: unknown) {
+
+        if (err instanceof ZodError) {
+            return res.status(400).json({
+                message: err.issues.map(issue => issue.message)
+            });
+        }
+
+        console.error("Unexpected error:", err);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
-    if (!input.nisn || input.nisn.trim() === "") {
-        return res.status(400).json({ message: Messages.NISN_REQUIRED });
-    }
-    if (!input.kelasId) {
-        return res.status(400).json({ message: Messages.KELASID_REQUIRED });
-    }
-    if (!input.password || input.password.trim() === "") {
-        return res.status(400).json({ message: Messages.PASSWORD_REQUIRED });
-    }
-    if (input.password.length < 6) {
-        return res.status(400).json({ message: Messages.PASSWORD_TOO_SHORT });
-    }
-    next();
 };
