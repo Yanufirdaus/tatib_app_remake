@@ -2,6 +2,7 @@ export const Messages = {
   USER_ARRAY_EMPTY: "Empty request body",
   NAME_REQUIRED: `Field 'name' wajib diisi`,
   NISN_REQUIRED: `Field 'nisn' wajib diisi`,
+  NOMOR_INDUK_REQUIRED: `Field 'nomor_induk' wajib diisi`,
   NIP_REQUIRED: `Field 'nip' wajib diisi`,
   KELASID_REQUIRED: ` Field 'kelas' wajib diisi`,
   PASSWORD_REQUIRED: `Field 'password' wajib diisi`,
