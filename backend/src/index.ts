@@ -7,6 +7,7 @@ import kelasRouter from '../routes/Kelas';
 import userRouter from '../routes/User';
 import pelanggaranRouter from '../routes/Pelanggaran';
 import catatanPelanggaranRouter from '../routes/CatatanPelanggaran';
+import semesterRouter from '../routes/Semester';
 
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 dotenv.config({ path: envFile });
@@ -22,6 +23,7 @@ app.use(kelasRouter);
 app.use(userRouter);
 app.use(pelanggaranRouter)
 app.use(catatanPelanggaranRouter);
+app.use(semesterRouter);
 
 app.listen(3001, () => {
   console.log('server running on port 3001')
