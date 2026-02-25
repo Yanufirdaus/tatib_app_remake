@@ -6,8 +6,11 @@ import { validatePelanggaranInputMiddleware } from '../midlewares/PelanggaranMid
 const pelanggaranRouter = express.Router();
 
 pelanggaranRouter.post('/pelanggaran', AuthMidleware, AdminMiddleware, validatePelanggaranInputMiddleware, PelanggaranController.addPelanggaran);
+
 pelanggaranRouter.get('/pelanggaran/jenis/:jenisId', AuthMidleware, AdminMiddleware, PelanggaranController.getPelanggaranByJenis);
+
 pelanggaranRouter.put('/pelanggaran/:id', AuthMidleware, AdminMiddleware, PelanggaranController.updatePelanggaran);
+
 pelanggaranRouter.delete('/pelanggaran/:id', AuthMidleware, AdminMiddleware, PelanggaranController.deletePelanggaran);
 
 export default pelanggaranRouter;
