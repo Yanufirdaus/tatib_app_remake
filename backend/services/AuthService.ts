@@ -1,4 +1,3 @@
-import * as argon2 from "argon2";
 import { prisma } from "../lib/prisma";
 import { jwtToken, verifyToken } from "../utils/jwt";
 import { Messages } from "../constant/message";
@@ -9,8 +8,6 @@ import { Siswa, User } from "../generated/prisma/browser";
 export class AuthService {
 
   static async registerStudents(users: CreateSiswaDTO[]) {
-    // validateStudentInput(users);
-
     type CreatedStudent = {
         user: User;
         siswa: Siswa;
@@ -49,8 +46,6 @@ export class AuthService {
   }
 
   static async registerTendik(users: CreateTendikDTO[]) {
-    // validateTendikInput(users);
-
     type CreatedTendik = {
         user: User;
         tendik: any;
