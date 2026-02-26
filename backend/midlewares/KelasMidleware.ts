@@ -1,20 +1,19 @@
-import { Messages } from "../constant/message";
-import { Request, Response, NextFunction } from "express";
-import { UpdateTendikSchema, UpdateUserSchema } from "../validation/UpdateUserSchema";
+import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import { AddKelasSchema } from "../validation/KelasSchema";
 
-export const UpdateSiswaInputCheckingMiddleware = (
-    req: Request, 
-    res: Response, 
-    next: NextFunction) => 
-{
-    const data: UpdateUserDTO = req.body;
+export const CreateKelasMidleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: CreateKelasDTO = req.body;
 
-    console.log("Input data:", data);
     try {
-        UpdateUserSchema.parse(data);
+        AddKelasSchema.parse(input);
         next();
     } catch (err: unknown) {
+
         if (err instanceof ZodError) {
             return res.status(400).json({
                 message: err.issues.map(issue => issue.message)
@@ -28,17 +27,22 @@ export const UpdateSiswaInputCheckingMiddleware = (
     }
 }
 
-export const UpdateTendikInputCheckingMiddleware = (
-    req: Request, 
-    res: Response, 
-    next: NextFunction) => 
-{
-    const data: UpdateTendikDTO = req.body[0];
-    
-    try {
-        UpdateTendikSchema.parse(data);
+export const CreateManyKelasMidleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: CreateKelasDTO[] = req.body;
+        try {
+        const result = AddKelasSchema.array().safeParse(input);
+        if (!result.success) {
+            return res.status(400).json({
+                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+            });
+        }
         next();
     } catch (err: unknown) {
+
         if (err instanceof ZodError) {
             return res.status(400).json({
                 message: err.issues.map(issue => issue.message)

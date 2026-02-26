@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Messages } from "../constant/message";
+import { AddCatatanPelanggaranSchema, AddManyCatatanPelanggaranSchema } from "../validation/CatatanPelanggaranSchema";
+import { ZodError } from "zod";
 
 export const validateCatatanPelanggaranInputMiddleware = (
     req: Request,
@@ -7,28 +9,22 @@ export const validateCatatanPelanggaranInputMiddleware = (
     next: NextFunction
 ) => {
     const input: AddCatatanPelanggaranDTO = req.body;
-    if (!input.idPelanggaran || isNaN(input.idPelanggaran)) {
-        return res.status(400).json({ message: Messages.PELANGGARAN_ID_REQUIRED });
+
+    try {
+        AddCatatanPelanggaranSchema.parse(input);
+        next();
+    } catch (err: unknown) {
+
+        if (err instanceof ZodError) {
+            return res.status(400).json({
+                message: err.issues.map(issue => issue.message)
+            });
+        }
+        console.error("Unexpected error:", err);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
-    if (!input.idPelanggar || isNaN(input.idPelanggar)) {
-        return res.status(400).json({ message: Messages.ID_PELANGGAR_REQUIRED });
-    }
-    if (!input.idKelasPelanggar || isNaN(input.idKelasPelanggar)) {
-        return res.status(400).json({ message: Messages.ID_KELAS_PELANGGAR_REQUIRED });
-    }
-    if (!input.idPencatat || isNaN(input.idPencatat)) {
-        return res.status(400).json({ message: Messages.ID_PENCATAT_REQUIRED });
-    }
-    if (!input.bukti || input.bukti.trim() === "") {
-        return res.status(400).json({ message: Messages.BUKTI_PELANGGARAN_REQUIRED });
-    }
-    if (!input.semester || input.semester.trim() === "") {
-        return res.status(400).json({ message: Messages.SEMESTER_PELANGGARAN_REQUIRED });
-    }
-    if (!input.time || isNaN(Date.parse(input.time.toString()))) {
-        return res.status(400).json({ message: Messages.TIME_PELANGGARAN_REQUIRED });
-    }
-    next();
 }
 
 export const validateManyCatatanPelanggaranInputMiddleware = (
@@ -37,26 +33,24 @@ export const validateManyCatatanPelanggaranInputMiddleware = (
     next: NextFunction
 ) => {
     const input: AddManyCatatanPelanggaranDTO = req.body;
-    if (!input.idPelanggaran || isNaN(input.idPelanggaran)) {
-        return res.status(400).json({ message: Messages.PELANGGARAN_ID_REQUIRED });
+    try {
+        const result = AddManyCatatanPelanggaranSchema.safeParse(input);
+        if (!result.success) {
+            return res.status(400).json({
+                message: result.error.issues.map(issue => ({field: issue.path[0], index: issue.path[1], message: issue.message}))
+            });
+        }
+        next();
+    } catch (err: unknown) { 
+        if (err instanceof ZodError) {
+            return res.status(400).json({
+                message: err.issues.map(issue => issue.message)
+            });
+        }
+        console.error("Unexpected error:", err);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
-    if (!input.idPelanggar || !Array.isArray(input.idPelanggar) || input.idPelanggar.some(id => isNaN(id))) {
-        return res.status(400).json({ message: Messages.ID_PELANGGAR_REQUIRED });
-    }
-    if (!input.idKelasPelanggar || isNaN(input.idKelasPelanggar)) {
-        return res.status(400).json({ message: Messages.ID_KELAS_PELANGGAR_REQUIRED });
-    }
-    if (!input.idPencatat || isNaN(input.idPencatat)) {
-        return res.status(400).json({ message: Messages.ID_PENCATAT_REQUIRED });
-    }
-    if (!input.bukti || input.bukti.trim() === "") {
-        return res.status(400).json({ message: Messages.BUKTI_PELANGGARAN_REQUIRED });
-    }
-    if (!input.semester || input.semester.trim() === "") {
-        return res.status(400).json({ message: Messages.SEMESTER_PELANGGARAN_REQUIRED });
-    }
-    if (!input.time || isNaN(Date.parse(input.time.toString()))) {
-        return res.status(400).json({ message: Messages.TIME_PELANGGARAN_REQUIRED });
-    }
-    next();
 }

@@ -67,8 +67,7 @@ export const validateLoginMiddleware = (
 
     return res.status(500).json({
         message: "Internal server error"
-    });
-}
+    });}
 };
 
 
@@ -77,10 +76,15 @@ export const validateRegisterTendikMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateTendikDTO = req.body[0];
+    const input: CreateTendikDTO[] = req.body;
 
     try {
-        CreateTendikSchema.parse(input);
+        const result = CreateTendikSchema.safeParse(input);
+        if (!result.success) {
+            return res.status(400).json({
+                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+            });
+        }
         next();
     } catch (err: unknown) {
 
@@ -102,12 +106,16 @@ export const validateRegisterSiswaMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateSiswaDTO  = req.body[0];
-    console.log("Input data:", req.body[0]);
+    const input: CreateSiswaDTO[]  = req.body;
+    console.log("Input data:", req.body);
     
     try {
-        CreateUserSchema.parse(input);
-
+        const result = CreateUserSchema.safeParse(input);
+        if (!result.success) {
+            return res.status(400).json({
+                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+            });
+        }
         next();
     } catch (err: unknown) {
 
