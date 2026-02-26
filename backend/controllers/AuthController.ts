@@ -8,6 +8,8 @@ export class AuthController {
         try {
             const users = req.body;
 
+            console.log("Received registration data:", users);
+
             const createdStudents = await AuthService.registerStudents(users);
             return res.status(201).json(createdStudents);
         } catch (err:any) {
