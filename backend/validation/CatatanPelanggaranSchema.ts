@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { no } from "zod/v4/locales";
 
 export const AddCatatanPelanggaranSchema = z.object({
     idPelanggaran: z.coerce.number({ message: "Pelanggaran ID must be a number" }).min(1, { message: "Pelanggaran ID is required" }),
@@ -9,6 +10,7 @@ export const AddCatatanPelanggaranSchema = z.object({
     semester: z.string().min(1, { message: "Semester is required" }),
     time: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Time must be a valid date string" }),
     tahun_ajaran: z.string().min(1, { message: "Tahun Ajaran is required" }),
+    note: z.string().optional(),
 });
 
 export const AddManyCatatanPelanggaranSchema = z.object({
@@ -20,14 +22,5 @@ export const AddManyCatatanPelanggaranSchema = z.object({
     semester: z.string().min(1, { message: "Semester is required" }),
     time: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Time must be a valid date string" }),
     tahun_ajaran: z.string().min(1, { message: "Tahun Ajaran is required" }),
+    note: z.string().optional(),
 });
-
-
-// idPelanggaran: number;
-// idPelanggar: number;
-// idKelasPelanggar: number;
-// idPencatat: number;
-// bukti: string;
-// semester: string;
-// time: Date;
-// tahun_ajaran: string;

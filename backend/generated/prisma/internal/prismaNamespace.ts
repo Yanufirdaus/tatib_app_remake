@@ -1195,7 +1195,8 @@ export const CatatanPelanggaranScalarFieldEnum = {
   semester: 'semester',
   time: 'time',
   bukti: 'bukti',
-  tahun_ajaran: 'tahun_ajaran'
+  tahun_ajaran: 'tahun_ajaran',
+  note: 'note'
 } as const
 
 export type CatatanPelanggaranScalarFieldEnum = (typeof CatatanPelanggaranScalarFieldEnum)[keyof typeof CatatanPelanggaranScalarFieldEnum]

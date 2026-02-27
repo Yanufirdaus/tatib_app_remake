@@ -7,6 +7,7 @@ interface AddCatatanPelanggaranDTO {
     semester: string;
     time: Date;
     tahun_ajaran: string;
+    note?: string;
 }
 
 interface AddManyCatatanPelanggaranDTO {
@@ -18,4 +19,5 @@ interface AddManyCatatanPelanggaranDTO {
     semester: string;
     time: Date;
     tahun_ajaran: string;
+    note?: string;
 }

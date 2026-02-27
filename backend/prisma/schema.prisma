@@ -92,6 +92,7 @@ model CatatanPelanggaran {
   time DateTime @default(now()) @db.Timestamptz(3)
   bukti String
   tahun_ajaran String
+  note String?
 }
 
 model RefreshToken {
