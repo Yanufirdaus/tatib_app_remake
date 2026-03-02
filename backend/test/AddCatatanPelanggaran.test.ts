@@ -1,4 +1,4 @@
-import { AddManyCatatanPelanggaranSchema } from "../validation/CatatanPelanggaranSchema";
+import { AddCatatanPelanggaranSchema, AddManyCatatanPelanggaranSchema } from "../validation/CatatanPelanggaranSchema";
 
 
 describe("AddManyCatatanPelanggaranSchema", () => {
@@ -69,5 +69,61 @@ describe("AddManyCatatanPelanggaranSchema", () => {
     });
 
     expect(result.success).toBe(false);
+  });
+});
+
+describe("AddCatatanPelanggaranSchema", () => {
+  const validData = {
+    idPelanggaran: 1,
+    idPelanggar: 1,
+    idPencatat: 5,
+    idKelasPelanggar: 2,
+    bukti: "foto.jpg",
+    semester: "ganjil",
+    time: "2026-02-27",
+    tahun_ajaran: "2025-2026",
+  };
+
+  it("should pass with valid data", () => {
+    const result = AddCatatanPelanggaranSchema.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
+
+  it("should fail if idPelanggaran is missing", () => {
+    const { idPelanggaran, ...data } = validData;
+    const result = AddCatatanPelanggaranSchema.safeParse(data);
+    expect(result.success).toBe(false);
+  });
+
+  it("should fail if idPelanggaran is string", () => {
+    const result = AddCatatanPelanggaranSchema.safeParse({
+      ...validData,
+      idPelanggaran: "1",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("should fail if semester is invalid", () => {
+    const result = AddCatatanPelanggaranSchema.safeParse({
+      ...validData,
+      semester: "semester3",
+    });
+    expect(result.success).toBe(false);
+  });
+  
+  it("should fail if time is invalid date format", () => {
+    const result = AddCatatanPelanggaranSchema.safeParse({
+      ...validData,
+      time: "27-02-2026",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("should fail if tahun_ajaran format is wrong", () => {
+    const result = AddCatatanPelanggaranSchema.safeParse({
+      ...validData,
+      tahun_ajaran: "2025-2026",
+    });
+    expect(result.success).toBe(true);
   });
 });
