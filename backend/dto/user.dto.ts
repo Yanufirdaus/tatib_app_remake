@@ -19,6 +19,7 @@ interface CreateTendikDTO {
 interface LoginDTO {
   nomor_induk: string;
   password: string;
+  platform: string;
 }
 
 interface CreateKelasDTO {

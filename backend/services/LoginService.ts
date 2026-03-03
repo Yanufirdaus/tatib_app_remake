@@ -4,7 +4,7 @@ import { verifyPassword } from "../utils/crypto";
 import { jwtToken, refreshToken } from "../utils/jwt";
 
 export class LoginService {
-    private static async findUserByIdentifier(tx: any, nomorInduk: string) {
+    private static async findUserByIdentifier(tx: any, nomorInduk: string, platform: string) {
         const siswa = await tx.siswa.findFirst({
             where: {
                 nisn: nomorInduk
@@ -32,6 +32,10 @@ export class LoginService {
         
         if (!user) {
             throw { status: 404, message: Messages.USER_NOT_FOUND };
+        }
+
+        if (platform === "web" && user.role !== "admin") {
+            throw { status: 403, message: "Hanya admin yang dapat login melalui web" };
         }
 
         return user;
@@ -128,7 +132,7 @@ export class LoginService {
     static async login(login_input: LoginDTO) {
 
         return await prisma.$transaction(async (tx) => {
-            const user = await this.findUserByIdentifier(tx, login_input.nomor_induk);
+            const user = await this.findUserByIdentifier(tx, login_input.nomor_induk, login_input.platform);
 
             await this.checkUserLockout(user);
             

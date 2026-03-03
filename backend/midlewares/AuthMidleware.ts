@@ -51,10 +51,10 @@ export const validateLoginMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const { nomor_induk, password } = req.body;
+  const { nomor_induk, password, platform } = req.body;
 
   try {
-    LoginSchema.parse({ nomor_induk, password });
+    LoginSchema.parse({ nomor_induk, password, platform });
     next();
   } catch (err: unknown) {
 
