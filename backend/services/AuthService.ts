@@ -81,11 +81,11 @@ export class AuthService {
   }
 
   static async refreshToken(token: string) {
-    const tokensplitted = token.split(" ")[1];
+    // const tokensplitted = token.split(" ")[1];
     // console.log("Received refresh token:", token);
     // console.log("Received refresh token splitted:", tokensplitted);
     const storedToken = await prisma.refreshToken.findUnique({
-        where: { token: tokensplitted    }
+        where: { token: token    }
     });
 
     console.log("Stored token:", storedToken);
@@ -110,7 +110,7 @@ export class AuthService {
         throw { status: 404, message: Messages.USER_NOT_FOUND };
     }
 
-    const decoded: any = verifyToken(tokensplitted);
+    const decoded: any = verifyToken(token);
     const newToken = jwtToken( {id: decoded.id, role: decoded.role} );
 
     return { newToken, user: { id: user.id, username: user.name } };
@@ -122,5 +122,22 @@ export class AuthService {
     await prisma.refreshToken.delete({
         where: { token: tokensplitted }
     });
+  }
+
+  static async me (userId:number) {
+    const user = await prisma.user.findUnique({
+      where: {id: userId},
+      select: {
+        id: true,
+        name:true,
+        role:true
+      }
+    })
+
+    if (!user) {
+        throw { status: 404, message: Messages.USER_NOT_FOUND };
+    }
+
+    return {user: {id: user.id, username: user.name, role: user.role}}
   }
 }
