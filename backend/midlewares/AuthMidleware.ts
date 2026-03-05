@@ -7,7 +7,7 @@ import { LoginSchema } from "../validation/LoginSchema";
 
 export const AuthMidleware = (req: Request, res: Response, next: NextFunction) => {
     
-    const authHeader = req.headers.authorization;
+    const authHeader = req.cookies.accessToken;
 
     console.log("Auth Header:", authHeader);
     if (!authHeader) {
@@ -18,7 +18,7 @@ export const AuthMidleware = (req: Request, res: Response, next: NextFunction) =
         return res.status(401).json({ message: "Invalid token format" });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader;
 
     try {
         const decoded: any = verifyAccessToken(token);

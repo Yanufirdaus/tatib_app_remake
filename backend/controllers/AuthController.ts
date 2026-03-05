@@ -71,10 +71,10 @@ export class AuthController {
     }
 
     static async refreshToken(req: Request, res: Response) {
-        const refreshToken = req.headers.authorization;
-        // console.log("Received refresh token:", refreshToken);
+        const refreshToken = req.cookies.refreshToken;
+        console.log(refreshToken);
 
-        if (!refreshToken || !refreshToken.startsWith("Bearer ")) {
+        if (!refreshToken) {
             return res.status(401).json({ message: "Refresh token is required" });
         }
 
@@ -122,6 +122,21 @@ export class AuthController {
             res.clearCookie("token");
             res.clearCookie("refreshToken");
             return res.status(200).json({ message: Messages.LOGOUT_SUCCESS });
+        } catch (err: any) {
+            console.error(err.message);
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                message: err.message || Messages.SERVER_ERROR,
+            });
+        }
+    }
+
+    static async me (req: Request, res: Response) {
+        const userId= req.body.user.id
+
+        try {
+            const result = await AuthService.me(userId);
+            return res.status(200).json({ id: result.user.id, username: result.user.username, role: result.user.role })
         } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
