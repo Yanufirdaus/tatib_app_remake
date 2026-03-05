@@ -57,16 +57,18 @@ export class LoginService {
         }
     }
 
-    private static async validatePassword (tx: any, user: any, inputPassword: string) {
+    private static async validatePassword (user: any, inputPassword: string) {
         const isPasswordValid = await verifyPassword(user!.password, inputPassword);
 
         if (!isPasswordValid) {
             const MAX_ATTEMPTS = 3;
             const LOCK_MINUTES = 3;
 
+            const attempts = user.failedLoginAttempts + 1
+
             if (user.failedLoginAttempts >= MAX_ATTEMPTS) {
                 const lockUntil = new Date(Date.now() + LOCK_MINUTES * 60 * 1000);
-                await tx.user.update({
+                await prisma.user.update({
                     where: { id: user.id },
                     data: {
                         failedLoginAttempts: 0,
@@ -77,12 +79,10 @@ export class LoginService {
             } 
             
             if (user.failedLoginAttempts < MAX_ATTEMPTS) {
-                await tx.user.update({
+                await prisma.user.update({
                     where: { id: user.id },
                     data: {
-                        failedLoginAttempts: {
-                            increment: 1
-                        }
+                        failedLoginAttempts: user.failedLoginAttempts + 1
                     }
                 });
 
@@ -91,14 +91,14 @@ export class LoginService {
                 throw { status: 401, message: Messages.WRONG_PASSWORD + ` (${user.failedLoginAttempts + 1}/${MAX_ATTEMPTS})` };
             }
 
-            await tx.user.update({
-                where: { id: user.id },
-                data: {
-                    failedLoginAttempts: user.failedLoginAttempts + 1
-                }
-            });
+            // await tx.user.update({
+            //     where: { id: user.id },
+            //     data: {
+            //         failedLoginAttempts: user.failedLoginAttempts + 1
+            //     }
+            // });
 
-            throw { status: 401, message: Messages.WRONG_PASSWORD };
+            // throw { status: 401, message: Messages.WRONG_PASSWORD };
         }
     }
 
@@ -136,7 +136,7 @@ export class LoginService {
 
             await this.checkUserLockout(user);
             
-            await this.validatePassword(tx, user, login_input.password);
+            await this.validatePassword(user, login_input.password);
 
             const tokens = this.generateTokens(user);
 
