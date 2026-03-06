@@ -75,7 +75,7 @@ export class LoginService {
                         lockoutUntil: lockUntil
                     }
                 });
-                throw { status: 401, message: Messages.ACCOUNT_LOCKED };
+                throw { status: 403, message: Messages.ACCOUNT_LOCKED };
             } 
             
             if (user.failedLoginAttempts < MAX_ATTEMPTS) {
@@ -88,7 +88,7 @@ export class LoginService {
 
                 console.log(user.id, user.failedLoginAttempts + 1);
 
-                throw { status: 401, message: Messages.WRONG_PASSWORD + ` (${user.failedLoginAttempts + 1}/${MAX_ATTEMPTS})` };
+                throw { status: 403, message: Messages.WRONG_PASSWORD + ` (${user.failedLoginAttempts + 1}/${MAX_ATTEMPTS})` };
             }
 
             // await tx.user.update({
