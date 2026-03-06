@@ -6,13 +6,16 @@ import { LoginSchema, type LoginFormValues } from "../schema/login.schema";
 import {useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "../../../store/auth.store";
+import { useNavigate } from "react-router-dom";
 
 const Loginform = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const { mutate, isPending, error } = useLogin();
 
-    const { setUser } = useAuthStore()
+    const { setUser } = useAuthStore();
+
+    const navigate = useNavigate();
 
     const {
         register,
@@ -29,6 +32,7 @@ const Loginform = () => {
             onSuccess: (response) => {
                 setUser(response.user)
                 console.log("Login success:", response)
+                navigate("/home", {replace:true})
             },
             onError: (err) => {
                 console.log("Login error:", err)
