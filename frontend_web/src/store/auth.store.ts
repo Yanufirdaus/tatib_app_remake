@@ -9,7 +9,7 @@ type AuthState = {
   user: User | null
   isAuthenticated: boolean
   setUser: (user: User) => void
-  logout: () => void
+  logoutStore: () => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       isAuthenticated: true
     }),
 
-  logout: () =>
+  logoutStore: () =>
     set({
       user: null,
       isAuthenticated: false
