@@ -7,22 +7,18 @@ import { LoginSchema } from "../validation/LoginSchema";
 
 export const AuthMidleware = (req: Request, res: Response, next: NextFunction) => {
     
-    const authHeader = req.cookies.accessToken;
+    const authHeader = req.cookies.token;
 
     console.log("Auth Header:", authHeader);
     if (!authHeader) {
         return res.status(401).json({ message: "Authorization header missing" });
     }
 
-    if (!authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Invalid token format" });
-    }
-
     const token = authHeader;
 
     try {
         const decoded: any = verifyAccessToken(token);
-        req.body.user = { id: decoded.id, role: decoded.role };
+        req.user = { id: decoded.id, role: decoded.role };
         next();
     } catch (err) {
         console.error("Token verification failed:", err);
