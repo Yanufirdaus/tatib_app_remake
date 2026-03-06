@@ -9,16 +9,27 @@ import pelanggaranRouter from '../routes/Pelanggaran';
 import catatanPelanggaranRouter from '../routes/CatatanPelanggaran';
 import semesterRouter from '../routes/Semester';
 
-const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
-dotenv.config({ path: envFile });
+// const envFile = process.env.NODE_ENV === "production" ? ".env.prod" : ".env";
+dotenv.config();
 
 const app = express()
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://g54gvt4v-5173.asse.devtunnels.ms"
+];
 
 app.use(express.json())
 app.use(cookieParser());
 app.use(cors(
   {
-    origin:"http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials:true
   }
 ))
