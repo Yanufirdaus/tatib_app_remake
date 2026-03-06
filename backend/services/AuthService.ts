@@ -119,7 +119,7 @@ export class AuthService {
   static async logout(token: string) {
     const tokensplitted = token;
     console.log("Received refresh token for logout:", tokensplitted);
-    await prisma.refreshToken.delete({
+    await prisma.refreshToken.deleteMany({
         where: { token: tokensplitted }
     });
   }
