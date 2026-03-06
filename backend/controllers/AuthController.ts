@@ -44,21 +44,21 @@ export class AuthController {
             
             res.cookie("token", accessToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
+                secure: true,
                 maxAge: 15 * 60 * 1000,
-                sameSite: "strict"
+                sameSite: "none"
             });
 
             res.cookie("refreshToken", refreshTokenValue, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
+                secure: true,
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                sameSite: "strict"
+                sameSite: "none"
             });
 
             res.json({
                 message: Messages.LOGIN_SUCCESS,
-                user: { id: user.id, username: user.name }
+                user: { id: user.id, role: user.role }
             });
             return res.status(201).json(result.user);
         } catch (err:any) {
@@ -75,7 +75,7 @@ export class AuthController {
         console.log(refreshToken);
 
         if (!refreshToken) {
-            return res.status(401).json({ message: "Refresh token is required" });
+            return res.status(402).json({ message: "Refresh token is required" });
         }
 
         try {
@@ -83,17 +83,17 @@ export class AuthController {
             
             res.cookie("token", result.newToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
+                secure: true,
                 maxAge: 15 * 60 * 1000,
-                sameSite: "strict"
+                sameSite: "none"
             });
 
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-                sameSite: "strict"
-            });
+            // res.cookie("refreshToken", refreshToken, {
+            //     httpOnly: true,
+            //     secure: true,
+            //     maxAge: 7 * 24 * 60 * 60 * 1000,
+            //     sameSite: "none"
+            // });
 
             res.json({
                 message: Messages.LOGIN_SUCCESS,
@@ -113,14 +113,22 @@ export class AuthController {
         const refreshToken = req.headers["refreshtoken"] || req.cookies.refreshToken;
         
         if (!refreshToken) {
-            return res.status(401).json({ message: "Refresh token is required" });
+            return res.status(402).json({ message: "Refresh token is required" });
         }
 
         try {
             await AuthService.logout(refreshToken!);
 
-            res.clearCookie("token");
-            res.clearCookie("refreshToken");
+            res.clearCookie("token", {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none"
+            });
+            res.clearCookie("refreshToken",{
+                httpOnly: true,
+                secure: true,
+                sameSite: "none"
+            });
             return res.status(200).json({ message: Messages.LOGOUT_SUCCESS });
         } catch (err: any) {
             console.error(err.message);
@@ -132,10 +140,15 @@ export class AuthController {
     }
 
     static async me (req: Request, res: Response) {
-        const userId= req.body.user.id
+        const userId= req.user?.id
+
+        if(!userId) {
+            return res.status(402).json({ message: Messages.NIP_REQUIRED });
+        }
 
         try {
             const result = await AuthService.me(userId);
+            console.log('bisa')
             return res.status(200).json({ id: result.user.id, username: result.user.username, role: result.user.role })
         } catch (err: any) {
             console.error(err.message);
