@@ -3,36 +3,55 @@ import DashboardPage from "../pages/DashboardPage";
 import RootLayout from "../layouts/RootLayout";
 import LoginPage from "../pages/LoginPage";
 import HomeAdminPage from "../pages/HomeAdminPage";
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 
 export const router = createBrowserRouter([
     {
-        path: "/",
-        element: < RootLayout />,
+        element: <PublicRoute />,
         children: [
             {
-                index: true,
-                element: <DashboardPage />
+                path: "/",
+                element: < RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <DashboardPage />
+                    }
+                ]
             }
         ]
+        
     },
     {
-        path: "/login",
-        element: <RootLayout />,
+        element: <PublicRoute />,
         children: [
             {
-                index: true,
-                element: <LoginPage />
+                path: "/login",
+                element: <RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <LoginPage />
+                    }
+                ]
             }
         ]
+        
     },
     {
-        path: "/home",
-        element: < RootLayout />,
+        element: <ProtectedRoute />,
         children: [
             {
-                index: true,
-                element: <HomeAdminPage />
-            }
-        ]
-    }
+                path: "/home",
+                element: <RootLayout />,
+                children: [
+                {
+                    index: true,
+                    element: <HomeAdminPage />,
+                },
+                ],
+            },
+        ],
+    },
 ]);
