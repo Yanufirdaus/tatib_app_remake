@@ -91,14 +91,14 @@ export class AuthService {
     console.log("Stored token:", storedToken);
 
     if (!storedToken) {
-        throw { status: 401, message: "Invalid refresh token" };
+        throw { status: 403, message: "Invalid refresh token" };
     }
 
     if (storedToken.expiresAt < new Date()) {
         await prisma.refreshToken.delete({
             where: { token }
         });
-        throw { status: 401, message: "Refresh token expired" };
+        throw { status: 403, message: "Refresh token expired" };
     }
 
     const user = await prisma.user.findUnique({
