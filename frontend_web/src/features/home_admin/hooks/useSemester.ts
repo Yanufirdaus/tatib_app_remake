@@ -5,5 +5,6 @@ export const useSemester = () => {
     return useQuery ({
         queryKey: ["semester"],
         queryFn: getSemester,
+        staleTime: 5*60*1000
     })
 }
