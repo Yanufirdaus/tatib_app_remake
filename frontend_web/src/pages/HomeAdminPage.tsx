@@ -1,9 +1,11 @@
+import HeroSection from "../features/home_admin/components/HeroSection";
+import SemesterSection from "../features/home_admin/components/SemesterSection";
+
 const HomeAdminPage = () => {
     return (
         <>
-            <div>
-                ini home atmin wak
-            </div>
+            <HeroSection />
+            <SemesterSection />
         </>
     )
 }
