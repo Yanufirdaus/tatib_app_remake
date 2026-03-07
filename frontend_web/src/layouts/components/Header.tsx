@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth.store";
 import { logout } from "../../features/auth/services/auth.services";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 const Header = () => {
   const { user, logoutStore } = useAuthStore()
-  const navigate = useNavigate()
-
-  console.log("user:",user?.id)
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     try {
@@ -16,6 +16,7 @@ const Header = () => {
       console.error(err);
     } finally {
       logoutStore();
+      queryClient.clear();
       navigate("/", { replace: true });
     }
   };
