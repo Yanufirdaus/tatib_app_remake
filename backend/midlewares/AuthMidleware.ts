@@ -27,7 +27,10 @@ export const AuthMidleware = (req: Request, res: Response, next: NextFunction) =
 };
 
 export const AdminMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.user.role !== "admin") {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    if (req.user.role !== "admin") {
         return res.status(403).json({ message: "Forbidden: Admins only" });
     }
     next();
@@ -35,7 +38,10 @@ export const AdminMiddleware = (req: Request, res: Response, next: NextFunction)
 
 
 export const TendikAdminMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.user.role !== "kesiswaan" && req.body.user.role !== "admin" && req.body.user.role !== "kepsek" && req.body.user.role !== "bk") {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    if (req.user.role !== "kesiswaan" && req.body.user.role !== "admin" && req.body.user.role !== "kepsek" && req.body.user.role !== "bk") {
         return res.status(403).json({ message: "Forbidden: Tendik only and Admin Only" });
     }
     next();
