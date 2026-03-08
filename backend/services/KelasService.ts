@@ -33,6 +33,16 @@ export class KelasService {
     }
 
     static async deleteKelas(kelasId: number) {
+        const siswaCount = await prisma.siswa.count({
+            where: {
+                kelasId: kelasId
+            }
+        });
+
+        if (siswaCount > 0) {
+            throw new Error("Kelas tidak dapat dihapus karena masih memiliki siswa");
+        }
+        
         const deletedKelas = await prisma.kelas.delete({
             where: {
                 id: kelasId
