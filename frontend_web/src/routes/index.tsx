@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import HomeAdminPage from "../pages/HomeAdminPage";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import ManajemenKelas from "../pages/ManajemenKelas";
 
 export const router = createBrowserRouter([
     {
@@ -49,6 +50,21 @@ export const router = createBrowserRouter([
                 {
                     index: true,
                     element: <HomeAdminPage />,
+                },
+                ],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/kelas",
+                element: <RootLayout />,
+                children: [
+                {
+                    index: true,
+                    element: <ManajemenKelas />,
                 },
                 ],
             },
