@@ -2,17 +2,19 @@ import { FaCircleNotch, FaTrashAlt } from "react-icons/fa";
 import { useDeleteKelas, useKelas } from "../hooks/useKelas";
 import { Oval } from "react-loader-spinner";
 import AddKelas from "./AddKelas";
+import type { AddKelasProps } from "../type/add.kelas.props.type";
 
-const ListKelas = ({ 
-    addKelasCount, 
-    cancelAddHandler 
-} : { 
-    addKelasCount: number, 
-    cancelAddHandler: () => void }
-) => {
-    const { data, isLoading, error } = useKelas();
+const ListKelas = ({
+  fields,
+  register,
+  cancelAddHandler,
+  onSubmit,
+  isPendingAddKelas,
+  errors
+}: AddKelasProps) => {
+    const { data, isLoading } = useKelas();
 
-    const { mutate: deleteKelas, isPending, error: deleteKelasError } = useDeleteKelas();
+    const { mutate: deleteKelas, isPending } = useDeleteKelas();
 
     const handleDeleteKelas = (id: number) => {
         if (confirm("Yakin ingin menghapus kelas ini?")) {
@@ -28,7 +30,7 @@ const ListKelas = ({
 
     return (
         <div className="flex flex-col gap-2 mx-6">
-            <AddKelas addKelasCount={addKelasCount} cancelAddHandler={cancelAddHandler}/>
+            <AddKelas fields={fields} register={register} cancelAddHandler={cancelAddHandler} onSubmit={onSubmit} isPendingAddKelas={isPendingAddKelas} errors={errors}/>
             
             {isLoading ? (
                 <div className="flex flex-col gap-2">
