@@ -10,7 +10,7 @@ kelasRouter.get("/kelas", AuthMidleware, AdminMiddleware, KelasController.getAll
 
 kelasRouter.post("/kelas", AuthMidleware, AdminMiddleware, CreateKelasMidleware, KelasController.createKelas);
 
-kelasRouter.post("/kelas/batch", AuthMidleware, AdminMiddleware, CreateManyKelasMidleware, KelasController.createManyKelas);
+kelasRouter.post("/kelas/batch", AuthMidleware, AdminMiddleware, CreateManyKelasMidleware, KelasController.createManyKelasNew);
 
 kelasRouter.delete("/kelas/:id", AuthMidleware, AdminMiddleware, KelasController.deleteKelas);
 
