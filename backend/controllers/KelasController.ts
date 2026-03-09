@@ -1,6 +1,7 @@
 import { Messages } from "../constant/message";
 import { KelasService } from "../services/KelasService";
 import { Request, Response } from "express";
+import { AddManyKelasSchema } from "../validation/KelasSchema";
 
 export class KelasController {
     static async getAllKelas(req: Request, res: Response) {
@@ -30,16 +31,23 @@ export class KelasController {
         }
     }
 
-    static async createManyKelas(req: Request<{}, {}, CreateKelasDTO[]>, res: Response) {
+    static async createManyKelasNew(req: Request<{}, {}, CreateManyKelasDTO>, res: Response) {
         try {
-            const kelasList = req.body;
-            const createdKelas = await KelasService.createManyKelas(kelasList);
-            res.status(201).json(createdKelas);
+            console.log(req.body)
+            const parsed = AddManyKelasSchema.parse(req.body);
+            
+            const created = await KelasService.createManyKelasNew(parsed);
+
+            res.status(201).json({
+                message: "Kelas berhasil ditambahkan",
+                data: created
+            });
         } catch (err:any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
                 message: err.message || Messages.SERVER_ERROR,
+                duplicates: err.duplicates
             });
         }
     }
