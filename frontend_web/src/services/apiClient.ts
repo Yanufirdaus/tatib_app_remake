@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../config/api';
 import { useAuthStore } from '../store/auth.store';
-import { useNavigate } from 'react-router-dom';
 
 export const apiClient = axios.create({
     baseURL: API_BASE_URL,
