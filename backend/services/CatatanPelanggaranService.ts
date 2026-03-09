@@ -23,7 +23,8 @@ export class CatatanPelanggaranService {
                 bukti: input.bukti,
                 semester: input.semester,
                 time: input.time,
-                tahun_ajaran: input.tahun_ajaran
+                tahun_ajaran: input.tahun_ajaran,
+                note: input.note
             },
         });
         return newCatatan;
@@ -55,6 +56,7 @@ export class CatatanPelanggaranService {
                     semester: input.semester,
                     time: input.time,
                     tahun_ajaran: input.tahun_ajaran,
+                    note: input.note
                 },
             });
             createdCatatan.push(newCatatan);
