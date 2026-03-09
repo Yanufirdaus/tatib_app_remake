@@ -90,15 +90,6 @@ export class LoginService {
 
                 throw { status: 403, message: Messages.WRONG_PASSWORD + ` (${user.failedLoginAttempts + 1}/${MAX_ATTEMPTS})` };
             }
-
-            // await tx.user.update({
-            //     where: { id: user.id },
-            //     data: {
-            //         failedLoginAttempts: user.failedLoginAttempts + 1
-            //     }
-            // });
-
-            // throw { status: 401, message: Messages.WRONG_PASSWORD };
         }
     }
 
