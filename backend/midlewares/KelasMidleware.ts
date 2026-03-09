@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
-import { AddKelasSchema } from "../validation/KelasSchema";
+import { AddKelasSchema, AddManyKelasSchema } from "../validation/KelasSchema";
 
 export const CreateKelasMidleware = (
     req: Request,
@@ -32,14 +32,25 @@ export const CreateManyKelasMidleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateKelasDTO[] = req.body;
-        try {
-        const result = AddKelasSchema.array().safeParse(input);
-        if (!result.success) {
+    try {
+        const body = req.body;
+
+        if (!body || !Array.isArray(body.kelas)) {
             return res.status(400).json({
-                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+                message: "Invalid input: expected property 'kelas' with array of kelas objects",
             });
         }
+
+        const result = AddManyKelasSchema.safeParse(body);
+        if (!result.success) {
+            return res.status(400).json({
+                message: result.error.issues.map(issue => ({
+                    path: issue.path.join("."),
+                    message: issue.message
+                }))
+            });
+        }
+
         next();
     } catch (err: unknown) {
 
