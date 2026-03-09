@@ -22,7 +22,7 @@ export class AuthService {
 
         const newUser = await tx.user.create({
           data: {
-            name: user.name,
+            name: user.name.toLowerCase(),
             password: hashedPassword,
             role: "siswa",
             image_profile: user.image_profile || null,
@@ -59,7 +59,7 @@ export class AuthService {
 
             const newUser = await tx.user.create({
                 data: {
-                    name: user.name,
+                    name: user.name.toLowerCase(),
                     password: hashedPassword,
                     role: user.role,
                     image_profile: user.image_profile || null,
@@ -81,9 +81,6 @@ export class AuthService {
   }
 
   static async refreshToken(token: string) {
-    // const tokensplitted = token.split(" ")[1];
-    // console.log("Received refresh token:", token);
-    // console.log("Received refresh token splitted:", tokensplitted);
     const storedToken = await prisma.refreshToken.findUnique({
         where: { token: token    }
     });
