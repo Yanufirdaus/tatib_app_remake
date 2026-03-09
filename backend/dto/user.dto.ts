@@ -27,6 +27,13 @@ interface CreateKelasDTO {
     name: string;
 }
 
+interface CreateManyKelasDTO {
+    kelas : {
+        grade: number; 
+        name: string;
+      } []
+}
+
 interface UpdateUserDTO {
     name: string;
     kelasId: number;
