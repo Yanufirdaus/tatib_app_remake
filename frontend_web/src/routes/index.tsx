@@ -6,6 +6,7 @@ import HomeAdminPage from "../pages/HomeAdminPage";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import ManajemenKelas from "../pages/ManajemenKelas";
+import ManajemenPelanggaran from "../pages/ManajemenPelanggaran";
 
 export const router = createBrowserRouter([
     {
@@ -47,10 +48,10 @@ export const router = createBrowserRouter([
                 path: "/home",
                 element: <RootLayout />,
                 children: [
-                {
-                    index: true,
-                    element: <HomeAdminPage />,
-                },
+                    {
+                        index: true,
+                        element: <HomeAdminPage />,
+                    },
                 ],
             },
         ],
@@ -62,10 +63,25 @@ export const router = createBrowserRouter([
                 path: "/kelas",
                 element: <RootLayout />,
                 children: [
-                {
-                    index: true,
-                    element: <ManajemenKelas />,
-                },
+                    {
+                        index: true,
+                        element: <ManajemenKelas />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/pelanggaran",
+                element: <RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <ManajemenPelanggaran />,
+                    },
                 ],
             },
         ],
