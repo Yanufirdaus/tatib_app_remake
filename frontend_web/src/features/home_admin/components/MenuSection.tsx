@@ -20,7 +20,7 @@ const MenuSection = () => {
                     <a className="text-white">Manajemen Siswa</a>
                     <a className="text-white">Manajemen Tendik</a>
                     <a className="text-white" onClick={()=>{navigate("/kelas")}}>Manajemen Kelas</a>
-                    <a className="text-white">Manajemen Peraturan</a>
+                    <a className="text-white" onClick={()=>{navigate("/pelanggaran")}}>Manajemen Peraturan</a>
                 </div>
             )}
 
@@ -28,7 +28,7 @@ const MenuSection = () => {
                 <a className="text-white hover:bg-gray-800 md:px-8 py-4">Manajemen Siswa</a>
                 <a className="text-white hover:bg-gray-800 md:px-8 py-4">Manajemen Tendik</a>
                 <a className="text-white hover:bg-gray-800 md:px-8 py-4" onClick={()=>{navigate('/kelas')}}>Manajemen Kelas</a>
-                <a className="text-white hover:bg-gray-800 md:px-8 py-4">Manajemen Peraturan</a>
+                <a className="text-white hover:bg-gray-800 md:px-8 py-4" onClick={()=>{navigate("/pelanggaran")}}>Manajemen Peraturan</a>
             </div>
         </div>
     )
