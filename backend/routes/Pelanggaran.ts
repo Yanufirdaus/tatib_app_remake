@@ -7,7 +7,9 @@ const pelanggaranRouter = express.Router();
 
 pelanggaranRouter.post('/pelanggaran', AuthMidleware, AdminMiddleware, validatePelanggaranInputMiddleware, PelanggaranController.addPelanggaran);
 
-pelanggaranRouter.get('/pelanggaran/jenis/:jenisId', AuthMidleware, AdminMiddleware, PelanggaranController.getPelanggaranByJenis);
+pelanggaranRouter.get('/pelanggaran/jenis/:jenisId', AuthMidleware, PelanggaranController.getPelanggaranByJenis);
+
+pelanggaranRouter.get('/pelanggaran/jenis', AuthMidleware, PelanggaranController.getAllJenisPelanggaran);
 
 pelanggaranRouter.put('/pelanggaran/:id', AuthMidleware, AdminMiddleware, validateUpdatePelanggaranMiddleware, PelanggaranController.updatePelanggaran);
 
