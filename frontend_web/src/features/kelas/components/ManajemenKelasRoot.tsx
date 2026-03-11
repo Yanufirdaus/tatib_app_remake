@@ -1,7 +1,7 @@
 import { FaPlusSquare } from "react-icons/fa"
 import ListKelas from "./ListKelas"
 import { useFieldArray, useForm } from "react-hook-form"
-import { AddManyKelasSchema, type AddKelasFormValues } from "../../login/schema/add.kelas.schema"
+import { AddManyKelasSchema, type AddKelasFormValues } from "../schema/add.kelas.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAddKelas } from "../hooks/useKelas"
 
