@@ -1,5 +1,5 @@
 import { apiClient } from "../../../services/apiClient";
-import type { UpdateSemesterFormValues } from "../../login/schema/update.semester.schema";
+import type { UpdateSemesterFormValues } from "../schema/update.semester.schema";
 
 export const getSemester = async () => {
     try {
