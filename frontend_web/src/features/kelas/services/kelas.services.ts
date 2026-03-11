@@ -1,5 +1,5 @@
 import { apiClient } from "../../../services/apiClient";
-import type { AddKelasFormValues } from "../../login/schema/add.kelas.schema";
+import type { AddKelasFormValues } from "../schema/add.kelas.schema";
 
 export const getKelas = async () => {
     try {
