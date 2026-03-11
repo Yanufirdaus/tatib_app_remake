@@ -27,6 +27,19 @@ export class PelanggaranController {
         }
     }
 
+     static async getAllJenisPelanggaran(req: Request, res: Response) {
+        try {
+            const jenisPelanggaran = await PelanggaranService.getAllJenisPelanggaran();
+            res.json(jenisPelanggaran);
+        } catch (err:any) {
+            console.error(err.message);
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                message: err.message || Messages.SERVER_ERROR,
+            });
+        }
+    }
+
     static async getPelanggaranByJenis(req: Request<{ jenisId: string }>, res: Response) {
         try {
             const jenisId = parseInt(req.params.jenisId);
