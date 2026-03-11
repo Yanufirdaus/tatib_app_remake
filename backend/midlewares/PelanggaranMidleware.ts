@@ -41,10 +41,12 @@ export const validateUpdatePelanggaranMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: UpdatePelanggaranDTO = req.body[0];
+    const input: UpdatePelanggaranDTO = req.body;
+    console.log(input)
 
     try {
-        UpdatePelanggaranSchema.parse(input);
+        const parsed = UpdatePelanggaranSchema.parse(input);
+        req.body = parsed;
         next();
     } catch (err: unknown) {
 
