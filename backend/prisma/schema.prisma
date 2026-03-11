@@ -74,6 +74,7 @@ model Pelanggaran {
   jenisId Int
   pelanggaran String
   poin Int
+  nomor Int
 
   catatanPelanggaran CatatanPelanggaran[]
 }
