@@ -3,7 +3,7 @@ import { FaEdit } from "react-icons/fa";
 import Input from "../../../components/ui/Input";
 import { useEditSemester, useSemester } from "../hooks/useSemester";
 import { useForm } from "react-hook-form";
-import { UpdateSemesterSchema, type UpdateSemesterFormValues } from "../../login/schema/update.semester.schema";
+import { UpdateSemesterSchema, type UpdateSemesterFormValues } from "../schema/update.semester.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const SemesterSection = () => {
