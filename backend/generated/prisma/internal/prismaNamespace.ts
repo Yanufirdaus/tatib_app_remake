@@ -1180,7 +1180,8 @@ export const PelanggaranScalarFieldEnum = {
   id: 'id',
   jenisId: 'jenisId',
   pelanggaran: 'pelanggaran',
-  poin: 'poin'
+  poin: 'poin',
+  nomor: 'nomor'
 } as const
 
 export type PelanggaranScalarFieldEnum = (typeof PelanggaranScalarFieldEnum)[keyof typeof PelanggaranScalarFieldEnum]
