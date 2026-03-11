@@ -30,12 +30,14 @@ export type PelanggaranAvgAggregateOutputType = {
   id: number | null
   jenisId: number | null
   poin: number | null
+  nomor: number | null
 }
 
 export type PelanggaranSumAggregateOutputType = {
   id: number | null
   jenisId: number | null
   poin: number | null
+  nomor: number | null
 }
 
 export type PelanggaranMinAggregateOutputType = {
@@ -43,6 +45,7 @@ export type PelanggaranMinAggregateOutputType = {
   jenisId: number | null
   pelanggaran: string | null
   poin: number | null
+  nomor: number | null
 }
 
 export type PelanggaranMaxAggregateOutputType = {
@@ -50,6 +53,7 @@ export type PelanggaranMaxAggregateOutputType = {
   jenisId: number | null
   pelanggaran: string | null
   poin: number | null
+  nomor: number | null
 }
 
 export type PelanggaranCountAggregateOutputType = {
@@ -57,6 +61,7 @@ export type PelanggaranCountAggregateOutputType = {
   jenisId: number
   pelanggaran: number
   poin: number
+  nomor: number
   _all: number
 }
 
@@ -65,12 +70,14 @@ export type PelanggaranAvgAggregateInputType = {
   id?: true
   jenisId?: true
   poin?: true
+  nomor?: true
 }
 
 export type PelanggaranSumAggregateInputType = {
   id?: true
   jenisId?: true
   poin?: true
+  nomor?: true
 }
 
 export type PelanggaranMinAggregateInputType = {
@@ -78,6 +85,7 @@ export type PelanggaranMinAggregateInputType = {
   jenisId?: true
   pelanggaran?: true
   poin?: true
+  nomor?: true
 }
 
 export type PelanggaranMaxAggregateInputType = {
@@ -85,6 +93,7 @@ export type PelanggaranMaxAggregateInputType = {
   jenisId?: true
   pelanggaran?: true
   poin?: true
+  nomor?: true
 }
 
 export type PelanggaranCountAggregateInputType = {
@@ -92,6 +101,7 @@ export type PelanggaranCountAggregateInputType = {
   jenisId?: true
   pelanggaran?: true
   poin?: true
+  nomor?: true
   _all?: true
 }
 
@@ -186,6 +196,7 @@ export type PelanggaranGroupByOutputType = {
   jenisId: number
   pelanggaran: string
   poin: number
+  nomor: number
   _count: PelanggaranCountAggregateOutputType | null
   _avg: PelanggaranAvgAggregateOutputType | null
   _sum: PelanggaranSumAggregateOutputType | null
@@ -216,6 +227,7 @@ export type PelanggaranWhereInput = {
   jenisId?: Prisma.IntFilter<"Pelanggaran"> | number
   pelanggaran?: Prisma.StringFilter<"Pelanggaran"> | string
   poin?: Prisma.IntFilter<"Pelanggaran"> | number
+  nomor?: Prisma.IntFilter<"Pelanggaran"> | number
   jenis?: Prisma.XOR<Prisma.JenisPelanggaranScalarRelationFilter, Prisma.JenisPelanggaranWhereInput>
   catatanPelanggaran?: Prisma.CatatanPelanggaranListRelationFilter
 }
@@ -225,6 +237,7 @@ export type PelanggaranOrderByWithRelationInput = {
   jenisId?: Prisma.SortOrder
   pelanggaran?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
   jenis?: Prisma.JenisPelanggaranOrderByWithRelationInput
   catatanPelanggaran?: Prisma.CatatanPelanggaranOrderByRelationAggregateInput
 }
@@ -237,6 +250,7 @@ export type PelanggaranWhereUniqueInput = Prisma.AtLeast<{
   jenisId?: Prisma.IntFilter<"Pelanggaran"> | number
   pelanggaran?: Prisma.StringFilter<"Pelanggaran"> | string
   poin?: Prisma.IntFilter<"Pelanggaran"> | number
+  nomor?: Prisma.IntFilter<"Pelanggaran"> | number
   jenis?: Prisma.XOR<Prisma.JenisPelanggaranScalarRelationFilter, Prisma.JenisPelanggaranWhereInput>
   catatanPelanggaran?: Prisma.CatatanPelanggaranListRelationFilter
 }, "id">
@@ -246,6 +260,7 @@ export type PelanggaranOrderByWithAggregationInput = {
   jenisId?: Prisma.SortOrder
   pelanggaran?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
   _count?: Prisma.PelanggaranCountOrderByAggregateInput
   _avg?: Prisma.PelanggaranAvgOrderByAggregateInput
   _max?: Prisma.PelanggaranMaxOrderByAggregateInput
@@ -261,11 +276,13 @@ export type PelanggaranScalarWhereWithAggregatesInput = {
   jenisId?: Prisma.IntWithAggregatesFilter<"Pelanggaran"> | number
   pelanggaran?: Prisma.StringWithAggregatesFilter<"Pelanggaran"> | string
   poin?: Prisma.IntWithAggregatesFilter<"Pelanggaran"> | number
+  nomor?: Prisma.IntWithAggregatesFilter<"Pelanggaran"> | number
 }
 
 export type PelanggaranCreateInput = {
   pelanggaran: string
   poin: number
+  nomor: number
   jenis: Prisma.JenisPelanggaranCreateNestedOneWithoutPelanggaranInput
   catatanPelanggaran?: Prisma.CatatanPelanggaranCreateNestedManyWithoutPelanggaranInput
 }
@@ -275,12 +292,14 @@ export type PelanggaranUncheckedCreateInput = {
   jenisId: number
   pelanggaran: string
   poin: number
+  nomor: number
   catatanPelanggaran?: Prisma.CatatanPelanggaranUncheckedCreateNestedManyWithoutPelanggaranInput
 }
 
 export type PelanggaranUpdateInput = {
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
   jenis?: Prisma.JenisPelanggaranUpdateOneRequiredWithoutPelanggaranNestedInput
   catatanPelanggaran?: Prisma.CatatanPelanggaranUpdateManyWithoutPelanggaranNestedInput
 }
@@ -290,6 +309,7 @@ export type PelanggaranUncheckedUpdateInput = {
   jenisId?: Prisma.IntFieldUpdateOperationsInput | number
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
   catatanPelanggaran?: Prisma.CatatanPelanggaranUncheckedUpdateManyWithoutPelanggaranNestedInput
 }
 
@@ -298,11 +318,13 @@ export type PelanggaranCreateManyInput = {
   jenisId: number
   pelanggaran: string
   poin: number
+  nomor: number
 }
 
 export type PelanggaranUpdateManyMutationInput = {
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PelanggaranUncheckedUpdateManyInput = {
@@ -310,6 +332,7 @@ export type PelanggaranUncheckedUpdateManyInput = {
   jenisId?: Prisma.IntFieldUpdateOperationsInput | number
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PelanggaranListRelationFilter = {
@@ -327,12 +350,14 @@ export type PelanggaranCountOrderByAggregateInput = {
   jenisId?: Prisma.SortOrder
   pelanggaran?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
 }
 
 export type PelanggaranAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   jenisId?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
 }
 
 export type PelanggaranMaxOrderByAggregateInput = {
@@ -340,6 +365,7 @@ export type PelanggaranMaxOrderByAggregateInput = {
   jenisId?: Prisma.SortOrder
   pelanggaran?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
 }
 
 export type PelanggaranMinOrderByAggregateInput = {
@@ -347,12 +373,14 @@ export type PelanggaranMinOrderByAggregateInput = {
   jenisId?: Prisma.SortOrder
   pelanggaran?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
 }
 
 export type PelanggaranSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   jenisId?: Prisma.SortOrder
   poin?: Prisma.SortOrder
+  nomor?: Prisma.SortOrder
 }
 
 export type PelanggaranScalarRelationFilter = {
@@ -419,6 +447,7 @@ export type PelanggaranUpdateOneRequiredWithoutCatatanPelanggaranNestedInput = {
 export type PelanggaranCreateWithoutJenisInput = {
   pelanggaran: string
   poin: number
+  nomor: number
   catatanPelanggaran?: Prisma.CatatanPelanggaranCreateNestedManyWithoutPelanggaranInput
 }
 
@@ -426,6 +455,7 @@ export type PelanggaranUncheckedCreateWithoutJenisInput = {
   id?: number
   pelanggaran: string
   poin: number
+  nomor: number
   catatanPelanggaran?: Prisma.CatatanPelanggaranUncheckedCreateNestedManyWithoutPelanggaranInput
 }
 
@@ -463,11 +493,13 @@ export type PelanggaranScalarWhereInput = {
   jenisId?: Prisma.IntFilter<"Pelanggaran"> | number
   pelanggaran?: Prisma.StringFilter<"Pelanggaran"> | string
   poin?: Prisma.IntFilter<"Pelanggaran"> | number
+  nomor?: Prisma.IntFilter<"Pelanggaran"> | number
 }
 
 export type PelanggaranCreateWithoutCatatanPelanggaranInput = {
   pelanggaran: string
   poin: number
+  nomor: number
   jenis: Prisma.JenisPelanggaranCreateNestedOneWithoutPelanggaranInput
 }
 
@@ -476,6 +508,7 @@ export type PelanggaranUncheckedCreateWithoutCatatanPelanggaranInput = {
   jenisId: number
   pelanggaran: string
   poin: number
+  nomor: number
 }
 
 export type PelanggaranCreateOrConnectWithoutCatatanPelanggaranInput = {
@@ -497,6 +530,7 @@ export type PelanggaranUpdateToOneWithWhereWithoutCatatanPelanggaranInput = {
 export type PelanggaranUpdateWithoutCatatanPelanggaranInput = {
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
   jenis?: Prisma.JenisPelanggaranUpdateOneRequiredWithoutPelanggaranNestedInput
 }
 
@@ -505,17 +539,20 @@ export type PelanggaranUncheckedUpdateWithoutCatatanPelanggaranInput = {
   jenisId?: Prisma.IntFieldUpdateOperationsInput | number
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PelanggaranCreateManyJenisInput = {
   id?: number
   pelanggaran: string
   poin: number
+  nomor: number
 }
 
 export type PelanggaranUpdateWithoutJenisInput = {
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
   catatanPelanggaran?: Prisma.CatatanPelanggaranUpdateManyWithoutPelanggaranNestedInput
 }
 
@@ -523,6 +560,7 @@ export type PelanggaranUncheckedUpdateWithoutJenisInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
   catatanPelanggaran?: Prisma.CatatanPelanggaranUncheckedUpdateManyWithoutPelanggaranNestedInput
 }
 
@@ -530,6 +568,7 @@ export type PelanggaranUncheckedUpdateManyWithoutJenisInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pelanggaran?: Prisma.StringFieldUpdateOperationsInput | string
   poin?: Prisma.IntFieldUpdateOperationsInput | number
+  nomor?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -568,6 +607,7 @@ export type PelanggaranSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   jenisId?: boolean
   pelanggaran?: boolean
   poin?: boolean
+  nomor?: boolean
   jenis?: boolean | Prisma.JenisPelanggaranDefaultArgs<ExtArgs>
   catatanPelanggaran?: boolean | Prisma.Pelanggaran$catatanPelanggaranArgs<ExtArgs>
   _count?: boolean | Prisma.PelanggaranCountOutputTypeDefaultArgs<ExtArgs>
@@ -578,6 +618,7 @@ export type PelanggaranSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   jenisId?: boolean
   pelanggaran?: boolean
   poin?: boolean
+  nomor?: boolean
   jenis?: boolean | Prisma.JenisPelanggaranDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pelanggaran"]>
 
@@ -586,6 +627,7 @@ export type PelanggaranSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   jenisId?: boolean
   pelanggaran?: boolean
   poin?: boolean
+  nomor?: boolean
   jenis?: boolean | Prisma.JenisPelanggaranDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pelanggaran"]>
 
@@ -594,9 +636,10 @@ export type PelanggaranSelectScalar = {
   jenisId?: boolean
   pelanggaran?: boolean
   poin?: boolean
+  nomor?: boolean
 }
 
-export type PelanggaranOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jenisId" | "pelanggaran" | "poin", ExtArgs["result"]["pelanggaran"]>
+export type PelanggaranOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jenisId" | "pelanggaran" | "poin" | "nomor", ExtArgs["result"]["pelanggaran"]>
 export type PelanggaranInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jenis?: boolean | Prisma.JenisPelanggaranDefaultArgs<ExtArgs>
   catatanPelanggaran?: boolean | Prisma.Pelanggaran$catatanPelanggaranArgs<ExtArgs>
@@ -620,6 +663,7 @@ export type $PelanggaranPayload<ExtArgs extends runtime.Types.Extensions.Interna
     jenisId: number
     pelanggaran: string
     poin: number
+    nomor: number
   }, ExtArgs["result"]["pelanggaran"]>
   composites: {}
 }
@@ -1049,6 +1093,7 @@ export interface PelanggaranFieldRefs {
   readonly jenisId: Prisma.FieldRef<"Pelanggaran", 'Int'>
   readonly pelanggaran: Prisma.FieldRef<"Pelanggaran", 'String'>
   readonly poin: Prisma.FieldRef<"Pelanggaran", 'Int'>
+  readonly nomor: Prisma.FieldRef<"Pelanggaran", 'Int'>
 }
     
 
