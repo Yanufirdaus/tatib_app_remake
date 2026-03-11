@@ -1,20 +1,15 @@
 import SelectOption from "../../../components/ui/option"
+import type { FilterSectionProps } from "../../../types/input.types";
 
-const option = [
-    {
-        value: "Kedisiplinan",
-        label: "Kedisiplinan"
-    },
-    {
-        value: "p",
-        label: "p"
-    }
-]
+const FilterSection = ({
+    isLoading, options, register
+} : FilterSectionProps ) => {
 
-const FilterSection = () => {
     return (
-        <div className="flex flex-row min-w-screen px-4 md:px-12 justify-left items-center md:justify-center">
-            <SelectOption selectOption={option} label="Jenis Pelanggaran :   "/>
+        <div className="flex flex-row min-w-screen px-4 md:px-0 justify-left items-center md:justify-center">
+            <form>
+                <SelectOption selectOption={isLoading ? [] : options} label="Jenis Pelanggaran :   " {...register("jenisPelanggaran")}/>
+            </form>
         </div>
     )
 }
