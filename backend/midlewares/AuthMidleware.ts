@@ -6,7 +6,7 @@ import { ZodError } from "zod";
 import { LoginSchema } from "../validation/LoginSchema";
 
 export const AuthMidleware = (req: Request, res: Response, next: NextFunction) => {
-    
+
     const authHeader = req.cookies.token;
 
     console.log("Auth Header:", authHeader);
@@ -41,7 +41,7 @@ export const TendikAdminMiddleware = (req: Request, res: Response, next: NextFun
     if (!req.user) {
         return res.status(401).json({ message: "Unauthorized" });
     }
-    if (req.user.role !== "kesiswaan" && req.body.user.role !== "admin" && req.body.user.role !== "kepsek" && req.body.user.role !== "bk") {
+    if (req.user.role !== "kesiswaan" && req.user.role !== "admin" && req.user.role !== "kepsek" && req.user.role !== "bk") {
         return res.status(403).json({ message: "Forbidden: Tendik only and Admin Only" });
     }
     next();
@@ -49,27 +49,28 @@ export const TendikAdminMiddleware = (req: Request, res: Response, next: NextFun
 
 
 export const validateLoginMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
-  const { nomor_induk, password, platform } = req.body;
+    const { nomor_induk, password, platform } = req.body;
 
-  try {
-    LoginSchema.parse({ nomor_induk, password, platform });
-    next();
-  } catch (err: unknown) {
+    try {
+        LoginSchema.parse({ nomor_induk, password, platform });
+        next();
+    } catch (err: unknown) {
 
-    if (err instanceof ZodError) {
-        return res.status(400).json({
-            message: err.issues.map(issue => issue.message)
+        if (err instanceof ZodError) {
+            return res.status(400).json({
+                message: err.issues.map(issue => issue.message)
+            });
+        }
+        console.error("Unexpected error:", err);
+
+        return res.status(500).json({
+            message: "Internal server error"
         });
     }
-    console.error("Unexpected error:", err);
-
-    return res.status(500).json({
-        message: "Internal server error"
-    });}
 };
 
 
@@ -84,7 +85,7 @@ export const validateRegisterTendikMiddleware = (
         const result = CreateTendikSchema.safeParse(input);
         if (!result.success) {
             return res.status(400).json({
-                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+                message: result.error.issues.map(issue => ({ index: issue.path[0], field: issue.path[1], message: issue.message }))
             });
         }
         next();
@@ -108,14 +109,14 @@ export const validateRegisterSiswaMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateSiswaDTO[]  = req.body;
+    const input: CreateSiswaDTO[] = req.body;
     console.log("Input data:", req.body);
-    
+
     try {
         const result = CreateUserSchema.safeParse(input);
         if (!result.success) {
             return res.status(400).json({
-                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+                message: result.error.issues.map(issue => ({ index: issue.path[0], field: issue.path[1], message: issue.message }))
             });
         }
         next();
