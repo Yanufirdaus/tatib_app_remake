@@ -4,24 +4,33 @@ export class KelasService {
     static async getAllKelas() {
         const kelas = await prisma.kelas.findMany({
             orderBy: [
-                {grade: "asc"},
-                {name: "asc"}
+                { grade: "asc" },
+                { name: "asc" }
             ]
         });
         return kelas;
     }
-    
-    static async createKelas (kelas: CreateKelasDTO) {
+
+    static async getKelasById(kelasId: number) {
+        const kelas = await prisma.kelas.findUnique({
+            where: {
+                id: kelasId
+            }
+        });
+        return kelas;
+    }
+
+    static async createKelas(kelas: CreateKelasDTO) {
         const newKelas = await prisma.kelas.create({
             data: {
                 grade: kelas.grade,
                 name: kelas.name.toLowerCase()
             }
         });
-        return {message: "Kelas created successfully", data: newKelas};
+        return { message: "Kelas created successfully", data: newKelas };
     }
 
-    static async createManyKelasNew (input: CreateManyKelasDTO) {
+    static async createManyKelasNew(input: CreateManyKelasDTO) {
         const normalizedKelas = input.kelas.map(k => ({
             ...k,
             name: k.name.toLowerCase().trim()
@@ -47,7 +56,7 @@ export class KelasService {
             data: normalizedKelas,
             skipDuplicates: true
         });
-        return {status: 201, message: "Kelas added successfully", data: created};
+        return { status: 201, message: "Kelas added successfully", data: created };
     }
 
     static async deleteKelas(kelasId: number) {
@@ -62,12 +71,12 @@ export class KelasService {
             error.status = 400;
             throw error;
         }
-        
+
         const deletedKelas = await prisma.kelas.delete({
             where: {
                 id: kelasId
             }
         });
-        return {message: "Kelas deleted successfully", data: deletedKelas};
+        return { message: "Kelas deleted successfully", data: deletedKelas };
     }
 }
