@@ -7,6 +7,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import ManajemenKelas from "../pages/ManajemenKelas";
 import ManajemenPelanggaran from "../pages/ManajemenPelanggaran";
+import ManajemenSiswa from "../pages/ManajemenSiswa";
+import SiswaKelasPage from "../pages/SiswaKelasPage";
 
 export const router = createBrowserRouter([
     {
@@ -23,7 +25,7 @@ export const router = createBrowserRouter([
                 ]
             }
         ]
-        
+
     },
     {
         element: <PublicRoute />,
@@ -39,7 +41,7 @@ export const router = createBrowserRouter([
                 ]
             }
         ]
-        
+
     },
     {
         element: <ProtectedRoute />,
@@ -81,6 +83,36 @@ export const router = createBrowserRouter([
                     {
                         index: true,
                         element: <ManajemenPelanggaran />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/manajemen-siswa",
+                element: <RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <ManajemenSiswa />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/manajemen-siswa/kelas/:id",
+                element: <RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <SiswaKelasPage />,
                     },
                 ],
             },
