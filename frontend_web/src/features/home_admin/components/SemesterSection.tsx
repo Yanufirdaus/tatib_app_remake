@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Input from "../../../components/ui/Input";
+import ActionButtons from "../../../components/ui/ActionButtons";
 import { useEditSemester, useSemester } from "../hooks/useSemester";
 import { useForm } from "react-hook-form";
 import { UpdateSemesterSchema, type UpdateSemesterFormValues } from "../schema/update.semester.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const SemesterSection = () => {
-    const [ onEdit, setOnEdit]  = useState(false);
+    const [onEdit, setOnEdit] = useState(false);
     const { data, isLoading, error: semesterError } = useSemester();
 
     const { mutate, isPending, error: editSemesterError } = useEditSemester();
@@ -38,64 +39,58 @@ const SemesterSection = () => {
                 <p>Tahun Ajaran</p>
                 <div className="flex flex-row justify-center items:center md:items-top gap-2 md:gap-4">
                     {!onEdit ? (
-                            <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4">
-                                <p>{data?.tahun_ajaran}</p>
-                                <p>/</p>
-                                <p>{data?.semester}</p>
-                            </div>
-                            
-                        ) : (
-                            <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4 px-18 md:px-0">
-                                <Input 
-                                    {...register("tahun_ajaran")}
-                                    placeholder="ex: 2024-2025"
-                                    className="text-xs w-auto"
-                                    error={errors.tahun_ajaran?.message}
-                                />
-                                <p>/</p>
-                                <Input 
-                                    {...register("semester")}
-                                    placeholder="ganjil/genap"
-                                    className="text-xs w-auto"
-                                    error={errors.semester?.message}
-                                />
-                            </div>
-                            
-                        )
+                        <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4">
+                            <p>{data?.tahun_ajaran}</p>
+                            <p>/</p>
+                            <p>{data?.semester}</p>
+                        </div>
+
+                    ) : (
+                        <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4 px-18 md:px-0">
+                            <Input
+                                {...register("tahun_ajaran")}
+                                placeholder="ex: 2024-2025"
+                                className="text-xs w-auto"
+                                error={errors.tahun_ajaran?.message}
+                            />
+                            <p>/</p>
+                            <Input
+                                {...register("semester")}
+                                placeholder="ganjil/genap"
+                                className="text-xs w-auto"
+                                error={errors.semester?.message}
+                            />
+                        </div>
+
+                    )
 
                     }
-                    
-                    {!onEdit ? (
-                            <button 
+
+                    {
+                        !onEdit ? (
+                            <button
                                 className="bg-blue-500 px-1 py-1 rounded-sm hover:bg-blue-700"
-                                onClick={()=>setOnEdit(true)}
+                                onClick={() => setOnEdit(true)}
                             >
-                                <FaEdit color="white"/>
+                                <FaEdit color="white" />
                             </button>
-                        ):(
+                        ) : (
                             <></>
                         )
                     }
-                    
+
                 </div>
-                {!onEdit ? (
+                {
+                    !onEdit ? (
                         <></>
                     ) : (
-                        <div className="flex flex-row justify-center items-top h-fit gap-2 md:gap-4">
-                            <button 
-                                className="bg-red-600 px-2 py-1 rounded-sm hover:bg-red-900 text-xs text-white font-medium"
-                                onClick={()=>setOnEdit(false)}
-                            >
-                                Batal
-                            </button>
-                            <button 
-                                type="submit"
-                                className="bg-blue-500 px-2 py-1 rounded-sm hover:bg-blue-700 text-xs text-white font-medium"
-                                disabled= {isPending}
-                            >
-                                {!isPending ? "Simpan" : "Update..."}
-                            </button>
-                        </div>
+                        <ActionButtons
+                            onCancel={() => setOnEdit(false)}
+                            isPending={isPending}
+                            submitText="Simpan"
+                            loadingText="Update..."
+                            className="!py-0"
+                        />
                     )
                 }
                 {editSemesterError && (
@@ -103,7 +98,7 @@ const SemesterSection = () => {
                         {editSemesterError.message}
                     </p>
                 )}
-                
+
             </div>
         </form>
     )
