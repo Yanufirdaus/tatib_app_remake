@@ -8,7 +8,21 @@ export class KelasController {
         try {
             const kelas = await KelasService.getAllKelas();
             res.json(kelas);
-        } catch (err:any) {
+        } catch (err: any) {
+            console.error(err.message);
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                message: err.message || Messages.SERVER_ERROR,
+            });
+        }
+    }
+
+    static async getKelasById(req: Request<{ id: string }>, res: Response) {
+        try {
+            const kelasId = parseInt(req.params.id);
+            const kelas = await KelasService.getKelasById(kelasId);
+            res.json(kelas);
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
@@ -22,7 +36,7 @@ export class KelasController {
             const kelasInput = req.body;
             const newKelas = await KelasService.createKelas(kelasInput);
             res.status(201).json(newKelas);
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
@@ -35,14 +49,14 @@ export class KelasController {
         try {
             console.log(req.body)
             const parsed = AddManyKelasSchema.parse(req.body);
-            
+
             const created = await KelasService.createManyKelasNew(parsed);
 
             res.status(201).json({
                 message: "Kelas berhasil ditambahkan",
                 data: created
             });
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
@@ -57,7 +71,7 @@ export class KelasController {
             const kelasId = parseInt(req.params.id);
             const deletedKelas = await KelasService.deleteKelas(kelasId);
             res.json(deletedKelas);
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,

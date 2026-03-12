@@ -12,7 +12,7 @@ export class AuthController {
 
             const createdStudents = await AuthService.registerStudents(users);
             return res.status(201).json(createdStudents);
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
@@ -27,7 +27,7 @@ export class AuthController {
 
             const createdTendik = await AuthService.registerTendik(users);
             return res.status(201).json(createdTendik);
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
@@ -36,12 +36,12 @@ export class AuthController {
         }
     }
 
-    static async login(req: Request<{}, {}, LoginDTO>, res: Response) { 
+    static async login(req: Request<{}, {}, LoginDTO>, res: Response) {
         try {
             const login_input = req.body;
             const result = await LoginService.login(login_input);
             const { user, accessToken, refreshToken: refreshTokenValue } = result;
-            
+
             res.cookie("token", accessToken, {
                 httpOnly: true,
                 secure: true,
@@ -61,7 +61,7 @@ export class AuthController {
                 user: { id: user.id, role: user.role }
             });
             return res.status(201).json(result.user);
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
@@ -80,20 +80,13 @@ export class AuthController {
 
         try {
             const result = await AuthService.refreshToken(refreshToken!);
-            
+
             res.cookie("token", result.newToken, {
                 httpOnly: true,
                 secure: true,
                 maxAge: 15 * 60 * 1000,
                 sameSite: "none"
             });
-
-            // res.cookie("refreshToken", refreshToken, {
-            //     httpOnly: true,
-            //     secure: true,
-            //     maxAge: 7 * 24 * 60 * 60 * 1000,
-            //     sameSite: "none"
-            // });
 
             res.json({
                 message: Messages.LOGIN_SUCCESS,
@@ -111,7 +104,7 @@ export class AuthController {
 
     static async logout(req: Request, res: Response) {
         const refreshToken = req.headers["refreshtoken"] || req.cookies.refreshToken;
-        
+
         if (!refreshToken) {
             return res.status(402).json({ message: "Refresh token is required" });
         }
@@ -124,7 +117,7 @@ export class AuthController {
                 secure: true,
                 sameSite: "none"
             });
-            res.clearCookie("refreshToken",{
+            res.clearCookie("refreshToken", {
                 httpOnly: true,
                 secure: true,
                 sameSite: "none"
@@ -139,10 +132,10 @@ export class AuthController {
         }
     }
 
-    static async me (req: Request, res: Response) {
-        const userId= req.user?.id
+    static async me(req: Request, res: Response) {
+        const userId = req.user?.id
 
-        if(!userId) {
+        if (!userId) {
             return res.status(402).json({ message: Messages.NIP_REQUIRED });
         }
 
