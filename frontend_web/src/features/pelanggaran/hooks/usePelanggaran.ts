@@ -1,31 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { deletePelanggaran, getJenisPelanggaran, getPelanggaranByJenis, updatePelanggaran } from "../services/pelanggaran.service"
+import { addPelanggaran, deletePelanggaran, getJenisPelanggaran, getPelanggaranByJenis, updatePelanggaran } from "../services/pelanggaran.service"
 import type { JenisPelanggaranType } from "../../../types/variable.type"
 import type { UpdatePelanggaranPayload } from "../type/pelanggaran.type"
 
 export const useJenisPelanggaran = () => {
-    return useQuery <JenisPelanggaranType[]> ({
+    return useQuery<JenisPelanggaranType[]>({
         queryKey: ["jenisPelanggaran"],
         queryFn: getJenisPelanggaran,
-        staleTime: 5*60*1000
+        staleTime: 5 * 60 * 1000
     })
 }
 
 export const useGetPelanggaranByJenisId = (jenisId: number) => {
-    return useQuery ({
+    return useQuery({
         queryKey: ["pelanggaranByJenisId", jenisId],
         queryFn: () => getPelanggaranByJenis(jenisId),
-        staleTime: 5*60*1000
+        staleTime: 5 * 60 * 1000
     })
 }
 
 export const useUpdatePelanggaran = () => {
     const queryClient = useQueryClient();
-    
+
     return useMutation<
-        unknown,                    
-        Error,                      
-        UpdatePelanggaranPayload    
+        unknown,
+        Error,
+        UpdatePelanggaranPayload
     >({
         mutationFn: ({ id, data }) => updatePelanggaran(id, data),
 
@@ -37,9 +37,20 @@ export const useUpdatePelanggaran = () => {
 
 export const useDeletePelanggaran = () => {
     const queryClient = useQueryClient();
-    
+
     return useMutation({
         mutationFn: deletePelanggaran,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["pelanggaranByJenisId"] })
+        }
+    })
+}
+
+export const useAddPelanggaran = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: addPelanggaran,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["pelanggaranByJenisId"] })
         }
