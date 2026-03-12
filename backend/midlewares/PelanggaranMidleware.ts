@@ -9,17 +9,19 @@ export const validatePelanggaranInputMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: AddPelanggaranDTO[] = req.body;
+    const input: AddPelanggaranDTO[] = req.body.pelanggaran;
 
     console.log("Input data:", input);
-    
+
     try {
         const result = AddPelanggaranSchema.safeParse(input);
         if (!result.success) {
             return res.status(400).json({
-                message: result.error.issues.map(issue => ({index: issue.path[0], field: issue.path[1], message: issue.message}))
+                message: result.error.issues.map(issue => ({ index: issue.path[0], field: issue.path[1], message: issue.message }))
             });
         }
+
+        req.body.pelanggaran = result.data;
         next();
     } catch (err: unknown) {
 
