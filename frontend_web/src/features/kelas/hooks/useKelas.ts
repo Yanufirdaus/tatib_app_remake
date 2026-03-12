@@ -1,17 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addKelas, deleteKelas, getKelas } from "../services/kelas.services"
+import { addKelas, deleteKelas, getKelas, getKelasById } from "../services/kelas.services"
 
 export const useKelas = () => {
-    return useQuery ({
+    return useQuery({
         queryKey: ["kelas"],
         queryFn: getKelas,
-        staleTime: 5*60*1000
+        staleTime: 5 * 60 * 1000
+    })
+}
+
+export const useKelasById = (id: number) => {
+    return useQuery({
+        queryKey: ["kelas", id],
+        queryFn: () => getKelasById(id),
+        staleTime: 5 * 60 * 1000
     })
 }
 
 export const useDeleteKelas = () => {
     const queryClient = useQueryClient();
-    
+
     return useMutation({
         mutationFn: deleteKelas,
         onSuccess: () => {
@@ -22,7 +30,7 @@ export const useDeleteKelas = () => {
 
 export const useAddKelas = () => {
     const queryClient = useQueryClient();
-    
+
     return useMutation({
         mutationFn: addKelas,
         onSuccess: () => {
