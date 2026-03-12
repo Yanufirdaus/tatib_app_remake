@@ -6,7 +6,9 @@ import { CreateKelasMidleware } from '../midlewares/KelasMidleware';
 
 const kelasRouter = express.Router();
 
-kelasRouter.get("/kelas", AuthMidleware, AdminMiddleware, KelasController.getAllKelas);
+kelasRouter.get("/kelas", AuthMidleware, KelasController.getAllKelas);
+
+kelasRouter.get("/kelas/:id", AuthMidleware, KelasController.getKelasById);
 
 kelasRouter.post("/kelas", AuthMidleware, AdminMiddleware, CreateKelasMidleware, KelasController.createKelas);
 
