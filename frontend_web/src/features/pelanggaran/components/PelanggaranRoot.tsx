@@ -7,6 +7,7 @@ import { FaPlusSquare } from "react-icons/fa";
 import TambahPelanggaran from "./TambahPelanggaran";
 import { AddPelanggaranSchema, type AddPelanggaranFormValues } from "../schemas/pelanggaran.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import TitlePage from "../../../components/ui/TitlePage";
 
 const PelanggaranRoot = () => {
     const { data, isLoading, error: jenisError } = useJenisPelanggaran();
@@ -56,7 +57,7 @@ const PelanggaranRoot = () => {
                 <div className="w-full flex flex-row">
                     <div className="basis-2/8"></div>
                     <div className="basis-6/8">
-                        <h1 className="text-lg md:text-2xl font-bold text-center">Manajemen Pelanggaran</h1>
+                        <TitlePage title="Manajemen Pelanggaran" />
                     </div>
                     <div className="flex flex-row basis-2/8 justify-center items-center">
                         <FaPlusSquare
