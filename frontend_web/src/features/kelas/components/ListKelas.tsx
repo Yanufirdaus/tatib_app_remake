@@ -3,6 +3,7 @@ import { useDeleteKelas, useKelas } from "../hooks/useKelas";
 import { Oval } from "react-loader-spinner";
 import AddKelas from "./AddKelas";
 import type { AddKelasProps } from "../type/add.kelas.props.type";
+import DataCard from "../../../components/ui/DataCard";
 
 const ListKelas = ({
   fields,
@@ -45,21 +46,14 @@ const ListKelas = ({
                 </div>
             ) : (
                 <div className="flex flex-col gap-2">
-                    {data.map((data: any) => (
-                        <div className="flex flex-row min-w-xs md:min-w-xl rounded-md border border-black">
-                            <div className="basis-5/6 py-4 pl-4 text-sm md: text-base">
-                                {data.name}
-                            </div>
-                            <a 
-                                className="basis-1/6 py-4 flex items-center justify-center" 
-                                onClick={
-                                    () => handleDeleteKelas(data.id)
-                                }
-                                aria-disabled={isPending}
-                            >
-                                {!isPending ? <FaTrashAlt className="fill-red-500 hover:fill-red-800" /> : <FaCircleNotch className="fill-black-500" />}
-                            </a>
-                        </div>
+                    {data.map((item: any) => (
+                        <DataCard 
+                            key={item.id}
+                            text={item.name}
+                            actionIcon={!isPending ? <FaTrashAlt className="fill-red-500 hover:fill-red-800" /> : <FaCircleNotch className="fill-black-500 animate-spin" />}
+                            onActionClick={() => handleDeleteKelas(item.id)}
+                            isActionDisabled={isPending}
+                        />
                     ))}
                 </div>
             )}
