@@ -5,13 +5,14 @@ import { Messages } from "../constant/message";
 export class PelanggaranController {
     static async addPelanggaran(req: Request, res: Response) {
         try {
-            const pelanggaranData: AddPelanggaranDTO[] = req.body
+            const pelanggaranData: AddPelanggaranDTO[] = req.body.pelanggaran
                 .filter((item: any) => item.jenisId && item.pelanggaran && item.poin !== undefined)
                 .map((item: any) => ({
                     jenisId: item.jenisId,
                     pelanggaran: item.pelanggaran,
                     poin: item.poin,
-            }));
+                    nomor: item.nomor
+                }));
 
             if (pelanggaranData.length === 0) {
                 throw { status: 400, message: "Tidak ada data pelanggaran valid untuk disimpan" };
@@ -27,11 +28,11 @@ export class PelanggaranController {
         }
     }
 
-     static async getAllJenisPelanggaran(req: Request, res: Response) {
+    static async getAllJenisPelanggaran(req: Request, res: Response) {
         try {
             const jenisPelanggaran = await PelanggaranService.getAllJenisPelanggaran();
             res.json(jenisPelanggaran);
-        } catch (err:any) {
+        } catch (err: any) {
             console.error(err.message);
             res.status(err.status || 500).json({
                 status: err.status || 500,
