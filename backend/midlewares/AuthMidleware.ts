@@ -109,7 +109,7 @@ export const validateRegisterSiswaMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateSiswaDTO[] = req.body;
+    const input: CreateSiswaDTO[] = req.body.siswa;
     console.log("Input data:", req.body);
 
     try {
@@ -119,6 +119,8 @@ export const validateRegisterSiswaMiddleware = (
                 message: result.error.issues.map(issue => ({ index: issue.path[0], field: issue.path[1], message: issue.message }))
             });
         }
+
+        req.body.siswa = result.data;
         next();
     } catch (err: unknown) {
 
