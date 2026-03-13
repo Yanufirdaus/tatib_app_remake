@@ -11,3 +11,10 @@ export type SiswaRowProps = {
     controlKelas: Control<UpdateManySiswaKelasFormValues>;
     index: number;
 }
+
+export type ListSiswaProps = {
+    siswa: any;
+    isLoadingSiswa: boolean;
+    fields: FieldArrayWithId<UpdateManySiswaKelasFormValues, "kelasUpdate">[];
+    controlKelas: Control<UpdateManySiswaKelasFormValues>;
+}
