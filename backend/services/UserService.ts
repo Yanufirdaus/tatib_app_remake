@@ -1,5 +1,6 @@
 import { profile } from "node:console";
 import { prisma } from "../lib/prisma";
+import { hashPassword } from "../utils/crypto";
 
 export class UserService {
     static async getSiswaById(id: number) {
@@ -19,6 +20,11 @@ export class UserService {
             include: {
                 profileSiswa: true,
                 kelas: true,
+            },
+            orderBy: {
+                profileSiswa: {
+                    name: "asc",
+                },
             },
         });
         return siswaList;
@@ -46,16 +52,20 @@ export class UserService {
 
     static async updateSiswa(id: number, data: UpdateUserDTO) {
         console.log("Updating siswa with data:", data);
+
+        const hashedPassword = await hashPassword(String(data.nisn));
+
         const updatedSiswa = await prisma.siswa.update({
             where: { id: id },
             data: {
-                kelas: {          // bukan kelasId langsung
-                    connect: { id: data.kelasId },  // connect ke kelas baru
+                nisn: String(data.nisn),
+                kelas: {
+                    connect: { id: Number(data.kelasId) },
                 },
                 profileSiswa: {
                     update: {
-                        name: data.name,
-                        image_profile: data.image_profile,
+                        name: data.name.toLowerCase(),
+                        password: hashedPassword,
                     },
                 },
             },
@@ -65,8 +75,23 @@ export class UserService {
             },
         });
 
-  
+
         return updatedSiswa;
+    }
+
+    static async updateManySiswaKelas(data: UpdateManySiswaKelasDTO) {
+        const result = await prisma.$transaction(
+            data.kelasUpdate.map((siswaId, index) =>
+                prisma.siswa.update({
+                    where: { id: Number(siswaId.siswaIds) },
+                    data: {
+                        kelasId: Number(siswaId.kelasIds),
+                    },
+                })
+            )
+        );
+
+        return result;
     }
 
     static async updateTendik(id: number, data: UpdateTendikDTO) {
@@ -75,7 +100,7 @@ export class UserService {
             data: {
                 profileSiswa: {
                     update: {
-                        name: data.name,
+                        name: data.name.toLowerCase(),
                         image_profile: data.image_profile,
                     },
                 },
@@ -96,6 +121,29 @@ export class UserService {
         const profileId = getSiswaById.profileSiswa.id;
 
         console.log(id, profileId);
+
+        const catatanList = await prisma.catatanPelanggaran.findMany({
+            where: { idPelanggar: profileId },
+            select: { bukti: true },
+        });
+
+        const { v2: cloudinary } = await import("cloudinary");
+        for (const catatan of catatanList) {
+            if (catatan.bukti) {
+                try {
+                    const urlParts = catatan.bukti.split("/");
+                    const uploadIndex = urlParts.indexOf("upload");
+                    if (uploadIndex !== -1) {
+                        const publicIdWithExt = urlParts.slice(uploadIndex + 2).join("/");
+                        const publicId = publicIdWithExt.replace(/\.[^/.]+$/, "");
+                        await cloudinary.uploader.destroy(publicId);
+                        console.log(`Deleted Cloudinary file: ${publicId}`);
+                    }
+                } catch (err) {
+                    console.error(`Failed to delete Cloudinary file: ${catatan.bukti}`, err);
+                }
+            }
+        }
 
         const deleteCatatanPelanggaran = await prisma.catatanPelanggaran.deleteMany({
             where: { idPelanggar: profileId },
@@ -118,7 +166,7 @@ export class UserService {
     static async deleteTendik(id: number) {
         const deleteTendik = await prisma.tendik.delete({
             where: { id: id },
-            include: {  
+            include: {
                 profileSiswa: true,
             },
         });
