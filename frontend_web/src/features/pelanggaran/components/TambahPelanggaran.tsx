@@ -84,6 +84,7 @@ const TambahPelanggaran = ({
                 cancelText="Batal"
                 onCancel={() => remove()}
                 isPending={isPending}
+                typeButton="submit"
             />
         </form>
     )
