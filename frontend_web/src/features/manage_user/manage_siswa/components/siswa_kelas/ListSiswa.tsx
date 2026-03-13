@@ -1,39 +1,59 @@
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import { useSiswaByKelas } from "../../hooks/useSiswa";
+import { Oval } from "react-loader-spinner";
+import { HEADERS, thClass } from "../../constants/table";
+import { useState } from "react";
+import { useKelas } from "../../../../kelas/hooks/useKelas";
+import SiswaRow from "./SiswaRow";
+import type { ListSiswaProps } from "../../../type/user.type";
 
-const ListSiswa = ({ id }: { id: number }) => {
-    const { data: siswa, isLoading: isLoadingSiswa } = useSiswaByKelas(id);
+const ListSiswa = ({ siswa, isLoadingSiswa, fields, controlKelas }: ListSiswaProps) => {
+    const [editId, setEditId] = useState<number | null>(null);
 
-    console.log(siswa)
+    const { data: kelas, isLoading: isLoadingKelas } = useKelas();
+
+    const options = kelas?.map((k: any) => ({
+        value: String(k.id),
+        label: k.name
+    }))
 
     return (
         <div >
             {isLoadingSiswa ? (
-                <p>Loading...</p>
+                <div className="flex justify-center h-screen">
+                    <Oval
+                        color="#2dd4bf"
+                        height={50}
+                        width={50}
+                    />
+                </div>
             ) : (
                 <div className="flex flex-col gap-2 w-full px-4 md:px-0">
-                    <div className="w-full overflow-x-auto">
+                    <div className="w-full overflow-x-auto flex justify-start md:justify-center">
                         <table className="border-collapse md:border-separate table-auto border border-gray-400 w-full md:w-150 text-sm md:text-base">
                             <thead>
                                 <tr>
-                                    <th className="border border-gray-300 py-2 px-2 whitespace-nowrap">Nama</th>
-                                    <th className="border border-gray-300 py-2 px-2 whitespace-nowrap">NISN</th>
-                                    <th className="border border-gray-300 py-2 px-2 whitespace-nowrap">Kelas</th>
-                                    <th className="border border-gray-300 py-2 px-2 whitespace-nowrap">Poin</th>
-                                    <th className="border border-gray-300 py-2 px-2 whitespace-nowrap">Hapus</th>
-                                    <th className="border border-gray-300 py-2 px-2 whitespace-nowrap">Edit</th>
+                                    {HEADERS.map((header) => (
+                                        <th key={header} className={thClass}>{header}</th>
+                                    ))}
+                                    {editId ? (
+                                        <th className={thClass}>Batal</th>
+                                    ) : (
+                                        <th className={thClass}>Hapus</th>
+                                    )}
                                 </tr>
                             </thead>
                             <tbody>
-                                {siswa.map((s: any) => (
-                                    <tr key={s.id}>
-                                        <td className="border border-gray-300 px-2 py-4 text-sm md:text-base whitespace-nowrap">{s.profileSiswa.name}</td>
-                                        <td className="border border-gray-300 px-2 py-4 text-sm md:text-base whitespace-nowrap">{s.nisn}</td>
-                                        <td className="border border-gray-300 px-2 py-4 text-sm md:text-base whitespace-nowrap">{s.kelas.name}</td>
-                                        <td className="border border-gray-300 px-2 py-4 text-sm md:text-base whitespace-nowrap text-center">{s.poin}</td>
-                                        <td className="border border-gray-300 px-2 py-4 text-sm md:text-base whitespace-nowrap text-center"><FaTrashAlt className="inline fill-red-500 hover:fill-red-800 cursor-pointer" /></td>
-                                        <td className="border border-gray-300 px-2 py-4 text-sm md:text-base whitespace-nowrap text-center"><FaEdit className="inline fill-blue-500 hover:fill-blue-800 cursor-pointer" /></td>
-                                    </tr>
+                                {siswa.map((s: any, index: number) => (
+                                    <SiswaRow
+                                        key={s.id}
+                                        s={s}
+                                        editId={editId}
+                                        setEditId={setEditId}
+                                        isLoadingKelas={isLoadingKelas}
+                                        options={options}
+                                        fields={fields}
+                                        controlKelas={controlKelas}
+                                        index={index}
+                                    />
                                 ))}
                             </tbody>
                         </table>
