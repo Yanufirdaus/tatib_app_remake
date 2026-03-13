@@ -8,9 +8,16 @@ import userRouter from '../routes/User';
 import pelanggaranRouter from '../routes/Pelanggaran';
 import catatanPelanggaranRouter from '../routes/CatatanPelanggaran';
 import semesterRouter from '../routes/Semester';
+import { v2 as cloudinary } from 'cloudinary';
 
 // const envFile = process.env.NODE_ENV === "production" ? ".env.prod" : ".env";
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const app = express()
 
@@ -30,7 +37,7 @@ app.use(cors(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials:true
+    credentials: true
   }
 ))
 
