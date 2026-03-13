@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const SemesterSection = () => {
     const [onEdit, setOnEdit] = useState(false);
-    const { data, isLoading, error: semesterError } = useSemester();
+    const { data, isLoading } = useSemester();
 
     const { mutate, isPending, error: editSemesterError } = useEditSemester();
 
@@ -24,10 +24,12 @@ const SemesterSection = () => {
     const onSubmit = (data: UpdateSemesterFormValues) => {
         mutate(data, {
             onSuccess: () => {
+                alert("Semester berhasil diupdate")
                 setOnEdit(false)
             },
             onError: (err: any) => {
                 console.error(err);
+                alert(err.message)
             }
         })
     }
@@ -38,32 +40,32 @@ const SemesterSection = () => {
             <div className="flex flex-col md:flex-row w-full justify-center items-center md:items-top gap-2 md:gap-4 md:px-6">
                 <p>Tahun Ajaran</p>
                 <div className="flex flex-row justify-center items:center md:items-top gap-2 md:gap-4">
-                    {!onEdit ? (
-                        <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4">
-                            <p>{data?.tahun_ajaran}</p>
-                            <p>/</p>
-                            <p>{data?.semester}</p>
-                        </div>
+                    {
+                        !onEdit ? (
+                            <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4">
+                                <p>{isLoading ? "-" : data?.tahun_ajaran}</p>
+                                <p>/</p>
+                                <p>{isLoading ? "-" : data?.semester}</p>
+                            </div>
 
-                    ) : (
-                        <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4 px-18 md:px-0">
-                            <Input
-                                {...register("tahun_ajaran")}
-                                placeholder="ex: 2024-2025"
-                                className="text-xs w-auto"
-                                error={errors.tahun_ajaran?.message}
-                            />
-                            <p>/</p>
-                            <Input
-                                {...register("semester")}
-                                placeholder="ganjil/genap"
-                                className="text-xs w-auto"
-                                error={errors.semester?.message}
-                            />
-                        </div>
+                        ) : (
+                            <div className="flex flex-row justify-center items-center md:items-top gap-2 md:gap-4 px-18 md:px-0">
+                                <Input
+                                    {...register("tahun_ajaran")}
+                                    placeholder="ex: 2024-2025"
+                                    className="text-xs w-auto"
+                                    error={errors.tahun_ajaran?.message}
+                                />
+                                <p>/</p>
+                                <Input
+                                    {...register("semester")}
+                                    placeholder="ganjil/genap"
+                                    className="text-xs w-auto"
+                                    error={errors.semester?.message}
+                                />
+                            </div>
 
-                    )
-
+                        )
                     }
 
                     {
@@ -90,6 +92,7 @@ const SemesterSection = () => {
                             submitText="Simpan"
                             loadingText="Update..."
                             className="!py-0"
+                            typeButton="submit"
                         />
                     )
                 }
