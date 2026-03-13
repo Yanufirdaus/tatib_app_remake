@@ -50,7 +50,7 @@ export class UserController {
                 message: err.message || Messages.SERVER_ERROR,
             });
         }
-    
+
     }
 
     static async getTendikByRole(req: Request<{ role: string }>, res: Response) {
@@ -72,6 +72,20 @@ export class UserController {
             const siswaId = parseInt(req.params.id);
             const updateData = req.body;
             const updatedSiswa = await UserService.updateSiswa(siswaId, updateData);
+            res.json(updatedSiswa);
+        } catch (err: any) {
+            console.error(err.message);
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                message: err.message || Messages.SERVER_ERROR,
+            });
+        }
+    }
+
+    static async updateManySiswaKelas(req: Request<{ kelasId: string }>, res: Response) {
+        try {
+            const updateData = req.body;
+            const updatedSiswa = await UserService.updateManySiswaKelas(updateData);
             res.json(updatedSiswa);
         } catch (err: any) {
             console.error(err.message);
