@@ -4,9 +4,9 @@ import { Messages } from '../constant/message';
 import { LoginService } from '../services/LoginService';
 
 export class AuthController {
-    static async registerStudents(req: Request<{}, {}, CreateSiswaDTO[]>, res: Response) {
+    static async registerStudents(req: Request<{}, {}, { siswa: CreateSiswaDTO[] }>, res: Response) {
         try {
-            const users = req.body;
+            const users = req.body.siswa;
 
             console.log("Received registration data:", users);
 
