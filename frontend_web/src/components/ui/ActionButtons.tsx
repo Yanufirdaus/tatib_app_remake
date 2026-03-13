@@ -6,6 +6,8 @@ export type ActionButtonsProps = {
     isPending?: boolean;
     className?: string;
     disabled?: boolean;
+    onClick?: () => void;
+    typeButton: "button" | "submit";
 }
 
 const ActionButtons = ({
@@ -15,7 +17,9 @@ const ActionButtons = ({
     loadingText = "Memuat...",
     isPending = false,
     className = "",
-    disabled = false
+    disabled = false,
+    onClick,
+    typeButton
 }: ActionButtonsProps) => {
     return (
         <div className={`flex flex-row justify-center items-top h-fit gap-2 md:gap-4 py-3 ${className}`}>
@@ -28,9 +32,10 @@ const ActionButtons = ({
                 {cancelText}
             </button>
             <button
-                type="submit"
+                type={typeButton}
                 className="bg-blue-500 px-2 py-1 rounded-sm hover:bg-blue-700 text-xs text-white font-medium disabled:opacity-50"
                 disabled={disabled || isPending}
+                onClick={onClick}
             >
                 {!isPending ? submitText : loadingText}
             </button>
