@@ -53,6 +53,7 @@ const AddKelas = ({
                         isPending={isPendingAddKelas}
                         submitText="tambahkan"
                         loadingText="memuat"
+                        typeButton="submit"
                     />
                 ) : (
                     <></>
