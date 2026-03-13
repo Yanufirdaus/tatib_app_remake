@@ -20,4 +20,5 @@ export type OptionProps = {
     label: string
   }[]
   label?: string
+  placeholder?: string
 } & React.SelectHTMLAttributes<HTMLSelectElement>
