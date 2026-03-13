@@ -23,24 +23,31 @@ interface LoginDTO {
 }
 
 interface CreateKelasDTO {
-    grade: number; 
-    name: string;
+  grade: number;
+  name: string;
 }
 
 interface CreateManyKelasDTO {
-    kelas : {
-        grade: number; 
-        name: string;
-      } []
+  kelas: {
+    grade: number;
+    name: string;
+  }[]
 }
 
 interface UpdateUserDTO {
-    name: string;
-    kelasId: number;
-    image_profile: string | null;
+  name: string;
+  kelasId: number;
+  nisn: string;
+}
+
+interface UpdateManySiswaKelasDTO {
+  kelasUpdate: {
+    siswaIds: string;
+    kelasIds: string;
+  }[];
 }
 
 interface UpdateTendikDTO {
-    name: string;
-    image_profile: string | null;
+  name: string;
+  image_profile: string | null;
 }
