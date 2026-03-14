@@ -53,7 +53,7 @@ const ListPelanggaran = ({ isLoadingPelanggaran, pelanggaran }: ListPelanggaranC
                                     <th className="border border-gray-300 py-2 px-2">Pelanggaran</th>
                                     <th className="border border-gray-300 py-2 px-2">Poin</th>
                                     <th className="border border-gray-300 py-2 px-2">Edit</th>
-                                    <th className="border border-gray-300 py-2 px-2">Delete</th>
+                                    <th className="border border-gray-300 py-2 px-2">{editId ? "Batal" : "Delete"}</th>
                                 </tr>
                             </thead>
                             <BodyTable pelanggaran={pelanggaran} editId={editId} register={register} setEditId={setEditId} isPending={isPending} setValue={setValue} errors={errors} />
