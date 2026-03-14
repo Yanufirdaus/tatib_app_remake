@@ -18,3 +18,9 @@ export type ListSiswaProps = {
     fields: FieldArrayWithId<UpdateManySiswaKelasFormValues, "kelasUpdate">[];
     controlKelas: Control<UpdateManySiswaKelasFormValues>;
 }
+
+export interface CsvSiswaRow {
+    nama: string;
+    nisn: string;
+    kelas: string;
+}
