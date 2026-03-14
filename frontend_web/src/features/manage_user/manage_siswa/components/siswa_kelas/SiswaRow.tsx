@@ -85,7 +85,7 @@ const SiswaRow = ({
                     s.nisn
                 )}
             </td>
-            <td className={tdClass}>
+            <td className={`${tdClass} text-center`}>
                 {editId === s.id ? (
                     <SelectOption
                         className="w-full py-2"
