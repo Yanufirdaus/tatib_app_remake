@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "../../../components/ui/Input";
-import { FaEdit, FaSave, FaSpinner, FaTrashAlt } from "react-icons/fa";
+import { FaBackspace, FaEdit, FaSave, FaSpinner, FaTrashAlt } from "react-icons/fa";
 import { useDeletePelanggaran } from "../hooks/usePelanggaran";
 import type { EditPelanggaranComponentProps } from "../type/pelanggaran.type";
 
@@ -113,14 +113,23 @@ const BodyTable = (
                                     }
                                 />
                             </div>
-                            )) : (
+                            )) : (editId === data.id ? (
+                                <div className="w-full flex flex-row justify-center items-center">
+                                    <FaBackspace
+                                        color="red" size={18}
+                                        onClick={
+                                            () => setEditId(null)
+                                        }
+                                    />
+                                </div>
+                            ) : (
                                 <FaTrashAlt
                                     color="red" size={18}
                                     onClick={
                                         () => handleDeletePelanggaraan(data.id)
                                     }
                                 />
-                            )
+                            ))
                             }
                         </div>
                     </td>
