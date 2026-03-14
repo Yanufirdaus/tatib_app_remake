@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma";
+import { CreateKelasDTO, CreateManyKelasDTO } from "../dto/user.dto";
 
 export class KelasService {
     static async getAllKelas() {

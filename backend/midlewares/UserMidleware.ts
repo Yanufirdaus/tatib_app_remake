@@ -2,6 +2,7 @@ import { Messages } from "../constant/message";
 import { Request, Response, NextFunction } from "express";
 import { UpdateManySiswaKelasSchema, UpdateTendikSchema, UpdateUserSchema } from "../validation/UpdateUserSchema";
 import { ZodError } from "zod";
+import { UpdateUserDTO, UpdateTendikDTO } from "../dto/user.dto";
 
 export const UpdateSiswaInputCheckingMiddleware = (
     req: Request,
