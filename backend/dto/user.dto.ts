@@ -1,4 +1,4 @@
-interface CreateSiswaDTO {
+export interface CreateSiswaDTO {
   name: string;
   password: string;
   role: string
@@ -8,7 +8,7 @@ interface CreateSiswaDTO {
   poin: number;
 }
 
-interface CreateTendikDTO {
+export interface CreateTendikDTO {
   name: string;
   password: string;
   role: string
@@ -16,38 +16,38 @@ interface CreateTendikDTO {
   image_profile?: string | null;
 }
 
-interface LoginDTO {
+export interface LoginDTO {
   nomor_induk: string;
   password: string;
   platform: string;
 }
 
-interface CreateKelasDTO {
+export interface CreateKelasDTO {
   grade: number;
   name: string;
 }
 
-interface CreateManyKelasDTO {
+export interface CreateManyKelasDTO {
   kelas: {
     grade: number;
     name: string;
   }[]
 }
 
-interface UpdateUserDTO {
+export interface UpdateUserDTO {
   name: string;
   kelasId: number;
   nisn: string;
 }
 
-interface UpdateManySiswaKelasDTO {
+export interface UpdateManySiswaKelasDTO {
   kelasUpdate: {
     siswaIds: string;
     kelasIds: string;
   }[];
 }
 
-interface UpdateTendikDTO {
+export interface UpdateTendikDTO {
   name: string;
   image_profile: string | null;
 }

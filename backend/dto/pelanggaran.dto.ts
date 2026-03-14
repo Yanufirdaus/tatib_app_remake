@@ -1,11 +1,11 @@
-interface AddPelanggaranDTO {
+export interface AddPelanggaranDTO {
     jenisId: number;
     pelanggaran: string;
     poin: number;
     nomor: number;
 }
 
-interface UpdatePelanggaranDTO {
+export interface UpdatePelanggaranDTO {
     pelanggaran: string;
     poin: number;
 }
