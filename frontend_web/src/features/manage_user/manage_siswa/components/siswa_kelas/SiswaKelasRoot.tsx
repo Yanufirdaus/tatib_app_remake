@@ -1,55 +1,26 @@
 import { FaPlusSquare } from "react-icons/fa";
 import TitlePage from "../../../../../components/ui/TitlePage";
-import { useKelasById } from "../../../../kelas/hooks/useKelas";
 import ListSiswa from "./ListSiswa";
-import { useState } from "react";
 import AddSiswa from "./AddSiswa";
-import { useSiswaByKelas, useUpdateManySiswaKelas } from "../../hooks/useSiswa";
-import { useFieldArray, useForm } from "react-hook-form";
-import { UpdateManySiswaKelasSchema, type UpdateManySiswaKelasFormValues } from "../../../schema/user.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import ActionButtons from "../../../../../components/ui/ActionButtons";
+import { useSiswaKelasRoot } from "../../hooks/useSiswaKelasRoot";
 
 const SiswaKelasRoot = ({ id }: { id: number }) => {
-    const [isAddSiswa, setIsAddSiswa] = useState(false);
-    const [isEditKelasSiswa, setIsEditKelasSiswa] = useState(false);
-
-    const { data: kelas, isLoading: isLoadingKelas } = useKelasById(id);
-
-    const { data: siswa, isLoading: isLoadingSiswa } = useSiswaByKelas(id);
-
-    const { mutate, isPending } = useUpdateManySiswaKelas();
-
-    //update many user kelas
     const {
-        handleSubmit: handleSubmitKelas,
+        isAddSiswa,
+        setIsAddSiswa,
+        isEditKelasSiswa,
+        kelas,
+        isLoadingKelas,
+        siswa,
+        isLoadingSiswa,
+        isPending,
+        fields,
         control,
-        getValues
-    } = useForm<UpdateManySiswaKelasFormValues>({
-        resolver: zodResolver(UpdateManySiswaKelasSchema),
-        defaultValues: {
-            kelasUpdate: []
-        },
-    });
-
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "kelasUpdate"
-    });
-
-    const onSubmitKelas = (data: UpdateManySiswaKelasFormValues) => {
-        mutate(data, {
-            onSuccess: () => {
-                setIsEditKelasSiswa(false)
-                remove()
-                alert("Data berhasil diupdate")
-            },
-            onError: (error) => {
-                console.log(error)
-                alert("Data gagal diupdate")
-            }
-        })
-    }
+        handleSaveKelas,
+        handleCancelKelas,
+        handleStartKenaikanKelas,
+    } = useSiswaKelasRoot(id);
 
     return (
         <div className="flex flex-col min-h-screen w-full py-6 md:py-8 gap-8">
@@ -75,36 +46,20 @@ const SiswaKelasRoot = ({ id }: { id: number }) => {
                 {
                     isEditKelasSiswa ? (
                         <ActionButtons
-                            onClick={() => {
-                                console.log(getValues())
-                                handleSubmitKelas(onSubmitKelas)()
-                            }}
-                            onCancel={() => {
-                                remove()
-                                setIsEditKelasSiswa(false)
-                            }}
+                            onClick={handleSaveKelas}
+                            onCancel={handleCancelKelas}
                             cancelText="Batal"
                             submitText="Simpan"
                             loadingText="Memuat..."
                             isPending={isPending}
                             className=""
                             typeButton="button"
-                            disabled={isPending ? true : false}
+                            disabled={isPending}
                         />
                     ) : (
                         <button
                             className="bg-blue-500 text-white px-2 py-1 rounded-md text-xs md:text-sm"
-                            onClick={() => {
-                                if (siswa.length > 0) {
-                                    Array.from({ length: siswa.length }).forEach((_, index) => {
-                                        append({
-                                            siswaIds: String(siswa[index].id),
-                                            kelasIds: String(siswa[index].kelasId)
-                                        })
-                                    })
-                                }
-                                setIsEditKelasSiswa(true)
-                            }}
+                            onClick={handleStartKenaikanKelas}
                         >Kenaikan Kelas</button>
                     )
                 }
