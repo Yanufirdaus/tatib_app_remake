@@ -1,48 +1,18 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import ActionButtons from "../../../../../components/ui/ActionButtons";
 import Input from "../../../../../components/ui/Input";
 import SelectOption from "../../../../../components/ui/option";
-import { useKelas } from "../../../../kelas/hooks/useKelas";
-import { useCreateManySiswa } from "../../hooks/useSiswa";
-import { useForm } from "react-hook-form";
-import { CreateUserSchema, type CreateUserFormValues } from "../../../schema/user.schema";
+import { useAddSiswa } from "../../hooks/useAddSiswa";
 
 const AddSiswa = ({ setIsAddSiswa, kelasId }: { setIsAddSiswa: (value: boolean) => void, kelasId: number }) => {
-    const { data: kelasList, isLoading: isLoadingKelasList } = useKelas();
-
-    const options = kelasList?.map((k: any) => ({
-        value: k.id,
-        label: k.name
-    }))
-
-    const { mutate: createManySiswa, isPending: isPendingCreateManySiswa } = useCreateManySiswa();
-
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateUserFormValues>({
-        resolver: zodResolver(CreateUserSchema),
-        defaultValues: {
-            siswa: [
-                {
-                    name: "",
-                    nisn: "",
-                    kelasId: ""
-                }
-            ]
-        }
-    });
-
-    const handleAddSiswa = (data: CreateUserFormValues) => {
-        createManySiswa(data,
-            {
-                onSuccess: () => {
-                    setIsAddSiswa(false);
-                    alert("Siswa berhasil ditambahkan")
-                },
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message || error?.message || "Terjadi kesalahan";
-                    alert(message);
-                }
-            });
-    }
+    const {
+        options,
+        isLoadingKelasList,
+        isPendingCreateManySiswa,
+        register,
+        handleSubmit,
+        errors,
+        handleAddSiswa,
+    } = useAddSiswa(setIsAddSiswa, kelasId);
 
     return (
         <form className="flex flex-col w-full items-center justify-center gap-3" onSubmit={handleSubmit(handleAddSiswa)}>
@@ -82,7 +52,6 @@ const AddSiswa = ({ setIsAddSiswa, kelasId }: { setIsAddSiswa: (value: boolean) 
                         {...register("siswa.0.kelasId")}
                         selectOption={isLoadingKelasList ? [] : options}
                         className="w-full py-2"
-                        defaultValue={String(kelasId)}
                     />
                 </div>
             </div>
