@@ -26,7 +26,6 @@ const AuthProvider = ({ children }: Props) => {
   }
 
   return <>{children}</>
-//   return <>{children}</>
 }
 
 export default AuthProvider;
