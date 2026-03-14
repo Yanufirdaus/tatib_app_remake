@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PelanggaranService } from "../services/PelanggaranService";
 import { Messages } from "../constant/message";
+import { AddPelanggaranDTO, UpdatePelanggaranDTO } from "../dto/pelanggaran.dto";
 
 export class PelanggaranController {
     static async addPelanggaran(req: Request, res: Response) {

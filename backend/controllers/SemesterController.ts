@@ -1,6 +1,7 @@
 import { SemesterService } from "../services/SemesterService";
 import { Messages } from "../constant/message";
 import { Request, Response } from "express";
+import { UpdateSemesterDTO } from "../dto/semester.dto";
 
 export class SemesterController {
     static async getCurrentSemester(req: Request, res: Response) {
@@ -24,7 +25,7 @@ export class SemesterController {
         if (req.body.semester === "" || req.body.tahun_ajaran === "") {
             return res.status(400).json({ message: "Semester and Tahun Ajaran cannot be empty" });
         }
-        
+
         try {
             const updateData: UpdateSemesterDTO = req.body;
             const updatedSemester = await SemesterService.updateCurrentSemester(updateData);

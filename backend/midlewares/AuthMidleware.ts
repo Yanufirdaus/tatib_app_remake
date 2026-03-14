@@ -4,6 +4,7 @@ import { Messages } from "../constant/message";
 import { CreateTendikSchema, CreateUserSchema } from "../validation/CreateUserSchema";
 import { ZodError } from "zod";
 import { LoginSchema } from "../validation/LoginSchema";
+import { CreateTendikDTO, CreateSiswaDTO } from "../dto/user.dto";
 
 export const AuthMidleware = (req: Request, res: Response, next: NextFunction) => {
 

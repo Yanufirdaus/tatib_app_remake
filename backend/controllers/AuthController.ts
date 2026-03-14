@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AuthService } from '../services/AuthService';
 import { Messages } from '../constant/message';
 import { LoginService } from '../services/LoginService';
+import { CreateSiswaDTO, CreateTendikDTO, LoginDTO } from '../dto/user.dto';
 
 export class AuthController {
     static async registerStudents(req: Request<{}, {}, { siswa: CreateSiswaDTO[] }>, res: Response) {

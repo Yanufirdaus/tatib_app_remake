@@ -2,6 +2,7 @@ import { Messages } from "../constant/message";
 import { KelasService } from "../services/KelasService";
 import { Request, Response } from "express";
 import { AddManyKelasSchema } from "../validation/KelasSchema";
+import { CreateKelasDTO, CreateManyKelasDTO } from "../dto/user.dto";
 
 export class KelasController {
     static async getAllKelas(req: Request, res: Response) {
