@@ -1,4 +1,4 @@
-interface AddCatatanPelanggaranDTO {
+export interface AddCatatanPelanggaranDTO {
     idPelanggaran: number;
     idPelanggar: number;
     idKelasPelanggar: number;
@@ -10,7 +10,7 @@ interface AddCatatanPelanggaranDTO {
     note?: string;
 }
 
-interface AddManyCatatanPelanggaranDTO {
+export interface AddManyCatatanPelanggaranDTO {
     idPelanggaran: number;
     idPelanggar: number[];
     idKelasPelanggar: number;

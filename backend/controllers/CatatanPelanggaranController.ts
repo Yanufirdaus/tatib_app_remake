@@ -1,5 +1,6 @@
 import { Messages } from "../constant/message";
 import { CatatanPelanggaranService } from "../services/CatatanPelanggaranService";
+import { AddCatatanPelanggaranDTO, AddManyCatatanPelanggaranDTO } from "../dto/catatan.pelanggaran.dto";
 
 export class CatatanPelanggaranController {
     static async addCatatanPelanggaran(req: any, res: any) {
