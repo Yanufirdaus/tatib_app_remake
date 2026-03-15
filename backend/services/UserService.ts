@@ -99,10 +99,13 @@ export class UserService {
         const updatedTendik = await prisma.tendik.update({
             where: { id: id },
             data: {
+                nip: data.nip,
                 profileSiswa: {
                     update: {
                         name: data.name.toLowerCase(),
+                        role: data.role.toLowerCase(),
                         image_profile: data.image_profile,
+                        password: data.nip
                     },
                 },
             },
