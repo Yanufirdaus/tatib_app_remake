@@ -26,3 +26,11 @@ export const UpdateManySiswaKelasSchema = z.object({
 })
 
 export type UpdateManySiswaKelasFormValues = z.infer<typeof UpdateManySiswaKelasSchema>
+
+export const UpdateTendikSchema = z.object({
+    name: z.string().min(1, { message: "Nama is required" }),
+    nip: z.string().min(1, { message: "NIP is required" }),
+    role: z.string().min(1, { message: "Jabatan is required" }),
+})
+
+export type UpdateTendikFormValues = z.infer<typeof UpdateTendikSchema>
