@@ -28,7 +28,7 @@ const SiswaRow = ({
         },
     });
 
-    const { mutate: deleteSiswa, isPending: isPendingDeleteSiswa } = useDeleteSiswa(s.id);
+    const { mutate: deleteSiswa, isPending: isPendingDeleteSiswa } = useDeleteSiswa();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     const handleDelete = () => {
