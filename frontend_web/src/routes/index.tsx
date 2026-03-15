@@ -9,6 +9,8 @@ import ManajemenKelas from "../pages/ManajemenKelas";
 import ManajemenPelanggaran from "../pages/ManajemenPelanggaran";
 import ManajemenSiswa from "../pages/ManajemenSiswa";
 import SiswaKelasPage from "../pages/SiswaKelasPage";
+import ManajemenTendik from "../pages/ManajemenTendik";
+import TendikPerRole from "../pages/TendikPerRole";
 
 export const router = createBrowserRouter([
     {
@@ -113,6 +115,36 @@ export const router = createBrowserRouter([
                     {
                         index: true,
                         element: <SiswaKelasPage />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/manajemen-tendik",
+                element: <RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <ManajemenTendik />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/manajemen-tendik/role/:role",
+                element: <RootLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <TendikPerRole />,
                     },
                 ],
             },
