@@ -1,6 +1,19 @@
 import type { Control, FieldArrayWithId } from "react-hook-form";
 import type { UpdateManySiswaKelasFormValues } from "../schema/user.schema";
 
+export interface ProfileType {
+    id: number;
+    name: string;
+    role: string;
+    image_profile?: string;
+}
+
+export interface TendikType {
+    id: number;
+    nip: string;
+    profileSiswa: ProfileType;
+}
+
 export type SiswaRowProps = {
     s: any;
     editId: number | null;
