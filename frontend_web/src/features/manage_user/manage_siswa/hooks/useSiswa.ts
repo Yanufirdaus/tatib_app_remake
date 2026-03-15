@@ -32,11 +32,11 @@ export const useUpdateSiswa = (id: number) => {
     })
 }
 
-export const useDeleteSiswa = (id: number) => {
+export const useDeleteSiswa = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: () => deleteSiswa(id),
+        mutationFn: (id: number) => deleteSiswa(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["siswa"] });
         }
