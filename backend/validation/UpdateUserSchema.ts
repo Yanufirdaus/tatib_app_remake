@@ -11,7 +11,6 @@ export const UpdateTendikSchema = z.object({
     name: z.string().min(1, { message: Messages.NAME_REQUIRED }),
     nip: z.string().min(1, { message: "NIP wajib diisi" }),
     role: z.string().min(1, { message: "Jabatan wajib diisi" }),
-    image_profile: z.string().nullable(),
 })
 
 export const UpdateManySiswaKelasSchema = z.object({
