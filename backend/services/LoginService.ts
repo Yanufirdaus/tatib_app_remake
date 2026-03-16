@@ -2,6 +2,7 @@ import { Messages } from "../constant/message";
 import { prisma } from "../lib/prisma";
 import { verifyPassword } from "../utils/crypto";
 import { jwtToken, refreshToken } from "../utils/jwt";
+import { LoginDTO } from "../dto/user.dto";
 
 export class LoginService {
     private static async findUserByIdentifier(tx: any, nomorInduk: string, platform: string) {
@@ -24,12 +25,12 @@ export class LoginService {
         const profileId = siswa
             ? siswa.profileId
             : tendik!.profileId;
-            
+
         const user = await tx.user.findUnique({
             where: { id: profileId }
         });
 
-        
+
         if (!user) {
             throw { status: 404, message: Messages.USER_NOT_FOUND };
         }
@@ -57,7 +58,7 @@ export class LoginService {
         }
     }
 
-    private static async validatePassword (user: any, inputPassword: string) {
+    private static async validatePassword(user: any, inputPassword: string) {
         const isPasswordValid = await verifyPassword(user!.password, inputPassword);
 
         if (!isPasswordValid) {
@@ -76,8 +77,8 @@ export class LoginService {
                     }
                 });
                 throw { status: 403, message: Messages.ACCOUNT_LOCKED };
-            } 
-            
+            }
+
             if (user.failedLoginAttempts < MAX_ATTEMPTS) {
                 await prisma.user.update({
                     where: { id: user.id },
@@ -126,7 +127,7 @@ export class LoginService {
             const user = await this.findUserByIdentifier(tx, login_input.nomor_induk, login_input.platform);
 
             await this.checkUserLockout(user);
-            
+
             await this.validatePassword(user, login_input.password);
 
             const tokens = this.generateTokens(user);
@@ -134,7 +135,7 @@ export class LoginService {
             await this.saveRefreshToken(tx, user.id, tokens.refreshToken);
 
             await this.resetLoginAttempts(tx, user.id);
-            
+
             return { user, ...tokens };
         });
     }

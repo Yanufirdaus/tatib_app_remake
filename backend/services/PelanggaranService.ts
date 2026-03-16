@@ -1,7 +1,8 @@
 import { prisma } from "../lib/prisma";
+import { AddPelanggaranDTO, UpdatePelanggaranDTO } from "../dto/pelanggaran.dto";
 
 export class PelanggaranService {
-    static async addPelanggaran( pelanggaran: AddPelanggaranDTO[] ) {
+    static async addPelanggaran(pelanggaran: AddPelanggaranDTO[]) {
         const newPelanggaran = await prisma.pelanggaran.createMany({
             data: pelanggaran.map(item => ({
                 jenisId: item.jenisId,
@@ -16,7 +17,7 @@ export class PelanggaranService {
     static async getAllJenisPelanggaran() {
         const jenisPelanggaran = await prisma.jenisPelanggaran.findMany({
             orderBy: [
-                {id: "asc"},
+                { id: "asc" },
             ]
         });
         return jenisPelanggaran;
@@ -26,7 +27,7 @@ export class PelanggaranService {
         const pelanggaran = await prisma.pelanggaran.findMany({
             where: { jenisId: jenisId },
             orderBy: [
-                {nomor: "asc"}
+                { nomor: "asc" }
             ]
         });
         return pelanggaran;

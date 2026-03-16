@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Messages } from "../constant/message";
 import { AddCatatanPelanggaranSchema, AddManyCatatanPelanggaranSchema } from "../validation/CatatanPelanggaranSchema";
 import { ZodError } from "zod";
+import { AddCatatanPelanggaranDTO, AddManyCatatanPelanggaranDTO } from "../dto/catatan.pelanggaran.dto";
 
 export const validateCatatanPelanggaranInputMiddleware = (
     req: Request,
@@ -37,11 +37,11 @@ export const validateManyCatatanPelanggaranInputMiddleware = (
         const result = AddManyCatatanPelanggaranSchema.safeParse(input);
         if (!result.success) {
             return res.status(400).json({
-                message: result.error.issues.map(issue => ({field: issue.path[0], index: issue.path[1], message: issue.message}))
+                message: result.error.issues.map(issue => ({ field: issue.path[0], index: issue.path[1], message: issue.message }))
             });
         }
         next();
-    } catch (err: unknown) { 
+    } catch (err: unknown) {
         if (err instanceof ZodError) {
             return res.status(400).json({
                 message: err.issues.map(issue => issue.message)

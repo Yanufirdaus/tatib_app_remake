@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../utils/jwt";
-import { Messages } from "../constant/message";
 import { CreateTendikSchema, CreateUserSchema } from "../validation/CreateUserSchema";
 import { ZodError } from "zod";
 import { LoginSchema } from "../validation/LoginSchema";

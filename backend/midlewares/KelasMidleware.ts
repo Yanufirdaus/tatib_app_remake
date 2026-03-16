@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { AddKelasSchema, AddManyKelasSchema } from "../validation/KelasSchema";
+import { CreateKelasDTO } from "../dto/user.dto";
+
 
 export const CreateKelasMidleware = (
     req: Request,

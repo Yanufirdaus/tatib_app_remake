@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma";
+import { AddCatatanPelanggaranDTO, AddManyCatatanPelanggaranDTO } from "../dto/catatan.pelanggaran.dto";
 
 export class CatatanPelanggaranService {
     static async addCatatanPelanggaran(input: AddCatatanPelanggaranDTO) {
@@ -74,10 +75,10 @@ export class CatatanPelanggaranService {
                 time: "desc",
             },
             include: {
-                pelanggaran: true,    
-                pelanggar: true,      
-                kelasPelanggar: true, 
-                pencatat: true,       
+                pelanggaran: true,
+                pelanggar: true,
+                kelasPelanggar: true,
+                pencatat: true,
             },
         });
         return catatan;
@@ -94,10 +95,10 @@ export class CatatanPelanggaranService {
                 time: "desc",
             },
             include: {
-                pelanggaran: true,    
-                pelanggar: true,      
-                kelasPelanggar: true, 
-                pencatat: true,       
+                pelanggaran: true,
+                pelanggar: true,
+                kelasPelanggar: true,
+                pencatat: true,
             },
         });
         return catatan;

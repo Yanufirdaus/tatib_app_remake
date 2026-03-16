@@ -3,14 +3,15 @@ import { jwtToken, verifyToken } from "../utils/jwt";
 import { Messages } from "../constant/message";
 import { hashPassword } from "../utils/crypto";
 import { Siswa, User } from "../generated/prisma/browser";
+import { CreateSiswaDTO, CreateTendikDTO } from "../dto/user.dto";
 
 
 export class AuthService {
 
   static async registerStudents(users: CreateSiswaDTO[]) {
     type CreatedStudent = {
-        user: User;
-        siswa: Siswa;
+      user: User;
+      siswa: Siswa;
     };
 
     const createdStudents: CreatedStudent[] = [];
@@ -47,34 +48,34 @@ export class AuthService {
 
   static async registerTendik(users: CreateTendikDTO[]) {
     type CreatedTendik = {
-        user: User;
-        tendik: any;
+      user: User;
+      tendik: any;
     };
 
     const createdTendik: CreatedTendik[] = [];
 
     await prisma.$transaction(async (tx) => {
-        for (const [index, user] of users.entries()) {
-            const hashedPassword = await hashPassword(user.password);
+      for (const [index, user] of users.entries()) {
+        const hashedPassword = await hashPassword(user.password);
 
-            const newUser = await tx.user.create({
-                data: {
-                    name: user.name.toLowerCase(),
-                    password: hashedPassword,
-                    role: user.role,
-                    image_profile: user.image_profile || null,
-                },
-            });
+        const newUser = await tx.user.create({
+          data: {
+            name: user.name.toLowerCase(),
+            password: hashedPassword,
+            role: user.role,
+            image_profile: user.image_profile || null,
+          },
+        });
 
-            const newTendik = await tx.tendik.create({
-                data: {
-                    profileId: newUser.id,
-                    nip: user.nip,
-                },
-            });
+        const newTendik = await tx.tendik.create({
+          data: {
+            profileId: newUser.id,
+            nip: user.nip,
+          },
+        });
 
-            createdTendik.push({ user: newUser, tendik: newTendik });
-        }
+        createdTendik.push({ user: newUser, tendik: newTendik });
+      }
     });
 
     return createdTendik;
@@ -82,33 +83,33 @@ export class AuthService {
 
   static async refreshToken(token: string) {
     const storedToken = await prisma.refreshToken.findUnique({
-        where: { token: token    }
+      where: { token: token }
     });
 
     console.log("Stored token:", storedToken);
 
     if (!storedToken) {
-        throw { status: 403, message: "Invalid refresh token" };
+      throw { status: 403, message: "Invalid refresh token" };
     }
 
     if (storedToken.expiresAt < new Date()) {
-        await prisma.refreshToken.delete({
-            where: { token }
-        });
-        throw { status: 403, message: "Refresh token expired" };
+      await prisma.refreshToken.delete({
+        where: { token }
+      });
+      throw { status: 403, message: "Refresh token expired" };
     }
 
     const user = await prisma.user.findUnique({
-        where: { id: storedToken.userId }
+      where: { id: storedToken.userId }
     });
 
-    
+
     if (!user) {
-        throw { status: 404, message: Messages.USER_NOT_FOUND };
+      throw { status: 404, message: Messages.USER_NOT_FOUND };
     }
 
     const decoded: any = verifyToken(token);
-    const newToken = jwtToken( {id: decoded.id, role: decoded.role} );
+    const newToken = jwtToken({ id: decoded.id, role: decoded.role });
 
     return { newToken, user: { id: user.id, username: user.name } };
   }
@@ -117,24 +118,24 @@ export class AuthService {
     const tokensplitted = token;
     console.log("Received refresh token for logout:", tokensplitted);
     await prisma.refreshToken.deleteMany({
-        where: { token: tokensplitted }
+      where: { token: tokensplitted }
     });
   }
 
-  static async me (userId:number) {
+  static async me(userId: number) {
     const user = await prisma.user.findUnique({
-      where: {id: userId},
+      where: { id: userId },
       select: {
         id: true,
-        name:true,
-        role:true
+        name: true,
+        role: true
       }
     })
 
     if (!user) {
-        throw { status: 404, message: Messages.USER_NOT_FOUND };
+      throw { status: 404, message: Messages.USER_NOT_FOUND };
     }
 
-    return {user: {id: user.id, username: user.name, role: user.role}}
+    return { user: { id: user.id, username: user.name, role: user.role } }
   }
 }

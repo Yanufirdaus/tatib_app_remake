@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma";
+import { UpdateSemesterDTO } from "../dto/semester.dto";
 
 export class SemesterService {
     static async getCurrentSemester() {

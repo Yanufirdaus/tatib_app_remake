@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { Messages } from "../constant/message";
-import { tr } from "zod/v4/locales";
 import { AddPelanggaranSchema, UpdatePelanggaranSchema } from "../validation/PelanggaranSchema";
 import { ZodError } from "zod";
 import { AddPelanggaranDTO, UpdatePelanggaranDTO } from "../dto/pelanggaran.dto";

@@ -1,4 +1,3 @@
-import { Messages } from "../constant/message";
 import { Request, Response, NextFunction } from "express";
 import { UpdateManySiswaKelasSchema, UpdateTendikSchema, UpdateUserSchema } from "../validation/UpdateUserSchema";
 import { ZodError } from "zod";
@@ -64,6 +63,7 @@ export const UpdateTendikInputCheckingMiddleware = (
     res: Response,
     next: NextFunction) => {
     const data: UpdateTendikDTO = req.body;
+    console.log(data)
 
     try {
         UpdateTendikSchema.parse(data);
