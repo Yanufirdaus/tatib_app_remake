@@ -1,4 +1,3 @@
-import { profile } from "node:console";
 import { prisma } from "../lib/prisma";
 import { hashPassword } from "../utils/crypto";
 import { UpdateUserDTO, UpdateManySiswaKelasDTO, UpdateTendikDTO } from "../dto/user.dto";
@@ -104,7 +103,6 @@ export class UserService {
                     update: {
                         name: data.name.toLowerCase(),
                         role: data.role.toLowerCase(),
-                        image_profile: data.image_profile,
                         password: data.nip
                     },
                 },

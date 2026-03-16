@@ -51,5 +51,4 @@ export interface UpdateTendikDTO {
   name: string;
   nip: string;
   role: string;
-  image_profile: string | null;
 }
