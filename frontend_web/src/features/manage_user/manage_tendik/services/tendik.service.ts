@@ -20,7 +20,7 @@ export const deleteTendik = async (id: number) => {
 
 export const updateTendik = async (id: number, data: any) => {
     try {
-        const response = await apiClient.patch(`/tendik/${id}`, data);
+        const response = await apiClient.put(`/tendik/${id}`, data);
         return response.data;
     } catch (error: any) {
         throw new Error(error.response?.data?.message || "gagal memperbarui data tendik")
