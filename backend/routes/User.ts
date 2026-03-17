@@ -1,7 +1,7 @@
 import express from 'express';
 import { UserController } from '../controllers/UserController';
-import { AdminMiddleware, AuthMidleware, TendikAdminMiddleware } from '../midlewares/AuthMidleware';
-import { UpdateManySiswaKelasInputCheckingMiddleware, UpdateSiswaInputCheckingMiddleware, UpdateTendikInputCheckingMiddleware } from '../midlewares/UserMidleware';
+import { AdminMiddleware, AuthMidleware, TendikAdminMiddleware } from '../middleware/AuthMiddleware';
+import { UpdateManySiswaKelasInputCheckingMiddleware, UpdateSiswaInputCheckingMiddleware, UpdateTendikInputCheckingMiddleware } from '../middleware/UserMiddleware';
 
 const userRouter = express.Router();
 

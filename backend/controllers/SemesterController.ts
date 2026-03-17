@@ -1,41 +1,27 @@
 import { SemesterService } from "../services/SemesterService";
-import { Messages } from "../constant/message";
 import { Request, Response } from "express";
 import { UpdateSemesterDTO } from "../dto/semester.dto";
+import { catchAsync } from "../utils/catchAsync";
+import { AppError } from "../utils/AppError";
 
 export class SemesterController {
-    static async getCurrentSemester(req: Request, res: Response) {
-        try {
-            const currentSemester = await SemesterService.getCurrentSemester();
-            res.json(currentSemester);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+    static getCurrentSemester = catchAsync(async (req: Request, res: Response) => {
+        const currentSemester = await SemesterService.getCurrentSemester();
+        res.json(currentSemester);
+    });
 
-    static async updateCurrentSemester(req: Request, res: Response) {
+    static updateCurrentSemester = catchAsync(async (req: Request, res: Response) => {
+        const { semester, tahun_ajaran } = req.body;
 
-        if (req.body.semester === undefined || req.body.tahun_ajaran === undefined) {
-            return res.status(400).json({ message: "Semester and Tahun Ajaran are required" });
+        if (semester === undefined || tahun_ajaran === undefined) {
+            throw new AppError("Semester and Tahun Ajaran are required", 400);
         }
-        if (req.body.semester === "" || req.body.tahun_ajaran === "") {
-            return res.status(400).json({ message: "Semester and Tahun Ajaran cannot be empty" });
+        if (semester === "" || tahun_ajaran === "") {
+            throw new AppError("Semester and Tahun Ajaran cannot be empty", 400);
         }
 
-        try {
-            const updateData: UpdateSemesterDTO = req.body;
-            const updatedSemester = await SemesterService.updateCurrentSemester(updateData);
-            res.json(updatedSemester);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+        const updateData: UpdateSemesterDTO = req.body;
+        const updatedSemester = await SemesterService.updateCurrentSemester(updateData);
+        res.json(updatedSemester);
+    });
 }

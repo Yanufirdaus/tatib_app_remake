@@ -1,8 +1,8 @@
 import express from 'express';
-import { AdminMiddleware, AuthMidleware } from '../midlewares/AuthMidleware';
+import { AdminMiddleware, AuthMidleware } from '../middleware/AuthMiddleware';
 import { KelasController } from '../controllers/KelasController';
-import { CreateManyKelasMidleware } from '../midlewares/KelasMidleware';
-import { CreateKelasMidleware } from '../midlewares/KelasMidleware';
+import { CreateManyKelasMidleware } from '../middleware/KelasMiddleware';
+import { CreateKelasMidleware } from '../middleware/KelasMiddleware';
 
 const kelasRouter = express.Router();
 

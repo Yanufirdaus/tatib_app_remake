@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import { CreateKelasDTO, CreateManyKelasDTO } from "../dto/user.dto";
+import { AppError } from "../utils/AppError";
 
 export class KelasService {
     static async getAllKelas() {
@@ -47,20 +48,22 @@ export class KelasService {
         const existingNames = existing.map(k => k.name.toLowerCase());
 
         if (existingNames.length > 0) {
-            const error = new Error("Beberapa kelas yang ditambahkan sudah ada") as any;
-            error.duplicates = existingNames;
-            error.status = 400;
-            throw error;
+            throw new AppError("Beberapa kelas yang ditambahkan sudah ada", 400);
         }
 
         const created = await prisma.kelas.createMany({
             data: normalizedKelas,
             skipDuplicates: true
         });
-        return { status: 201, message: "Kelas added successfully", data: created };
+        return { message: "Kelas added successfully", data: created };
     }
 
     static async deleteKelas(kelasId: number) {
+        const kelas = await this.getKelasById(kelasId);
+        if (!kelas) {
+            throw new AppError("Kelas not found", 404);
+        }
+
         const siswaCount = await prisma.siswa.count({
             where: {
                 kelasId: kelasId
@@ -68,9 +71,7 @@ export class KelasService {
         });
 
         if (siswaCount > 0) {
-            const error = new Error("Kelas tidak dapat dihapus karena masih memiliki siswa") as any;
-            error.status = 400;
-            throw error;
+            throw new AppError("Kelas tidak dapat dihapus karena masih memiliki siswa", 400);
         }
 
         const deletedKelas = await prisma.kelas.delete({

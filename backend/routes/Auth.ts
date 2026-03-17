@@ -1,6 +1,6 @@
 import express from 'express';
 import { AuthController } from '../controllers/AuthController';
-import { AdminMiddleware, AuthMidleware, validateLoginMiddleware, validateRegisterSiswaMiddleware, validateRegisterTendikMiddleware } from '../midlewares/AuthMidleware';
+import { AdminMiddleware, AuthMidleware, validateLoginMiddleware, validateRegisterSiswaMiddleware, validateRegisterTendikMiddleware } from '../middleware/AuthMiddleware';
 
 const authRouter = express.Router();
 

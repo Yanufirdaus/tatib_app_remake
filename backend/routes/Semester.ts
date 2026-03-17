@@ -1,7 +1,7 @@
 import express from 'express';
-import { AdminMiddleware, AuthMidleware } from '../midlewares/AuthMidleware';
+import { AdminMiddleware, AuthMidleware } from '../middleware/AuthMiddleware';
 import { SemesterController } from '../controllers/SemesterController';
-import { UpdateSemesterMidleware } from '../midlewares/SemesterMidleware';
+import { UpdateSemesterMidleware } from '../middleware/SemesterMiddleware';
 
 const semesterRouter = express.Router();
 

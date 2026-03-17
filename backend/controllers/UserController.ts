@@ -1,141 +1,90 @@
 import { Messages } from "../constant/message";
 import { UserService } from "../services/UserService";
 import { Request, Response } from "express";
+import { catchAsync } from "../utils/catchAsync";
+import { AppError } from "../utils/AppError";
 
 export class UserController {
-    static async getSiswaById(req: Request<{ id: string }>, res: Response) {
-        try {
-            const siswaId = parseInt(req.params.id);
-            const siswa = await UserService.getSiswaById(siswaId);
-            if (!siswa) {
-                return res.status(404).json({ message: "Siswa tidak ditemukan" });
-            }
-            res.json(siswa);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getSiswaById = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const siswaId = parseInt(req.params.id);
+        if (isNaN(siswaId)) {
+            throw new AppError("Invalid Siswa ID", 400);
         }
-    }
-
-    static async getSiswaByKelas(req: Request<{ kelasId: string }>, res: Response) {
-        try {
-            const kelasId = parseInt(req.params.kelasId);
-
-            const siswaList = await UserService.getSiswaByKelasId(kelasId);
-            res.json(siswaList);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+        const siswa = await UserService.getSiswaById(siswaId);
+        if (!siswa) {
+            throw new AppError("Siswa tidak ditemukan", 404);
         }
-    }
+        res.json(siswa);
+    });
 
-    static async getTendikById(req: Request<{ id: string }>, res: Response) {
-        try {
-            const tendikId = parseInt(req.params.id);
-            const tendik = await UserService.getTendikById(tendikId);
-            if (!tendik) {
-                return res.status(404).json({ message: "Tendik tidak ditemukan" });
-            }
-            res.json(tendik);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getSiswaByKelas = catchAsync(async (req: Request<{ kelasId: string }>, res: Response) => {
+        const kelasId = parseInt(req.params.kelasId);
+        if (isNaN(kelasId)) {
+            throw new AppError("Invalid Kelas ID", 400);
         }
+        const siswaList = await UserService.getSiswaByKelasId(kelasId);
+        res.json(siswaList);
+    });
 
-    }
-
-    static async getTendikByRole(req: Request<{ role: string }>, res: Response) {
-        try {
-            const role = req.params.role;
-            const tendikList = await UserService.getTendikByrole(role);
-            res.json(tendikList);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getTendikById = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const tendikId = parseInt(req.params.id);
+        if (isNaN(tendikId)) {
+            throw new AppError("Invalid Tendik ID", 400);
         }
-    }
-
-    static async updateSiswa(req: Request<{ id: string }>, res: Response) {
-        try {
-            const siswaId = parseInt(req.params.id);
-            const updateData = req.body;
-            const updatedSiswa = await UserService.updateSiswa(siswaId, updateData);
-            res.json(updatedSiswa);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+        const tendik = await UserService.getTendikById(tendikId);
+        if (!tendik) {
+            throw new AppError("Tendik tidak ditemukan", 404);
         }
-    }
+        res.json(tendik);
+    });
 
-    static async updateManySiswaKelas(req: Request<{ kelasId: string }>, res: Response) {
-        try {
-            const updateData = req.body;
-            const updatedSiswa = await UserService.updateManySiswaKelas(updateData);
-            res.json(updatedSiswa);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+    static getTendikByRole = catchAsync(async (req: Request<{ role: string }>, res: Response) => {
+        const role = req.params.role;
+        const tendikList = await UserService.getTendikByrole(role);
+        res.json(tendikList);
+    });
 
-    static async updateTendik(req: Request<{ id: string }>, res: Response) {
-        try {
-            const tendikId = parseInt(req.params.id);
-            const updateData = req.body;
-            const updatedTendik = await UserService.updateTendik(tendikId, updateData);
-            res.json(updatedTendik);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static updateSiswa = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const siswaId = parseInt(req.params.id);
+        if (isNaN(siswaId)) {
+            throw new AppError("Invalid Siswa ID", 400);
         }
-    }
+        const updateData = req.body;
+        const updatedSiswa = await UserService.updateSiswa(siswaId, updateData);
+        res.json(updatedSiswa);
+    });
 
-    static async deleteSiswa(req: Request<{ id: string }>, res: Response) {
-        try {
-            const siswaId = parseInt(req.params.id);
-            await UserService.deleteSiswa(siswaId);
-            res.json({ message: "Siswa berhasil dihapus" });
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+    static updateManySiswaKelas = catchAsync(async (req: Request<{ kelasId: string }>, res: Response) => {
+        const updateData = req.body;
+        const updatedSiswa = await UserService.updateManySiswaKelas(updateData);
+        res.json(updatedSiswa);
+    });
 
-    static async deleteTendik(req: Request<{ id: string }>, res: Response) {
-        try {
-            const tendikId = parseInt(req.params.id);
-            await UserService.deleteTendik(tendikId);
-            res.json({ message: "Tendik berhasil dihapus" });
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static updateTendik = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const tendikId = parseInt(req.params.id);
+        if (isNaN(tendikId)) {
+            throw new AppError("Invalid Tendik ID", 400);
         }
-    }
+        const updateData = req.body;
+        const updatedTendik = await UserService.updateTendik(tendikId, updateData);
+        res.json(updatedTendik);
+    });
+
+    static deleteSiswa = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const siswaId = parseInt(req.params.id);
+        if (isNaN(siswaId)) {
+            throw new AppError("Invalid Siswa ID", 400);
+        }
+        await UserService.deleteSiswa(siswaId);
+        res.json({ message: "Siswa berhasil dihapus" });
+    });
+
+    static deleteTendik = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const tendikId = parseInt(req.params.id);
+        if (isNaN(tendikId)) {
+            throw new AppError("Invalid Tendik ID", 400);
+        }
+        await UserService.deleteTendik(tendikId);
+        res.json({ message: "Tendik berhasil dihapus" });
+    });
 }

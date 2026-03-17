@@ -1,6 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { hashPassword } from "../utils/crypto";
 import { UpdateUserDTO, UpdateManySiswaKelasDTO, UpdateTendikDTO } from "../dto/user.dto";
+import { AppError } from "../utils/AppError";
 
 export class UserService {
     static async getSiswaById(id: number) {
@@ -51,6 +52,11 @@ export class UserService {
     }
 
     static async updateSiswa(id: number, data: UpdateUserDTO) {
+        const siswa = await this.getSiswaById(id);
+        if (!siswa) {
+            throw new AppError("Siswa not found", 404);
+        }
+
         console.log("Updating siswa with data:", data);
 
         const hashedPassword = await hashPassword(String(data.nisn));
@@ -95,6 +101,11 @@ export class UserService {
     }
 
     static async updateTendik(id: number, data: UpdateTendikDTO) {
+        const tendik = await this.getTendikById(id);
+        if (!tendik) {
+            throw new AppError("Tendik not found", 404);
+        }
+
         const updatedTendik = await prisma.tendik.update({
             where: { id: id },
             data: {
@@ -115,67 +126,62 @@ export class UserService {
     }
 
     static async deleteSiswa(id: number) {
-        const getSiswaById = await this.getSiswaById(id);
+        const siswa = await this.getSiswaById(id);
 
-        if (!getSiswaById) {
-            throw { status: 404, message: "Siswa not found" };
+        if (!siswa) {
+            throw new AppError("Siswa not found", 404);
         }
-        const profileId = getSiswaById.profileSiswa.id;
 
-        console.log(id, profileId);
+        const profileId = siswa.profileSiswa.id;
 
+        // 1. Get all file URLs to delete later
         const catatanList = await prisma.catatanPelanggaran.findMany({
             where: { idPelanggar: profileId },
             select: { bukti: true },
         });
+        const fileUrls = catatanList.map(c => c.bukti);
 
-        const { v2: cloudinary } = await import("cloudinary");
-        for (const catatan of catatanList) {
-            if (catatan.bukti) {
-                try {
-                    const urlParts = catatan.bukti.split("/");
-                    const uploadIndex = urlParts.indexOf("upload");
-                    if (uploadIndex !== -1) {
-                        const publicIdWithExt = urlParts.slice(uploadIndex + 2).join("/");
-                        const publicId = publicIdWithExt.replace(/\.[^/.]+$/, "");
-                        await cloudinary.uploader.destroy(publicId);
-                        console.log(`Deleted Cloudinary file: ${publicId}`);
-                    }
-                } catch (err) {
-                    console.error(`Failed to delete Cloudinary file: ${catatan.bukti}`, err);
-                }
-            }
-        }
+        // 2. Perform DB operations in a transaction
+        const result = await prisma.$transaction(async (tx) => {
+            const deleteCatatan = await tx.catatanPelanggaran.deleteMany({
+                where: { idPelanggar: profileId },
+            });
 
-        const deleteCatatanPelanggaran = await prisma.catatanPelanggaran.deleteMany({
-            where: { idPelanggar: profileId },
+            const deletedSiswa = await tx.siswa.delete({
+                where: { id: id },
+            });
+
+            const deletedProfile = await tx.user.delete({
+                where: { id: profileId },
+            });
+
+            return { deletedSiswa, deletedProfile, deleteCatatan };
         });
 
-        const deleteSiswa = await prisma.siswa.delete({
-            where: { id: id },
-            include: {
-                profileSiswa: true,
-            },
-        });
+        // 3. Delete from Cloudinary after DB success
+        const { CloudinaryService } = await import("./CloudinaryService");
+        await CloudinaryService.deleteMultipleFiles(fileUrls);
 
-        const deleteProfileSiswa = await prisma.user.delete({
-            where: { id: profileId },
-        });
-
-        return { deleteSiswa, deleteProfileSiswa, deleteCatatanPelanggaran };
+        return result;
     }
 
     static async deleteTendik(id: number) {
-        const deleteTendik = await prisma.tendik.delete({
-            where: { id: id },
-            include: {
-                profileSiswa: true,
-            },
-        });
+        const tendik = await this.getTendikById(id);
 
-        const deleteProfileTendik = await prisma.user.delete({
-            where: { id: deleteTendik.profileSiswa.id },
+        if (!tendik) {
+            throw new AppError("Tendik not found", 404);
+        }
+
+        return await prisma.$transaction(async (tx) => {
+            const deletedTendik = await tx.tendik.delete({
+                where: { id: id },
+            });
+
+            const deletedProfile = await tx.user.delete({
+                where: { id: deletedTendik.profileId },
+            });
+
+            return { deletedTendik, deletedProfile };
         });
-        return { deleteTendik, deleteProfileTendik };
     }
-}
+}

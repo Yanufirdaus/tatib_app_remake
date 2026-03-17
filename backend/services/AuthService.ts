@@ -1,13 +1,13 @@
+import { CreateSiswaDTO, CreateTendikDTO } from "../dto/user.dto";
+import { Siswa, Tendik, User } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
+import { AppError } from "../utils/AppError";
+import { hashPassword } from "../utils/crypto";
 import { jwtToken, verifyToken } from "../utils/jwt";
 import { Messages } from "../constant/message";
-import { hashPassword } from "../utils/crypto";
-import { Siswa, User } from "../generated/prisma/browser";
-import { CreateSiswaDTO, CreateTendikDTO } from "../dto/user.dto";
 
 
 export class AuthService {
-
   static async registerStudents(users: CreateSiswaDTO[]) {
     type CreatedStudent = {
       user: User;
@@ -24,7 +24,7 @@ export class AuthService {
 
     if (existingSiswa.length > 0) {
       const duplicateNisns = existingSiswa.map(s => s.nisn).join(", ");
-      throw { status: 400, message: `NISN berikut sudah terdaftar: ${duplicateNisns}` };
+      throw new AppError(`NISN berikut sudah terdaftar: ${duplicateNisns}`, 400);
     }
 
     const createdStudents: CreatedStudent[] = [];
@@ -62,7 +62,7 @@ export class AuthService {
   static async registerTendik(users: CreateTendikDTO[]) {
     type CreatedTendik = {
       user: User;
-      tendik: any;
+      tendik: Tendik;
     };
 
     const nips = users.map(u => u.nip);
@@ -75,7 +75,7 @@ export class AuthService {
 
     if (existingTendik.length > 0) {
       const duplicateNips = existingTendik.map(t => t.nip).join(", ");
-      throw { status: 400, message: `NIP berikut sudah terdaftar: ${duplicateNips}` };
+      throw new AppError(`NIP berikut sudah terdaftar: ${duplicateNips}`, 400);
     }
 
     const createdTendik: CreatedTendik[] = [];
@@ -112,17 +112,15 @@ export class AuthService {
       where: { token: token }
     });
 
-    console.log("Stored token:", storedToken);
-
     if (!storedToken) {
-      throw { status: 403, message: "Invalid refresh token" };
+      throw new AppError("Invalid refresh token", 403);
     }
 
     if (storedToken.expiresAt < new Date()) {
       await prisma.refreshToken.delete({
         where: { token }
       });
-      throw { status: 403, message: "Refresh token expired" };
+      throw new AppError("Refresh token expired", 403);
     }
 
     const user = await prisma.user.findUnique({
@@ -131,13 +129,13 @@ export class AuthService {
 
 
     if (!user) {
-      throw { status: 404, message: Messages.USER_NOT_FOUND };
+      throw new AppError(Messages.USER_NOT_FOUND, 404);
     }
 
-    const decoded: any = verifyToken(token);
+    const decoded = verifyToken(token);
     const newToken = jwtToken({ id: decoded.id, role: decoded.role });
 
-    return { newToken, user: { id: user.id, username: user.name } };
+    return { newToken, user: { id: user.id, username: user.name, role: user.role } };
   }
 
   static async logout(token: string) {
@@ -159,7 +157,7 @@ export class AuthService {
     })
 
     if (!user) {
-      throw { status: 404, message: Messages.USER_NOT_FOUND };
+      throw new AppError(Messages.USER_NOT_FOUND, 404);
     }
 
     return { user: { id: user.id, username: user.name, role: user.role } }

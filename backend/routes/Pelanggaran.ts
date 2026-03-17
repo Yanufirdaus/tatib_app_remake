@@ -1,7 +1,7 @@
 import express from 'express';
-import { AdminMiddleware, AuthMidleware} from '../midlewares/AuthMidleware';
+import { AdminMiddleware, AuthMidleware } from '../middleware/AuthMiddleware';
 import { PelanggaranController } from '../controllers/PelanggaranController';
-import { validatePelanggaranInputMiddleware, validateUpdatePelanggaranMiddleware } from '../midlewares/PelanggaranMidleware';
+import { validatePelanggaranInputMiddleware, validateUpdatePelanggaranMiddleware } from '../middleware/PelanggaranMiddleware';
 
 const pelanggaranRouter = express.Router();
 

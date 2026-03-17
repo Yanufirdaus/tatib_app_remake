@@ -1,11 +1,13 @@
 import { Messages } from "../constant/message";
+import { AppError } from "../utils/AppError";
 import { prisma } from "../lib/prisma";
 import { verifyPassword } from "../utils/crypto";
 import { jwtToken, refreshToken } from "../utils/jwt";
 import { LoginDTO } from "../dto/user.dto";
+import { Prisma, User } from "../generated/prisma/client";
 
 export class LoginService {
-    private static async findUserByIdentifier(tx: any, nomorInduk: string, platform: string) {
+    private static async findUserByIdentifier(tx: Prisma.TransactionClient, nomorInduk: string, platform: string) {
         const siswa = await tx.siswa.findFirst({
             where: {
                 nisn: nomorInduk
@@ -19,7 +21,7 @@ export class LoginService {
         });
 
         if (!siswa && !tendik) {
-            throw { status: 404, message: Messages.USER_NOT_FOUND };
+            throw new AppError(Messages.USER_NOT_FOUND, 404);
         }
 
         const profileId = siswa
@@ -32,17 +34,17 @@ export class LoginService {
 
 
         if (!user) {
-            throw { status: 404, message: Messages.USER_NOT_FOUND };
+            throw new AppError(Messages.USER_NOT_FOUND, 404);
         }
 
         if (platform === "web" && user.role !== "admin") {
-            throw { status: 403, message: "Hanya admin yang dapat login melalui web" };
+            throw new AppError("Hanya admin yang dapat login melalui web", 403);
         }
 
         return user;
     }
 
-    private static async checkUserLockout(user: any) {
+    private static async checkUserLockout(user: User) {
         if (user.lockoutUntil && user.lockoutUntil > new Date()) {
             const diffMs = user.lockoutUntil.getTime() - Date.now();
 
@@ -51,14 +53,11 @@ export class LoginService {
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
 
-            throw {
-                status: 403,
-                message: `Akun terkunci. Coba lagi dalam ${minutes} menit ${seconds} detik`
-            };
+            throw new AppError(`Akun terkunci. Coba lagi dalam ${minutes} menit ${seconds} detik`, 403);
         }
     }
 
-    private static async validatePassword(user: any, inputPassword: string) {
+    private static async validatePassword(user: User, inputPassword: string) {
         const isPasswordValid = await verifyPassword(user!.password, inputPassword);
 
         if (!isPasswordValid) {
@@ -76,7 +75,7 @@ export class LoginService {
                         lockoutUntil: lockUntil
                     }
                 });
-                throw { status: 403, message: Messages.ACCOUNT_LOCKED };
+                throw new AppError(Messages.ACCOUNT_LOCKED, 403);
             }
 
             if (user.failedLoginAttempts < MAX_ATTEMPTS) {
@@ -89,19 +88,19 @@ export class LoginService {
 
                 console.log(user.id, user.failedLoginAttempts + 1);
 
-                throw { status: 403, message: Messages.WRONG_PASSWORD + ` (${user.failedLoginAttempts + 1}/${MAX_ATTEMPTS})` };
+                throw new AppError(Messages.WRONG_PASSWORD + ` (${user.failedLoginAttempts + 1}/${MAX_ATTEMPTS})`, 403);
             }
         }
     }
 
-    private static generateTokens(user: any) {
+    private static generateTokens(user: User) {
         const accessToken = jwtToken({ id: user.id, role: user.role });
         const refreshTokenValue = refreshToken({ id: user.id, role: user.role });
 
         return { accessToken, refreshToken: refreshTokenValue };
     }
 
-    private static async saveRefreshToken(tx: any, userId: number, token: string) {
+    private static async saveRefreshToken(tx: Prisma.TransactionClient, userId: number, token: string) {
         await tx.refreshToken.create({
             data: {
                 token,
@@ -111,7 +110,7 @@ export class LoginService {
         });
     }
 
-    private static async resetLoginAttempts(tx: any, userId: number) {
+    private static async resetLoginAttempts(tx: Prisma.TransactionClient, userId: number) {
         await tx.user.update({
             where: { id: userId },
             data: {

@@ -1,7 +1,7 @@
 import express from 'express';
-import { AuthMidleware, TendikAdminMiddleware } from '../midlewares/AuthMidleware';
+import { AuthMidleware, TendikAdminMiddleware } from '../middleware/AuthMiddleware';
 import { CatatanPelanggaranController } from '../controllers/CatatanPelanggaranController';
-import { validateCatatanPelanggaranInputMiddleware, validateManyCatatanPelanggaranInputMiddleware } from '../midlewares/CatatanPelanggaranMidleware';
+import { validateCatatanPelanggaranInputMiddleware, validateManyCatatanPelanggaranInputMiddleware } from '../middleware/CatatanPelanggaranMiddleware';
 
 const catatanPelanggaranRouter = express.Router();
 

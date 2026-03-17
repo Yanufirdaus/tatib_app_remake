@@ -1,77 +1,48 @@
-import { Messages } from "../constant/message";
+import { Request, Response } from "express";
 import { CatatanPelanggaranService } from "../services/CatatanPelanggaranService";
 import { AddCatatanPelanggaranDTO, AddManyCatatanPelanggaranDTO } from "../dto/catatan.pelanggaran.dto";
+import { catchAsync } from "../utils/catchAsync";
+import { AppError } from "../utils/AppError";
 
 export class CatatanPelanggaranController {
-    static async addCatatanPelanggaran(req: any, res: any) {
-        try {
-            const input: AddCatatanPelanggaranDTO = req.body;
-            const newCatatan = await CatatanPelanggaranService.addCatatanPelanggaran(input);
-            res.status(201).json(newCatatan);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+    static addCatatanPelanggaran = catchAsync(async (req: Request, res: Response) => {
+        const input: AddCatatanPelanggaranDTO = req.body;
+        const newCatatan = await CatatanPelanggaranService.addCatatanPelanggaran(input);
+        res.status(201).json(newCatatan);
+    });
 
-    static async addManyCatatanPelanggaran(req: any, res: any) {
-        try {
-            const input: AddManyCatatanPelanggaranDTO = req.body;
-            const createdCatatan = await CatatanPelanggaranService.addManyCatatanPelanggaran(input);
-            res.status(201).json(createdCatatan);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+    static addManyCatatanPelanggaran = catchAsync(async (req: Request, res: Response) => {
+        const input: AddManyCatatanPelanggaranDTO = req.body;
+        const createdCatatan = await CatatanPelanggaranService.addManyCatatanPelanggaran(input);
+        res.status(201).json(createdCatatan);
+    });
 
-    static async getCatatanPelanggaranByPelanggar(req: any, res: any) {
-        try {
-            const idPelanggar = parseInt(req.params.idPelanggar);
-            const catatan = await CatatanPelanggaranService.getCatatanPelanggaranByPelanggar(idPelanggar);
-            res.json(catatan);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getCatatanPelanggaranByPelanggar = catchAsync(async (req: Request, res: Response) => {
+        const idPelanggar = parseInt(String(req.params.idPelanggar));
+        if (isNaN(idPelanggar)) {
+            throw new AppError("Invalid Pelanggar ID", 400);
         }
-    }
+        const catatan = await CatatanPelanggaranService.getCatatanPelanggaranByPelanggar(idPelanggar);
+        res.json(catatan);
+    });
 
-    static async getCatatanPelanggaranRekap(req: any, res: any) {
-        try {
-            const idPelanggar = parseInt(req.params.idPelanggar);
-            const semester = req.query.semester as string;
-            const tahun_ajaran = req.query.tahun_ajaran as string;
-            const catatan = await CatatanPelanggaranService.getCatatanPelanggaranRekap(idPelanggar, semester, tahun_ajaran);
-            res.json(catatan);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getCatatanPelanggaranRekap = catchAsync(async (req: Request, res: Response) => {
+        const idPelanggar = parseInt(req.params.idPelanggar as string);
+        if (isNaN(idPelanggar)) {
+            throw new AppError("Invalid Pelanggar ID", 400);
         }
-    }
+        const semester = req.query.semester as string;
+        const tahun_ajaran = req.query.tahun_ajaran as string;
+        const catatan = await CatatanPelanggaranService.getCatatanPelanggaranRekap(idPelanggar, semester, tahun_ajaran);
+        res.json(catatan);
+    });
 
-    static async deleteCatatanPelanggaran(req: any, res: any) {
-        try {
-            const catatanId = parseInt(req.params.id);
-            const deletedCatatan = await CatatanPelanggaranService.deleteCatatanPelanggaran(catatanId);
-            res.json(deletedCatatan);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static deleteCatatanPelanggaran = catchAsync(async (req: Request, res: Response) => {
+        const catatanId = parseInt(String(req.params.id));
+        if (isNaN(catatanId)) {
+            throw new AppError("Invalid Catatan ID", 400);
         }
-    }
+        const deletedCatatan = await CatatanPelanggaranService.deleteCatatanPelanggaran(catatanId);
+        res.json(deletedCatatan);
+    });
 }

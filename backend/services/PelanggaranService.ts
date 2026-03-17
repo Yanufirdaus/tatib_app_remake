@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import { AddPelanggaranDTO, UpdatePelanggaranDTO } from "../dto/pelanggaran.dto";
+import { AppError } from "../utils/AppError";
 
 export class PelanggaranService {
     static async addPelanggaran(pelanggaran: AddPelanggaranDTO[]) {
@@ -34,6 +35,11 @@ export class PelanggaranService {
     }
 
     static async updatePelanggaran(id: number, data: UpdatePelanggaranDTO) {
+        const pelanggaran = await prisma.pelanggaran.findUnique({ where: { id } });
+        if (!pelanggaran) {
+            throw new AppError("Pelanggaran not found", 404);
+        }
+
         const updatedPelanggaran = await prisma.pelanggaran.update({
             where: { id: id },
             data: {
@@ -45,6 +51,11 @@ export class PelanggaranService {
     }
 
     static async deletePelanggaran(id: number) {
+        const pelanggaran = await prisma.pelanggaran.findUnique({ where: { id } });
+        if (!pelanggaran) {
+            throw new AppError("Pelanggaran not found", 404);
+        }
+
         const deletedPelanggaran = await prisma.pelanggaran.delete({
             where: { id: id },
         });

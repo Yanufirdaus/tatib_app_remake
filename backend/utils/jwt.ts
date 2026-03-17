@@ -1,16 +1,23 @@
 import jwt from "jsonwebtoken";
+import { appConfig } from "../config/app.config";
 
-export const jwtToken = (payload: any) => {
-    return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "15m" });
+export interface JWTPayload {
+    id: number;
+    role: string;
 }
 
-export const refreshToken = (payload: any) => {
-    return jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
+export const jwtToken = (payload: JWTPayload) => {
+    return jwt.sign(payload, appConfig.jwt.secret!, { expiresIn: "15m" });
+}
+
+export const refreshToken = (payload: JWTPayload) => {
+    return jwt.sign(payload, appConfig.jwt.refreshSecret!, { expiresIn: "7d" });
 }
 
 export const verifyToken = (token: string) => {
-    return jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+    return jwt.verify(token, appConfig.jwt.refreshSecret!) as JWTPayload;
 }
+
 export const verifyAccessToken = (token: string) => {
-    return jwt.verify(token, process.env.JWT_SECRET!);
+    return jwt.verify(token, appConfig.jwt.secret!) as JWTPayload;
 }

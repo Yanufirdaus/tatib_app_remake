@@ -1,56 +1,28 @@
 import { prisma } from "../lib/prisma";
 import { AddCatatanPelanggaranDTO, AddManyCatatanPelanggaranDTO } from "../dto/catatan.pelanggaran.dto";
+import { AppError } from "../utils/AppError";
+import { CloudinaryService } from "./CloudinaryService";
 
 export class CatatanPelanggaranService {
     static async addCatatanPelanggaran(input: AddCatatanPelanggaranDTO) {
-        const pelanggaran = await prisma.pelanggaran.findUnique({
-            where: { id: input.idPelanggaran },
-        });
-
-        if (!pelanggaran) {
-            throw new Error("Pelanggaran tidak ditemukan");
-        }
-
-        await prisma.siswa.update({
-            where: { profileId: input.idPelanggar },
-            data: { poin: { increment: pelanggaran.poin } },
-        });
-        const newCatatan = await prisma.catatanPelanggaran.create({
-            data: {
-                idPelanggaran: input.idPelanggaran,
-                idPelanggar: input.idPelanggar,
-                idKelasPelanggar: input.idKelasPelanggar,
-                idPencatat: input.idPencatat,
-                bukti: input.bukti,
-                semester: input.semester,
-                time: input.time,
-                tahun_ajaran: input.tahun_ajaran,
-                note: input.note
-            },
-        });
-        return newCatatan;
-    }
-
-    static async addManyCatatanPelanggaran(input: AddManyCatatanPelanggaranDTO) {
-        const createdCatatan = [];
-
-        for (const idPelanggar of input.idPelanggar) {
-            const pelanggaran = await prisma.pelanggaran.findUnique({
+        return await prisma.$transaction(async (tx) => {
+            const pelanggaran = await tx.pelanggaran.findUnique({
                 where: { id: input.idPelanggaran },
             });
 
             if (!pelanggaran) {
-                throw new Error("Pelanggaran tidak ditemukan");
+                throw new AppError("Pelanggaran tidak ditemukan", 404);
             }
 
-            await prisma.siswa.update({
-                where: { profileId: idPelanggar },
+            await tx.siswa.update({
+                where: { profileId: input.idPelanggar },
                 data: { poin: { increment: pelanggaran.poin } },
             });
-            const newCatatan = await prisma.catatanPelanggaran.create({
+
+            return await tx.catatanPelanggaran.create({
                 data: {
                     idPelanggaran: input.idPelanggaran,
-                    idPelanggar: idPelanggar,
+                    idPelanggar: input.idPelanggar,
                     idKelasPelanggar: input.idKelasPelanggar,
                     idPencatat: input.idPencatat,
                     bukti: input.bukti,
@@ -60,10 +32,45 @@ export class CatatanPelanggaranService {
                     note: input.note
                 },
             });
-            createdCatatan.push(newCatatan);
-        }
+        });
+    }
 
-        return createdCatatan;
+    static async addManyCatatanPelanggaran(input: AddManyCatatanPelanggaranDTO) {
+        return await prisma.$transaction(async (tx) => {
+            const createdCatatan = [];
+
+            const pelanggaran = await tx.pelanggaran.findUnique({
+                where: { id: input.idPelanggaran },
+            });
+
+            if (!pelanggaran) {
+                throw new AppError("Pelanggaran tidak ditemukan", 404);
+            }
+
+            for (const idPelanggar of input.idPelanggar) {
+                await tx.siswa.update({
+                    where: { profileId: idPelanggar },
+                    data: { poin: { increment: pelanggaran.poin } },
+                });
+
+                const newCatatan = await tx.catatanPelanggaran.create({
+                    data: {
+                        idPelanggaran: input.idPelanggaran,
+                        idPelanggar: idPelanggar,
+                        idKelasPelanggar: input.idKelasPelanggar,
+                        idPencatat: input.idPencatat,
+                        bukti: input.bukti,
+                        semester: input.semester,
+                        time: input.time,
+                        tahun_ajaran: input.tahun_ajaran,
+                        note: input.note
+                    },
+                });
+                createdCatatan.push(newCatatan);
+            }
+
+            return createdCatatan;
+        });
     }
 
     static async getCatatanPelanggaranByPelanggar(idPelanggar: number) {
@@ -106,13 +113,11 @@ export class CatatanPelanggaranService {
 
     static async deleteCatatanPelanggaran(catatanId: number) {
         const catatan = await prisma.catatanPelanggaran.findUnique({
-            where: {
-                id: catatanId
-            }
+            where: { id: catatanId }
         });
 
         if (!catatan) {
-            throw new Error("Catatan pelanggaran tidak ditemukan");
+            throw new AppError("Catatan pelanggaran tidak ditemukan", 404);
         }
 
         const pelanggaran = await prisma.pelanggaran.findUnique({
@@ -120,19 +125,25 @@ export class CatatanPelanggaranService {
         });
 
         if (!pelanggaran) {
-            throw new Error("Pelanggaran tidak ditemukan");
+            throw new AppError("Pelanggaran tidak ditemukan", 404);
         }
 
-        await prisma.siswa.update({
-            where: { profileId: catatan.idPelanggar },
-            data: { poin: { decrement: pelanggaran.poin } },
+        const result = await prisma.$transaction(async (tx) => {
+            await tx.siswa.update({
+                where: { profileId: catatan.idPelanggar },
+                data: { poin: { decrement: pelanggaran.poin } },
+            });
+
+            return await tx.catatanPelanggaran.delete({
+                where: { id: catatanId }
+            });
         });
 
-        const deletedCatatan = await prisma.catatanPelanggaran.delete({
-            where: {
-                id: catatanId
-            }
-        });
-        return deletedCatatan;
+        // Delete evidence from Cloudinary if exists
+        if (catatan.bukti) {
+            await CloudinaryService.deleteFile(catatan.bukti);
+        }
+
+        return result;
     }
 }

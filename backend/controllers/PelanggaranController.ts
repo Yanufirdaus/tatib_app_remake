@@ -1,87 +1,57 @@
 import { Request, Response } from "express";
 import { PelanggaranService } from "../services/PelanggaranService";
-import { Messages } from "../constant/message";
+import { AppError } from "../utils/AppError";
+import { catchAsync } from "../utils/catchAsync";
 import { AddPelanggaranDTO, UpdatePelanggaranDTO } from "../dto/pelanggaran.dto";
 
 export class PelanggaranController {
-    static async addPelanggaran(req: Request, res: Response) {
-        try {
-            const pelanggaranData: AddPelanggaranDTO[] = req.body.pelanggaran
-                .filter((item: any) => item.jenisId && item.pelanggaran && item.poin !== undefined)
-                .map((item: any) => ({
-                    jenisId: item.jenisId,
-                    pelanggaran: item.pelanggaran,
-                    poin: item.poin,
-                    nomor: item.nomor
-                }));
+    static addPelanggaran = catchAsync(async (req: Request, res: Response) => {
+        const pelanggaranData: AddPelanggaranDTO[] = req.body.pelanggaran
+            .filter((item: AddPelanggaranDTO) => item.jenisId && item.pelanggaran && item.poin !== undefined)
+            .map((item: AddPelanggaranDTO) => ({
+                jenisId: item.jenisId,
+                pelanggaran: item.pelanggaran,
+                poin: item.poin,
+                nomor: item.nomor
+            }));
 
-            if (pelanggaranData.length === 0) {
-                throw { status: 400, message: "Tidak ada data pelanggaran valid untuk disimpan" };
-            }
-            const newPelanggaran = await PelanggaranService.addPelanggaran(pelanggaranData);
-            res.status(201).json(newPelanggaran);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+        if (pelanggaranData.length === 0) {
+            throw new AppError("Tidak ada data pelanggaran valid untuk disimpan", 400);
         }
-    }
+        const newPelanggaran = await PelanggaranService.addPelanggaran(pelanggaranData);
+        res.status(201).json(newPelanggaran);
+    });
 
-    static async getAllJenisPelanggaran(req: Request, res: Response) {
-        try {
-            const jenisPelanggaran = await PelanggaranService.getAllJenisPelanggaran();
-            res.json(jenisPelanggaran);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+    static getAllJenisPelanggaran = catchAsync(async (req: Request, res: Response) => {
+        const jenisPelanggaran = await PelanggaranService.getAllJenisPelanggaran();
+        res.json(jenisPelanggaran);
+    });
 
-    static async getPelanggaranByJenis(req: Request<{ jenisId: string }>, res: Response) {
-        try {
-            const jenisId = parseInt(req.params.jenisId);
-            const pelanggaran = await PelanggaranService.getPelanggaranByJenisId(jenisId);
-            res.json(pelanggaran);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getPelanggaranByJenis = catchAsync(async (req: Request<{ jenisId: string }>, res: Response) => {
+        const jenisId = parseInt(req.params.jenisId);
+        if (isNaN(jenisId)) {
+            throw new AppError("Invalid Jenis Pelanggaran ID", 400);
         }
-    }
+        const pelanggaran = await PelanggaranService.getPelanggaranByJenisId(jenisId);
+        res.json(pelanggaran);
+    });
 
-    static async updatePelanggaran(req: Request<{ id: string }>, res: Response) {
-        try {
-            const id = parseInt(req.params.id);
-            const updatedData: UpdatePelanggaranDTO = req.body;
-            const updatedPelanggaran = await PelanggaranService.updatePelanggaran(id, updatedData);
-            res.json(updatedPelanggaran);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static updatePelanggaran = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            throw new AppError("Invalid Pelanggaran ID", 400);
         }
-    }
+        const updatedData: UpdatePelanggaranDTO = req.body;
+        const updatedPelanggaran = await PelanggaranService.updatePelanggaran(id, updatedData);
+        res.json(updatedPelanggaran);
+    });
 
-    static async deletePelanggaran(req: Request<{ id: string }>, res: Response) {
-        try {
-            const id = parseInt(req.params.id);
-            const deletedPelanggaran = await PelanggaranService.deletePelanggaran(id);
-            res.json(deletedPelanggaran);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static deletePelanggaran = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            throw new AppError("Invalid Pelanggaran ID", 400);
         }
-    }
+        const deletedPelanggaran = await PelanggaranService.deletePelanggaran(id);
+        res.json(deletedPelanggaran);
+    });
 }

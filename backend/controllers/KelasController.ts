@@ -1,83 +1,45 @@
-import { Messages } from "../constant/message";
 import { KelasService } from "../services/KelasService";
 import { Request, Response } from "express";
 import { AddManyKelasSchema } from "../validation/KelasSchema";
-import { CreateKelasDTO, CreateManyKelasDTO } from "../dto/user.dto";
+import { catchAsync } from "../utils/catchAsync";
+import { AppError } from "../utils/AppError";
 
 export class KelasController {
-    static async getAllKelas(req: Request, res: Response) {
-        try {
-            const kelas = await KelasService.getAllKelas();
-            res.json(kelas);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static getAllKelas = catchAsync(async (req: Request, res: Response) => {
+        const kelas = await KelasService.getAllKelas();
+        res.json(kelas);
+    });
+
+    static getKelasById = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const kelasId = parseInt(req.params.id);
+        if (isNaN(kelasId)) {
+            throw new AppError("Invalid Kelas ID", 400);
         }
-    }
+        const kelas = await KelasService.getKelasById(kelasId);
+        res.json(kelas);
+    });
 
-    static async getKelasById(req: Request<{ id: string }>, res: Response) {
-        try {
-            const kelasId = parseInt(req.params.id);
-            const kelas = await KelasService.getKelasById(kelasId);
-            res.json(kelas);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
+    static createKelas = catchAsync(async (req: Request, res: Response) => {
+        const kelasInput = req.body;
+        const newKelas = await KelasService.createKelas(kelasInput);
+        res.status(201).json(newKelas);
+    });
+
+    static createManyKelasNew = catchAsync(async (req: Request, res: Response) => {
+        const created = await KelasService.createManyKelasNew(req.body);
+
+        res.status(201).json({
+            message: "Kelas berhasil ditambahkan",
+            data: created
+        });
+    });
+
+    static deleteKelas = catchAsync(async (req: Request<{ id: string }>, res: Response) => {
+        const kelasId = parseInt(req.params.id);
+        if (isNaN(kelasId)) {
+            throw new AppError("Invalid Kelas ID", 400);
         }
-    }
-
-    static async createKelas(req: Request<{}, {}, CreateKelasDTO>, res: Response) {
-        try {
-            const kelasInput = req.body;
-            const newKelas = await KelasService.createKelas(kelasInput);
-            res.status(201).json(newKelas);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
-
-    static async createManyKelasNew(req: Request<{}, {}, CreateManyKelasDTO>, res: Response) {
-        try {
-            console.log(req.body)
-            const parsed = AddManyKelasSchema.parse(req.body);
-
-            const created = await KelasService.createManyKelasNew(parsed);
-
-            res.status(201).json({
-                message: "Kelas berhasil ditambahkan",
-                data: created
-            });
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-                duplicates: err.duplicates
-            });
-        }
-    }
-
-    static async deleteKelas(req: Request<{ id: string }>, res: Response) {
-        try {
-            const kelasId = parseInt(req.params.id);
-            const deletedKelas = await KelasService.deleteKelas(kelasId);
-            res.json(deletedKelas);
-        } catch (err: any) {
-            console.error(err.message);
-            res.status(err.status || 500).json({
-                status: err.status || 500,
-                message: err.message || Messages.SERVER_ERROR,
-            });
-        }
-    }
+        const deletedKelas = await KelasService.deleteKelas(kelasId);
+        res.json(deletedKelas);
+    });
 }
