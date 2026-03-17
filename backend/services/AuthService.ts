@@ -14,6 +14,19 @@ export class AuthService {
       siswa: Siswa;
     };
 
+    const nisns = users.map(u => u.nisn);
+    const existingSiswa = await prisma.siswa.findMany({
+      where: {
+        nisn: { in: nisns }
+      },
+      select: { nisn: true }
+    });
+
+    if (existingSiswa.length > 0) {
+      const duplicateNisns = existingSiswa.map(s => s.nisn).join(", ");
+      throw { status: 400, message: `NISN berikut sudah terdaftar: ${duplicateNisns}` };
+    }
+
     const createdStudents: CreatedStudent[] = [];
 
     await prisma.$transaction(async (tx) => {
@@ -51,6 +64,19 @@ export class AuthService {
       user: User;
       tendik: any;
     };
+
+    const nips = users.map(u => u.nip);
+    const existingTendik = await prisma.tendik.findMany({
+      where: {
+        nip: { in: nips }
+      },
+      select: { nip: true }
+    });
+
+    if (existingTendik.length > 0) {
+      const duplicateNips = existingTendik.map(t => t.nip).join(", ");
+      throw { status: 400, message: `NIP berikut sudah terdaftar: ${duplicateNips}` };
+    }
 
     const createdTendik: CreatedTendik[] = [];
 
