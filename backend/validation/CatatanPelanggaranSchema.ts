@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { no } from "zod/v4/locales";
 
 export const AddCatatanPelanggaranSchema = z.object({
     idPelanggaran: z.coerce.number({ message: "Pelanggaran ID must be a number" }).min(1, { message: "Pelanggaran ID is required" }),
