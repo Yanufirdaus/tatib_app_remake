@@ -3,9 +3,10 @@ import { thClass } from "../../../manage_siswa/constants/table";
 import { useGetTendikByRole } from "../../hooks/useTendik";
 import { Oval } from "react-loader-spinner";
 import type { TendikType } from "../../../type/user.type";
+import type { TendikRole } from "../../../schema/user.schema";
 import TableRowTendik from "./TableRowTendik";
 
-const ListTendik = ({ role }: { role: string }) => {
+const ListTendik = ({ role }: { role: TendikRole }) => {
     const { data: tendik, isLoading: isLoadingTendik } = useGetTendikByRole(role);
     const [editId, setEditId] = useState<number | null>(null);
 
