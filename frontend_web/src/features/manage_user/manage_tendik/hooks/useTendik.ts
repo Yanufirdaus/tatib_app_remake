@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteTendik, getTendikByRole, updateTendik } from "../services/tendik.service";
+import { addTendik, deleteTendik, getTendikByRole, updateTendik } from "../services/tendik.service";
 
 export const useGetTendikByRole = (role: string) => {
     return useQuery({
@@ -25,6 +25,17 @@ export const useDeleteTendik = () => {
 
     return useMutation({
         mutationFn: (id: number) => deleteTendik(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tendik"] });
+        }
+    })
+}
+
+export const useAddTendik = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: any) => addTendik(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["tendik"] });
         }
