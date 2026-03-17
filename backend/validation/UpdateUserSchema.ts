@@ -10,7 +10,7 @@ export const UpdateUserSchema = z.object({
 export const UpdateTendikSchema = z.object({
     name: z.string().min(1, { message: Messages.NAME_REQUIRED }),
     nip: z.string().min(1, { message: "NIP wajib diisi" }),
-    role: z.string().min(1, { message: "Jabatan wajib diisi" }),
+    role: z.enum(["admin", "kesiswaan", "bk", "kepsek"], { message: "Role not valid'" }),
 })
 
 export const UpdateManySiswaKelasSchema = z.object({
