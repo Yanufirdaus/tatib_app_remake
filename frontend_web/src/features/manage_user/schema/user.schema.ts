@@ -10,6 +10,18 @@ export const CreateUserSchema = z.object({
 
 export type CreateUserFormValues = z.infer<typeof CreateUserSchema>
 
+export const CreateTendikSchema = z.object({
+    tendik: z.array(z.object({
+        name: z.string().min(1, { message: "Name is required" }),
+        role: z.enum(["admin", "kesiswaan", "bk", "kepsek"], { message: "Role not valid'" }),
+        nip: z.string().min(6, { message: "NIP Minimal 6 digit" }),
+    }))
+});
+
+export type TendikRole = "admin" | "kesiswaan" | "bk" | "kepsek";
+
+export type CreateTendikFormValues = z.infer<typeof CreateTendikSchema>
+
 export const UpdateUserSchema = z.object({
     name: z.string().min(1, { message: "Nama is required" }),
     kelasId: z.string().min(1, { message: "Kelas ID is required" }),
