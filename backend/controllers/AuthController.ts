@@ -22,9 +22,9 @@ export class AuthController {
         }
     }
 
-    static async registerTendik(req: Request<{}, {}, CreateTendikDTO[]>, res: Response) {
+    static async registerTendik(req: Request<{}, {}, { tendik: CreateTendikDTO[] }>, res: Response) {
         try {
-            const users = req.body;
+            const users = req.body.tendik;
 
             const createdTendik = await AuthService.registerTendik(users);
             return res.status(201).json(createdTendik);

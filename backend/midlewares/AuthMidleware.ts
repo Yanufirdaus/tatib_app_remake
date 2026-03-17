@@ -79,7 +79,7 @@ export const validateRegisterTendikMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const input: CreateTendikDTO[] = req.body;
+    const input: CreateTendikDTO[] = req.body.tendik;
 
     try {
         const result = CreateTendikSchema.safeParse(input);
