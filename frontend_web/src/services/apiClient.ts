@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../config/api';
-import { useAuthStore } from '../store/auth.store';
+import { ENV } from '@/config/env';
+import { useAuthStore } from '@/store/auth.store';
 
 export const apiClient = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: ENV.API_BASE_URL,
     withCredentials: true,
     headers: {
         "Content-Type": "application/json"
@@ -17,7 +17,9 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
     const requestUrl = originalRequest?.url;
 
-    console.error("API Error:", error.response?.data || error.message);
+    if (ENV.IS_DEV) {
+        console.error("API Error:", error.response?.data || error.message);
+    }
 
     if (requestUrl === "/refresh-token") {
       useAuthStore.getState().logoutStore();
