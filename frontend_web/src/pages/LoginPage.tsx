@@ -1,5 +1,5 @@
 import './page.css'
-import LoginRoot from '../features/login/components/LoginRoot';
+import LoginRoot from "@/features/auth/components/LoginRoot";
 
 const LoginPage = () => {
     return (
