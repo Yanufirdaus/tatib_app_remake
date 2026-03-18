@@ -1,8 +1,11 @@
 import { useState } from "react";
-import Input from "../../../components/ui/Input";
-import { FaBackspace, FaEdit, FaSave, FaSpinner, FaTrashAlt } from "react-icons/fa";
-import { useDeletePelanggaran } from "../hooks/usePelanggaran";
-import type { EditPelanggaranComponentProps } from "../type/pelanggaran.type";
+import Input from "@/components/ui/Input";
+import { FaEdit, FaSave, FaTrash, FaUndo } from "react-icons/fa";
+import { useDeletePelanggaran } from "@/features/pelanggaran/hooks/usePelanggaran";
+import type { EditPelanggaranComponentProps } from "@/features/pelanggaran/type/pelanggaran.type";
+import ConfirmModal from "@/components/ui/ConfirmModal";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { TABLE_CLASSES } from "@/constants/ui";
 
 const BodyTable = (
     {
@@ -12,125 +15,133 @@ const BodyTable = (
         setEditId,
         isPending,
         setValue,
-        errors
+        errors,
+        handleSubmit,
+        onSubmit
     }: EditPelanggaranComponentProps) => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-
-
-    const { mutate: deletePelanggaran, isPending: isPendingDeletePelanggaran } = useDeletePelanggaran();
+    const { mutate: deletePelanggaran, isPending: isPendingDeletePelanggaran, variables: deleteVars } = useDeletePelanggaran();
 
     const handleDeletePelanggaraan = (id: number) => {
         setDeleteId(id)
-        if (confirm("Yakin ingin menghapus pelanggaran ini?")) {
-            deletePelanggaran(id, {
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message || error?.message || "Terjadi kesalahan";
+        setIsConfirmOpen(true);
+    }
 
-                    alert(message);
+    const confirmDelete = () => {
+        if (deleteId) {
+            deletePelanggaran(deleteId, {
+                onSuccess: () => {
+                    setDeleteId(null);
+                    setIsConfirmOpen(false);
+                },
+                onError: () => {
+                    setDeleteId(null);
+                    setIsConfirmOpen(false);
                 }
             });
         }
     }
 
     return (
-        <tbody>
-            {pelanggaran.map((data: any) => (
-                <tr>
-                    <td className="border border-gray-300 px-2 py-4 text-sm md:text-base text-center">
+        <tbody className="divide-y divide-slate-100">
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                title="Hapus Pelanggaran"
+                message="Yakin ingin menghapus pelanggaran ini? Data yang dihapus tidak bisa dikembalikan."
+                onClose={() => {
+                    setIsConfirmOpen(false);
+                }}
+                onConfirm={confirmDelete}
+            />
+            {pelanggaran.map((data) => (
+                <tr key={data.id} className={TABLE_CLASSES.TR_HOVER}>
+                    <td className={TABLE_CLASSES.TD + " text-center"}>
                         {data.nomor}
                     </td>
-                    <td className="border border-gray-300 px-2 py-4 text-sm md:text-base">
+                    <td className={`${TABLE_CLASSES.TD} !text-left !whitespace-normal min-w-[300px]`}>
                         {editId === data.id ? (
                             <Input
                                 {...register("pelanggaran")}
                                 defaultValue={data.pelanggaran}
                                 error={errors?.pelanggaran?.message}
+                                className="!py-1.5 text-sm"
                             />
                         ) : (
-                            <>{data.pelanggaran}</>
+                            <span className="text-slate-700 font-medium">{data.pelanggaran}</span>
                         )}
                     </td>
-                    <td className="border border-gray-300 items-center text-center py-4 text-sm md:text-base px-2">
+                    <td className={TABLE_CLASSES.TD + " text-center"}>
                         {editId === data.id ? (
                             <Input
                                 {...register("poin")}
-                                defaultValue={data.poin}
+                                defaultValue={String(data.poin)}
                                 error={errors?.poin?.message}
+                                className="!py-1.5 text-sm w-20 mx-auto"
                             />
                         ) : (
-                            <>{data.poin}</>
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+                                {data.poin} Poin
+                            </span>
                         )}
                     </td>
-                    <td className="border border-gray-300 py-4">
-                        {editId === data.id ? (isPending ? (
-                            <div className="w-full flex flex-row justify-center items-center">
-                                <FaSpinner
-                                    size={18}
-                                    className="animate-spin text-gray-500"
-                                    type="button"
-                                />
-                            </div>
-                        ) : <div className="w-full flex flex-row justify-center items-center">
-                            <button type="submit">
-                                <FaSave
-                                    size={18}
-                                    className="cursor-pointer text-green-600"
-                                />
-                            </button>
-                        </div>
-                        ) : (
-                            <div className="w-full flex flex-row justify-center items-center">
-                                <FaEdit
-                                    size={18}
-                                    className="cursor-pointer text-black"
+                    <td className={TABLE_CLASSES.TD}>
+                        <div className="flex justify-center">
+                            {editId === data.id ? (
+                                isPending ? (
+                                    <LoadingSpinner size={18} />
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={handleSubmit(onSubmit)}
+                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-all active:scale-90"
+                                        title="Simpan"
+                                    >
+                                        <FaSave size={18} />
+                                    </button>
+                                )
+                            ) : (
+                                <button
                                     type="button"
                                     onClick={() => {
                                         setEditId(data.id)
-
                                         setValue("pelanggaran", data.pelanggaran)
                                         setValue("poin", String(data.poin))
                                     }}
-                                />
-                            </div>
-                        )}
+                                    className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all active:scale-90"
+                                    title="Edit"
+                                >
+                                    <FaEdit size={18} />
+                                </button>
+                            )}
+                        </div>
                     </td>
-                    <td className="border border-gray-300 py-4">
-                        <div className="w-full flex flex-row justify-center items-center">
-                            {deleteId === data.id ? (isPendingDeletePelanggaran ? (
-                                <div className="w-full flex flex-row justify-center items-center">
-                                    <FaSpinner
-                                        size={18}
-                                        className="animate-spin text-gray-500"
-                                        type="button"
-                                    />
-                                </div>
-                            ) : (<div className="w-full flex flex-row justify-center items-center">
-                                <FaTrashAlt
-                                    color="red" size={18}
-                                    onClick={
-                                        () => handleDeletePelanggaraan(data.id)
-                                    }
-                                />
-                            </div>
-                            )) : (editId === data.id ? (
-                                <div className="w-full flex flex-row justify-center items-center">
-                                    <FaBackspace
-                                        color="red" size={18}
-                                        onClick={
-                                            () => setEditId(null)
-                                        }
-                                    />
-                                </div>
+                    <td className={TABLE_CLASSES.TD}>
+                        <div className="flex justify-center">
+                            {deleteVars === data.id && isPendingDeletePelanggaran ? (
+                                <LoadingSpinner size={18} type="oval" noPadding />
                             ) : (
-                                <FaTrashAlt
-                                    color="red" size={18}
-                                    onClick={
-                                        () => handleDeletePelanggaraan(data.id)
-                                    }
-                                />
-                            ))
-                            }
+                                editId === data.id ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => setEditId(null)}
+                                        className="p-2 text-slate-400 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all active:scale-90"
+                                        title="Batal"
+                                    >
+                                        <FaUndo size={16} />
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDeletePelanggaraan(data.id)}
+                                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all active:scale-90"
+                                        title="Hapus"
+                                    >
+                                        <FaTrash size={16} />
+                                    </button>
+                                )
+                            )}
                         </div>
                     </td>
                 </tr>
