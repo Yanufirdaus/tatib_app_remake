@@ -1,14 +1,15 @@
-import TitlePage from "../../../../components/ui/TitlePage";
 import ListKelas from "./ListKelas";
 import TambahBanyakSiswa from "./TambahBanyakSiswa";
+import PageContainer from "@/components/ui/PageContainer";
+import FeatureHeader from "@/components/ui/FeatureHeader";
 
 const ManajemenSiswaRoot = () => {
     return (
-        <div className="flex flex-col min-h-screen w-full gap-4 items-center py-6 md:py-8">
-            <TitlePage title="Manajemen Siswa" />
+        <PageContainer className="py-6">
+            <FeatureHeader title="Manajemen Siswa" showAction={false} />
             <TambahBanyakSiswa />
             <ListKelas />
-        </div>
+        </PageContainer>
     )
 }
 
