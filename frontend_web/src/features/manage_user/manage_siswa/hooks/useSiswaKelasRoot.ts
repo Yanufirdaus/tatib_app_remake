@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useSiswaByKelas, useUpdateManySiswaKelas } from "../hooks/useSiswa";
+import { useSiswaByKelas, useUpdateManySiswaKelas } from "@/features/manage_user/manage_siswa/hooks/useSiswa";
 import { useFieldArray, useForm } from "react-hook-form";
-import { UpdateManySiswaKelasSchema, type UpdateManySiswaKelasFormValues } from "../../schema/user.schema";
+import { UpdateManySiswaKelasSchema, type UpdateManySiswaKelasFormValues } from "@/features/manage_user/schemas/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useKelasById } from "../../../kelas/hooks/useKelas";
+import { useKelasById } from "@/features/kelas/hooks/useKelas";
+import type { Siswa } from "@/types/models";
 
 export const useSiswaKelasRoot = (id: number) => {
     const [isAddSiswa, setIsAddSiswa] = useState(false);
@@ -33,12 +34,7 @@ export const useSiswaKelasRoot = (id: number) => {
             onSuccess: () => {
                 setIsEditKelasSiswa(false);
                 remove();
-                alert("Data berhasil diupdate");
             },
-            onError: (error) => {
-                console.error(error);
-                alert("Data gagal diupdate");
-            }
         });
     };
 
@@ -53,7 +49,7 @@ export const useSiswaKelasRoot = (id: number) => {
 
     const handleStartKenaikanKelas = () => {
         if (siswa && siswa.length > 0) {
-            siswa.forEach((s: any) => {
+            siswa.forEach((s: Siswa) => {
                 append({
                     siswaIds: String(s.id),
                     kelasIds: String(s.kelasId)
