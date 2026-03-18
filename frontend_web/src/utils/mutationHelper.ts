@@ -9,10 +9,6 @@ interface UseBaseMutationOptions<TData, TError, TVariables, TContext> {
     onError?: (error: TError, variables: TVariables, context: TContext | undefined) => void;
 }
 
-/**
- * A custom hook to standardize useMutation boilerplate.
- * Handles default query invalidation, success alerts, and error alerts.
- */
 export const useBaseMutation = <TData = void, TError = Error, TVariables = void, TContext = unknown>(
     options: UseBaseMutationOptions<TData, TError, TVariables, TContext>
 ) => {
