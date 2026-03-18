@@ -1,8 +1,8 @@
 import { FaChevronRight } from "react-icons/fa";
-import { useKelas } from "../../../../features/kelas/hooks/useKelas";
-import { Oval } from "react-loader-spinner";
-import DataCard from "../../../../components/ui/DataCard";
+import { useKelas } from "@/features/kelas/hooks/useKelas";
 import { useNavigate } from "react-router-dom";
+import DataCard from "@/components/ui/DataCard";
+import { Oval } from "react-loader-spinner";
 
 const ListKelas = () => {
     const { data, isLoading, error } = useKelas();
@@ -25,7 +25,7 @@ const ListKelas = () => {
                 </div>
             ) : (
                 <div className="flex flex-col gap-2">
-                    {data?.map((item: any) => (
+                    {data?.map((item) => (
                         <DataCard
                             key={item.id}
                             text={item.name}
