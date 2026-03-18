@@ -1,5 +1,5 @@
 import mobileDisplay from "@/assets/mobile_display.png"
-import PlatformStore from "../../../components/platform_store/PlatforomStore";
+import PlatformStore from "@/components/platform_store/PlatformStore";
 
 const MobileSection = () => {
     return (
@@ -10,7 +10,7 @@ const MobileSection = () => {
             <div className="flex-1 flex justify-center mt-6 md:mt-12">
                 <img 
                     src={mobileDisplay}
-                    alt="Logo" 
+                    alt="Tatib Apps Mobile Display" 
                     className="p-2 md:pb-6 w-70 md:w-150 opacity-85"
                 />
             </div>
