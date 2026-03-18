@@ -1,11 +1,12 @@
-import { FaPlusSquare } from "react-icons/fa";
-import TitlePage from "../../../../../components/ui/TitlePage";
 import ListTendik from "./ListTendik";
-import { CreateTendikSchema, type CreateTendikFormValues, type TendikRole } from "../../../schema/user.schema";
+import { CreateTendikSchema, type CreateTendikFormValues } from "@/features/manage_user/schemas/user.schema";
+import { type TendikRole } from "@/constants/roles";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAddTendik } from "../../hooks/useTendik";
+import { useAddTendik } from "@/features/manage_user/manage_tendik/hooks/useTendik";
 import AddTendikForm from "./AddTendik";
+import PageContainer from "@/components/ui/PageContainer";
+import FeatureHeader from "@/components/ui/FeatureHeader";
 
 const TendikPerRoleRoot = ({ role }: { role: TendikRole }) => {
     const {
@@ -29,35 +30,23 @@ const TendikPerRoleRoot = ({ role }: { role: TendikRole }) => {
     const onSubmitAdd = (data: CreateTendikFormValues) => {
         addTendik(data, {
             onSuccess: () => {
-                alert("Berhasil menambahkan tendik");
                 reset();
-            },
-            onError: (err: any) => {
-                alert(err.message);
             }
         });
     };
 
     return (
-        <div className="flex flex-col min-h-screen w-full py-6 md:py-8 gap-8 items-center">
-            <div className="flex flex-row w-full">
-                <div className="basis-2/8"></div>
-                <div className="basis-6/8">
-                    <TitlePage title={`Tendik ${role.toUpperCase()}`} />
-                </div>
-                <div className="basis-2/8">
-                    <FaPlusSquare
-                        className="size-6 fill-green-600 cursor-pointer"
-                        onClick={() => {
-                            append({
-                                name: "",
-                                nip: "",
-                                role: role,
-                            });
-                        }}
-                    />
-                </div>
-            </div>
+        <PageContainer className="py-6">
+            <FeatureHeader
+                title={`Tendik ${role.toUpperCase()}`}
+                onActionClick={() => {
+                    append({
+                        name: "",
+                        nip: "",
+                        role: role,
+                    });
+                }}
+            />
 
             <AddTendikForm
                 fields={fields}
@@ -71,7 +60,7 @@ const TendikPerRoleRoot = ({ role }: { role: TendikRole }) => {
             />
 
             <ListTendik role={role} />
-        </div>
+        </PageContainer>
     )
 }
 
