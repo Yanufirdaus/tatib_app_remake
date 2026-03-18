@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Papa from "papaparse";
-import { useKelas } from "../../../kelas/hooks/useKelas";
+import { useKelas } from "@/features/kelas/hooks/useKelas";
 import { useCreateManySiswa } from "./useSiswa";
-import type { CsvSiswaRow } from "../../type/user.type";
+import type { CsvSiswaRow } from "@/features/manage_user/type/user.type";
+import { extractGoogleSheetId, fetchAndParseCsv, getGoogleSheetCsvUrl } from "@/utils/csvHelper";
 
 export const useTambahBanyakSiswa = () => {
     const [isTambahBanyakSiswa, setIsTambahBanyakSiswa] = useState(false);
@@ -10,14 +10,10 @@ export const useTambahBanyakSiswa = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [csvData, setCsvData] = useState<CsvSiswaRow[] | null>(null);
     const [unmatchedKelas, setUnmatchedKelas] = useState<string[]>([]);
+    const [localError, setLocalError] = useState<string | null>(null);
 
     const { data: kelasList } = useKelas();
     const { mutate: createManySiswa, isPending: isPendingCreate } = useCreateManySiswa();
-
-    const extractSheetId = (url: string): string | null => {
-        const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-        return match ? match[1] : null;
-    };
 
     const mapKelasNameToId = (kelasName: string): number | null => {
         if (!kelasList) return null;
@@ -28,40 +24,30 @@ export const useTambahBanyakSiswa = () => {
     };
 
     const handleFetchSheet = async () => {
-        const sheetId = extractSheetId(sheetLink);
+        const sheetId = extractGoogleSheetId(sheetLink);
         if (!sheetId) {
-            alert("Link Google Spreadsheet tidak valid");
+            setLocalError("Link Google Spreadsheet tidak valid");
             return;
         }
 
-        const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+        const csvUrl = getGoogleSheetCsvUrl(sheetId);
 
         setIsLoading(true);
         setUnmatchedKelas([]);
         try {
-            const response = await fetch(csvUrl);
-            if (!response.ok) throw new Error("Gagal mengambil data spreadsheet");
+            setLocalError(null);
+            const data = await fetchAndParseCsv<CsvSiswaRow>(csvUrl);
 
-            const csvText = await response.text();
-            Papa.parse(csvText, {
-                header: true,
-                skipEmptyLines: true,
-                complete: (results) => {
-                    const data = results.data as CsvSiswaRow[];
+            const uniqueKelas = [...new Set(data.map(row => row.kelas))];
+            const notFound = uniqueKelas.filter(name => !mapKelasNameToId(name));
 
-                    const uniqueKelas = [...new Set(data.map(row => row.kelas))];
-                    const notFound = uniqueKelas.filter(name => !mapKelasNameToId(name));
+            if (notFound.length > 0) {
+                setUnmatchedKelas(notFound);
+            }
 
-                    if (notFound.length > 0) {
-                        setUnmatchedKelas(notFound);
-                    }
-
-                    setCsvData(data);
-                },
-            });
-        } catch (error) {
-            console.error(error);
-            alert("Gagal mengambil data. Pastikan spreadsheet di-set 'Anyone with the link'.");
+            setCsvData(data);
+        } catch {
+            setLocalError("Gagal mengambil data. Pastikan spreadsheet di-set 'Anyone with the link'.");
         } finally {
             setIsLoading(false);
         }
@@ -85,12 +71,7 @@ export const useTambahBanyakSiswa = () => {
             { siswa: mappedSiswa },
             {
                 onSuccess: () => {
-                    alert(`${mappedSiswa.length} siswa berhasil ditambahkan`);
                     resetState();
-                },
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message || error?.message || "Terjadi kesalahan";
-                    alert(message);
                 },
             }
         );
@@ -101,6 +82,7 @@ export const useTambahBanyakSiswa = () => {
         setSheetLink("");
         setCsvData(null);
         setUnmatchedKelas([]);
+        setLocalError(null);
     };
 
     return {
@@ -112,6 +94,8 @@ export const useTambahBanyakSiswa = () => {
         csvData,
         unmatchedKelas,
         isPendingCreate,
+        localError,
+        setLocalError,
         handleFetchSheet,
         handleSubmit,
         resetState
