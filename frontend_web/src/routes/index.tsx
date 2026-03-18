@@ -1,151 +1,44 @@
 import { createBrowserRouter } from "react-router-dom";
-import DashboardPage from "../pages/DashboardPage";
-import RootLayout from "../layouts/RootLayout";
-import LoginPage from "../pages/LoginPage";
-import HomeAdminPage from "../pages/HomeAdminPage";
+import { lazy } from "react";
+import RootLayout from "@/layouts/RootLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
-import ManajemenKelas from "../pages/ManajemenKelas";
-import ManajemenPelanggaran from "../pages/ManajemenPelanggaran";
-import ManajemenSiswa from "../pages/ManajemenSiswa";
-import SiswaKelasPage from "../pages/SiswaKelasPage";
-import ManajemenTendik from "../pages/ManajemenTendik";
-import TendikPerRole from "../pages/TendikPerRole";
+
+// Lazy load pages
+import { LazyElement } from "./RouteHelpers";
+
+// Lazy load pages
+const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
+const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const HomeAdminPage = lazy(() => import("@/pages/HomeAdminPage"));
+const ManajemenKelasPage = lazy(() => import("@/pages/ManajemenKelasPage"));
+const ManajemenPelanggaranPage = lazy(() => import("@/pages/ManajemenPelanggaranPage"));
+const ManajemenSiswaPage = lazy(() => import("@/pages/ManajemenSiswaPage"));
+const SiswaKelasPage = lazy(() => import("@/pages/SiswaKelasPage"));
+const ManajemenTendikPage = lazy(() => import("@/pages/ManajemenTendikPage"));
+const TendikPerRolePage = lazy(() => import("@/pages/TendikPerRolePage"));
 
 export const router = createBrowserRouter([
     {
-        element: <PublicRoute />,
+        element: <RootLayout />,
         children: [
             {
-                path: "/",
-                element: < RootLayout />,
+                element: <PublicRoute />,
                 children: [
-                    {
-                        index: true,
-                        element: <DashboardPage />
-                    }
-                ]
-            }
-        ]
-
-    },
-    {
-        element: <PublicRoute />,
-        children: [
-            {
-                path: "/login",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <LoginPage />
-                    }
-                ]
-            }
-        ]
-
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
-            {
-                path: "/home",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <HomeAdminPage />,
-                    },
+                    { path: "/", element: <LazyElement><DashboardPage /></LazyElement> },
+                    { path: "/login", element: <LazyElement><LoginPage /></LazyElement> },
                 ],
             },
-        ],
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
             {
-                path: "/kelas",
-                element: <RootLayout />,
+                element: <ProtectedRoute />,
                 children: [
-                    {
-                        index: true,
-                        element: <ManajemenKelas />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
-            {
-                path: "/pelanggaran",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <ManajemenPelanggaran />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
-            {
-                path: "/manajemen-siswa",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <ManajemenSiswa />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
-            {
-                path: "/manajemen-siswa/kelas/:id",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <SiswaKelasPage />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
-            {
-                path: "/manajemen-tendik",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <ManajemenTendik />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        element: <ProtectedRoute />,
-        children: [
-            {
-                path: "/manajemen-tendik/role/:role",
-                element: <RootLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <TendikPerRole />,
-                    },
+                    { path: "/home", element: <LazyElement><HomeAdminPage /></LazyElement> },
+                    { path: "/kelas", element: <LazyElement><ManajemenKelasPage /></LazyElement> },
+                    { path: "/pelanggaran", element: <LazyElement><ManajemenPelanggaranPage /></LazyElement> },
+                    { path: "/manajemen-siswa", element: <LazyElement><ManajemenSiswaPage /></LazyElement> },
+                    { path: "/manajemen-siswa/kelas/:id", element: <LazyElement><SiswaKelasPage /></LazyElement> },
+                    { path: "/manajemen-tendik", element: <LazyElement><ManajemenTendikPage /></LazyElement> },
+                    { path: "/manajemen-tendik/role/:role", element: <LazyElement><TendikPerRolePage /></LazyElement> },
                 ],
             },
         ],
