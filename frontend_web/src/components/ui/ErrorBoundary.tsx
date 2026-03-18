@@ -36,10 +36,10 @@ class ErrorBoundary extends Component<Props, State> {
             <FaExclamationTriangle className="text-red-500 text-6xl" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 font-poppins">
-            Waduh, ada masalah teknis nih!
+            terjadi kesalahan teknis
           </h1>
           <p className="text-gray-600 max-w-md mb-8">
-            Terjadi kesalahan yang tidak terduga dalam aplikasi. Jangan khawatir, tim kami akan segera memperbaikinya.
+            silahkan muat ulang halaman atau tunggu beberapa saat
           </p>
           <button
             onClick={this.handleReset}
@@ -48,11 +48,11 @@ class ErrorBoundary extends Component<Props, State> {
             <FaRedo className="text-sm" />
             Muat Ulang Halaman
           </button>
-          
+
           {process.env.NODE_ENV === 'development' && (
-             <div className="mt-12 p-4 bg-gray-100 rounded text-left overflow-auto max-w-2xl w-full">
-                <p className="font-mono text-xs text-red-600">{this.state.error?.toString()}</p>
-             </div>
+            <div className="mt-12 p-4 bg-gray-100 rounded text-left overflow-auto max-w-2xl w-full">
+              <p className="font-mono text-xs text-red-600">{this.state.error?.toString()}</p>
+            </div>
           )}
         </div>
       );
