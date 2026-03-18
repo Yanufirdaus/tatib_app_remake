@@ -1,21 +1,9 @@
 import type { Control, FieldArrayWithId } from "react-hook-form";
-import type { UpdateManySiswaKelasFormValues } from "../schema/user.schema";
-
-export interface ProfileType {
-    id: number;
-    name: string;
-    role: string;
-    image_profile?: string;
-}
-
-export interface TendikType {
-    id: number;
-    nip: string;
-    profileSiswa: ProfileType;
-}
+import type { UpdateManySiswaKelasFormValues } from "@/features/manage_user/schemas/user.schema";
+import type { Siswa } from "@/types/models";
 
 export type SiswaRowProps = {
-    s: any;
+    s: Siswa;
     editId: number | null;
     setEditId: (id: number | null) => void;
     isLoadingKelas: boolean;
@@ -26,7 +14,7 @@ export type SiswaRowProps = {
 }
 
 export type ListSiswaProps = {
-    siswa: any;
+    siswa: Siswa[];
     isLoadingSiswa: boolean;
     fields: FieldArrayWithId<UpdateManySiswaKelasFormValues, "kelasUpdate">[];
     controlKelas: Control<UpdateManySiswaKelasFormValues>;
