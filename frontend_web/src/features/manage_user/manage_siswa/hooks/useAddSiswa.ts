@@ -1,16 +1,16 @@
-import { useKelas } from "../../../kelas/hooks/useKelas";
+import { useKelas } from "@/features/kelas/hooks/useKelas";
 import { useCreateManySiswa } from "./useSiswa";
 import { useForm } from "react-hook-form";
-import { CreateUserSchema, type CreateUserFormValues } from "../../schema/user.schema";
+import { CreateUserSchema, type CreateUserFormValues } from "@/features/manage_user/schemas/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const useAddSiswa = (setIsAddSiswa: (value: boolean) => void, kelasId: number) => {
     const { data: kelasList, isLoading: isLoadingKelasList } = useKelas();
 
-    const options = kelasList?.map((k: any) => ({
-        value: k.id,
+    const options = kelasList?.map((k) => ({
+        value: String(k.id),
         label: k.name
-    }));
+    })) || [];
 
     const { mutate: createManySiswa, isPending: isPendingCreateManySiswa } = useCreateManySiswa();
 
@@ -31,11 +31,6 @@ export const useAddSiswa = (setIsAddSiswa: (value: boolean) => void, kelasId: nu
         createManySiswa(data, {
             onSuccess: () => {
                 setIsAddSiswa(false);
-                alert("Siswa berhasil ditambahkan");
-            },
-            onError: (error: any) => {
-                const message = error?.response?.data?.message || error?.message || "Terjadi kesalahan";
-                alert(message);
             }
         });
     };
