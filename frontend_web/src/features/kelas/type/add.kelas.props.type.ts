@@ -1,5 +1,5 @@
 import type { FieldArrayWithId, FieldErrors, UseFormRegister } from "react-hook-form"
-import type { AddKelasFormValues } from "../schema/add.kelas.schema"
+import type { AddKelasFormValues } from "@/features/kelas/schemas/add.kelas.schema";
 
 export type AddKelasProps = {
   fields: FieldArrayWithId<AddKelasFormValues>[]
