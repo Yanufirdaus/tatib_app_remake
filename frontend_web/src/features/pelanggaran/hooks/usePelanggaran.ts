@@ -1,10 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addPelanggaran, deletePelanggaran, getJenisPelanggaran, getPelanggaranByJenis, updatePelanggaran } from "../services/pelanggaran.service"
-import type { JenisPelanggaranType } from "../../../types/variable.type"
-import type { UpdatePelanggaranPayload } from "../type/pelanggaran.type"
+import { useQuery } from "@tanstack/react-query"
+import { addPelanggaran, deletePelanggaran, getJenisPelanggaran, getPelanggaranByJenis, updatePelanggaran } from "@/features/pelanggaran/services/pelanggaran.service";
+import type { JenisPelanggaran, Pelanggaran } from "@/types/models"
+import type { UpdatePelanggaranFormValues, AddPelanggaranFormValues } from "@/features/pelanggaran/schemas/pelanggaran.schema";
+import { useBaseMutation } from "@/utils/mutationHelper"
 
 export const useJenisPelanggaran = () => {
-    return useQuery<JenisPelanggaranType[]>({
+    return useQuery<JenisPelanggaran[]>({
         queryKey: ["jenisPelanggaran"],
         queryFn: getJenisPelanggaran,
         staleTime: 5 * 60 * 1000
@@ -12,7 +13,7 @@ export const useJenisPelanggaran = () => {
 }
 
 export const useGetPelanggaranByJenisId = (jenisId: number) => {
-    return useQuery({
+    return useQuery<Pelanggaran[]>({
         queryKey: ["pelanggaranByJenisId", jenisId],
         queryFn: () => getPelanggaranByJenis(jenisId),
         staleTime: 5 * 60 * 1000
@@ -20,39 +21,29 @@ export const useGetPelanggaranByJenisId = (jenisId: number) => {
 }
 
 export const useUpdatePelanggaran = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation<
-        unknown,
+    return useBaseMutation<
+        void,
         Error,
-        UpdatePelanggaranPayload
+        { id: number, data: UpdatePelanggaranFormValues }
     >({
         mutationFn: ({ id, data }) => updatePelanggaran(id, data),
-
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["pelanggaranByJenisId"] })
-        }
+        invalidateKeys: [["pelanggaranByJenisId"]],
+        onSuccessMessage: "Update pelanggaran berhasil"
     })
 }
 
 export const useDeletePelanggaran = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
+    return useBaseMutation<void, Error, number>({
         mutationFn: deletePelanggaran,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["pelanggaranByJenisId"] })
-        }
+        invalidateKeys: [["pelanggaranByJenisId"]],
+        onSuccessMessage: "Delete pelanggaran berhasil"
     })
 }
 
 export const useAddPelanggaran = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
+    return useBaseMutation<void, Error, AddPelanggaranFormValues>({
         mutationFn: addPelanggaran,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["pelanggaranByJenisId"] })
-        }
+        invalidateKeys: [["pelanggaranByJenisId"]],
+        onSuccessMessage: "Tambah pelanggaran berhasil"
     })
 }
