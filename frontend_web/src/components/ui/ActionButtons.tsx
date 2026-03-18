@@ -22,10 +22,10 @@ const ActionButtons = ({
     typeButton
 }: ActionButtonsProps) => {
     return (
-        <div className={`flex flex-row justify-center items-top h-fit gap-2 md:gap-4 py-3 ${className}`}>
+        <div className={`flex flex-row justify-center items-center gap-3 md:gap-4 py-4 ${className}`}>
             <button
                 type="button"
-                className="bg-red-600 px-2 py-1 rounded-sm hover:bg-red-900 text-xs text-white font-medium disabled:opacity-50"
+                className="bg-white border border-slate-200 px-5 py-2 rounded-lg hover:bg-slate-50 text-xs text-slate-600 font-bold transition-all active:scale-95 disabled:opacity-50"
                 onClick={onCancel}
                 disabled={disabled || isPending}
             >
@@ -33,7 +33,7 @@ const ActionButtons = ({
             </button>
             <button
                 type={typeButton}
-                className="bg-blue-500 px-2 py-1 rounded-sm hover:bg-blue-700 text-xs text-white font-medium disabled:opacity-50"
+                className="bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 text-xs text-white font-bold shadow-sm shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-50"
                 disabled={disabled || isPending}
                 onClick={onClick}
             >
