@@ -1,64 +1,81 @@
+import { useState } from "react";
 import { FaCircleNotch, FaTrashAlt } from "react-icons/fa";
-import { useDeleteKelas, useKelas } from "../hooks/useKelas";
-import { Oval } from "react-loader-spinner";
+import { useDeleteKelas, useKelas } from "@/features/kelas/hooks/useKelas";
 import AddKelas from "./AddKelas";
-import type { AddKelasProps } from "../type/add.kelas.props.type";
-import DataCard from "../../../components/ui/DataCard";
+import type { AddKelasProps } from "@/features/kelas/type/add.kelas.props.type";
+import DataCard from "@/components/ui/DataCard";
+import ConfirmModal from "@/components/ui/ConfirmModal";
+import Skeleton from "@/components/ui/Skeleton";
+import EmptyState from "@/components/ui/EmptyState";
 
 const ListKelas = ({
-  fields,
-  register,
-  cancelAddHandler,
-  onSubmit,
-  isPendingAddKelas,
-  errors
+    fields,
+    register,
+    cancelAddHandler,
+    onSubmit,
+    isPendingAddKelas,
+    errors
 }: AddKelasProps) => {
     const { data, isLoading } = useKelas();
-
     const { mutate: deleteKelas, isPending } = useDeleteKelas();
 
-    const handleDeleteKelas = (id: number) => {
-        if (confirm("Yakin ingin menghapus kelas ini?")) {
-            deleteKelas(id, {
-                onError: (error:any) => {
-                    const message = error?.response?.data?.message || error?.message || "Terjadi kesalahan";
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
 
-                    alert(message);
-                }
-            });
+    const handleDeleteKelas = (id: number) => {
+        setSelectedId(id);
+        setIsConfirmOpen(true);
+    }
+
+    const confirmDelete = () => {
+        if (selectedId) {
+            deleteKelas(selectedId);
+            setIsConfirmOpen(false);
         }
     }
 
     return (
-        <div className="flex flex-col gap-2 mx-6">
-            <AddKelas fields={fields} register={register} cancelAddHandler={cancelAddHandler} onSubmit={onSubmit} isPendingAddKelas={isPendingAddKelas} errors={errors}/>
-            
-            {isLoading ? (
-                <div className="flex flex-col gap-2">
-                    <Oval
-                        height="50"
-                        width="50"
-                        color="#2dd4bf"
-                        ariaLabel="oval-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
+        <div className="flex flex-col gap-6 w-full md:w-150">
+            <div className="px-6">
+                <AddKelas fields={fields} register={register} cancelAddHandler={cancelAddHandler} onSubmit={onSubmit} isPendingAddKelas={isPendingAddKelas} errors={errors} />
+            </div>
+
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                title="Hapus Kelas"
+                message="Yakin ingin menghapus kelas ini? Tindakan ini tidak dapat dibatalkan dan semua data siswa terkait akan terpengaruh."
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={confirmDelete}
+            />
+
+            <div className="flex flex-col gap-2 mx-6">
+                {isLoading ? (
+                    <div className="flex flex-col gap-2">
+                        {[...Array(5)].map((_, i) => (
+                            <Skeleton key={i} height={60} className="w-full" />
+                        ))}
+                    </div>
+                ) : data?.length === 0 ? (
+                    <EmptyState
+                        title="Kelas Belum Tersedia"
+                        message="Silakan tambahkan kelas baru melalui form di atas."
                     />
-                </div>
-            ) : (
-                <div className="flex flex-col gap-2">
-                    {data.map((item: any) => (
-                        <DataCard 
-                            key={item.id}
-                            text={item.name}
-                            actionIcon={!isPending ? <FaTrashAlt className="fill-red-500 hover:fill-red-800" /> : <FaCircleNotch className="fill-black-500 animate-spin" />}
-                            onActionClick={() => handleDeleteKelas(item.id)}
-                            isActionDisabled={isPending}
-                        />
-                    ))}
-                </div>
-            )}
+                ) : (
+                    <div className="flex flex-col gap-2 animate-fade-in">
+                        {data?.map((item) => (
+                            <DataCard
+                                key={item.id}
+                                text={item.name}
+                                actionIcon={!isPending ? <FaTrashAlt className="fill-red-500 hover:fill-red-800 group-hover:scale-110 transition-transform" /> : <FaCircleNotch className="fill-blue-500 animate-spin" />}
+                                onActionClick={() => handleDeleteKelas(item.id)}
+                                isActionDisabled={isPending}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
-        
+
     )
 }
 
