@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query"
-import { login } from "../services/auth.services"
+import { login } from "@/features/auth/services/auth.service";
+import { useBaseMutation } from "@/utils/mutationHelper"
 
 export const useLogin = () => {
-    return useMutation({
+    return useBaseMutation({
         mutationFn: login
     })
 }
