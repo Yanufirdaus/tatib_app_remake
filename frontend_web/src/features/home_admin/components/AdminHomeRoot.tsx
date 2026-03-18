@@ -1,16 +1,17 @@
 import HeroSection from "./HeroSection";
 import SemesterSection from "./SemesterSection";
 import MenuSection from "./MenuSection";
+import PageContainer from "@/components/ui/PageContainer";
 
 const AdminHomeRoot = () => {
     return (
-        <div className="flex flex-col md:flex-row min-h-screen w-full items-center justify-center">
+        <PageContainer className="md:flex-row md:justify-center">
             <MenuSection />
-            <div className="md:basis-4/5 flex flex-col flex-1 items-center justify-center gap-8">
+            <div className="md:basis-4/5 flex flex-col flex-1 items-center justify-center gap-8 px-6">
                 <HeroSection />
                 <SemesterSection />
             </div>
-        </div>
+        </PageContainer>
     )
 }
 
