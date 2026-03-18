@@ -1,8 +1,9 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { useAuthStore } from "../store/auth.store";
-import { ThreeDots } from 'react-loader-spinner';
+import { useAuthStore } from "@/store/auth.store";
+import ToastContainer from "@/components/ui/ToastContainer";
+import { ThreeDots } from "react-loader-spinner";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -12,6 +13,7 @@ const RootLayout = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-100 flex justify-center">
+      <ToastContainer />
 
       <div className="flex flex-col min-h-screen w-full bg-white">
         {!isLoginPage && (
