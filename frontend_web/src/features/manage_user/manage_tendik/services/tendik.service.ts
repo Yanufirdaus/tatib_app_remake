@@ -1,34 +1,36 @@
-import { apiClient } from "../../../../services/apiClient";
-import type { CreateTendikFormValues, UpdateTendikFormValues } from "../../schema/user.schema";
+import { apiClient } from "@/services/apiClient";
+import type { CreateTendikFormValues, UpdateTendikFormValues } from "@/features/manage_user/schemas/user.schema";
+import { handleApiError } from "@/utils/apiErrorHandler";
+import type { Tendik } from "@/types/models";
 
-export const getTendikByRole = async (role: string) => {
+export const getTendikByRole = async (role: string): Promise<Tendik[]> => {
     try {
-        const response = await apiClient.get(`/tendik/role/${role}`);
+        const response = await apiClient.get<Tendik[]>(`/tendik/role/${role}`);
         return response.data;
-    } catch (error: any) {
-        throw new Error(error.response?.data?.message || "gagal mendapatkan data tendik")
+    } catch (error: unknown) {
+        return handleApiError(error, "gagal mendapatkan data tendik");
     }
 }
 
-export const deleteTendik = async (id: number) => {
+export const deleteTendik = async (id: number): Promise<void> => {
     try {
         const response = await apiClient.delete(`/tendik/${id}`);
         return response.data;
-    } catch (error: any) {
-        throw new Error(error.response?.data?.message || "gagal menghapus data tendik")
+    } catch (error: unknown) {
+        return handleApiError(error, "gagal menghapus data tendik");
     }
 }
 
-export const updateTendik = async (id: number, data: UpdateTendikFormValues) => {
+export const updateTendik = async (id: number, data: UpdateTendikFormValues): Promise<void> => {
     try {
         const response = await apiClient.put(`/tendik/${id}`, data);
         return response.data;
-    } catch (error: any) {
-        throw new Error(error.response?.data?.message || "gagal memperbarui data tendik")
+    } catch (error: unknown) {
+        return handleApiError(error, "gagal memperbarui data tendik");
     }
 }
 
-export const addTendik = async (data: CreateTendikFormValues) => {
+export const addTendik = async (data: CreateTendikFormValues): Promise<void> => {
     try {
         const payload = {
             tendik: data.tendik.map((t) => ({
@@ -40,7 +42,7 @@ export const addTendik = async (data: CreateTendikFormValues) => {
 
         const response = await apiClient.post(`/register/tendik`, payload);
         return response.data;
-    } catch (error: any) {
-        throw new Error(error.response?.data?.message || "gagal menambahkan data tendik")
+    } catch (error: unknown) {
+        return handleApiError(error, "gagal menambahkan data tendik");
     }
 }
