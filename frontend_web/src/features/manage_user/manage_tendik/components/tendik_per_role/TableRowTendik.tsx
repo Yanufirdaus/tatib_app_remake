@@ -80,7 +80,7 @@ const TableRowTendik = ({
                     <Input
                         {...register("name")}
                         error={errors.name?.message}
-                        className="!py-1 text-sm"
+                        className="py-1! text-sm"
                     />
                 ) : (
                     <span className="font-medium text-slate-700">{t.profileSiswa.name.toUpperCase()}</span>
@@ -91,7 +91,7 @@ const TableRowTendik = ({
                     <Input
                         {...register("nip")}
                         error={errors.nip?.message}
-                        className="!py-1 text-sm"
+                        className="py-1! text-sm"
                     />
                 ) : (
                     <span className="text-slate-500 font-mono text-xs">{t.nip}</span>
@@ -103,7 +103,7 @@ const TableRowTendik = ({
                         <SelectOption
                             {...register("role")}
                             error={errors.role?.message}
-                            className="!py-1"
+                            className="py-1!"
                             selectOption={[
                                 { value: ROLES.ADMIN, label: "ADMIN" },
                                 { value: ROLES.KESISWAAN, label: "KESISWAAN" },

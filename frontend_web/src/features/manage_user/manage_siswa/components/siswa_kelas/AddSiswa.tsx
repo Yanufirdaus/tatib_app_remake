@@ -16,12 +16,12 @@ const AddSiswa = ({ setIsAddSiswa, kelasId }: { setIsAddSiswa: (value: boolean) 
     } = useAddSiswa(setIsAddSiswa, kelasId);
 
     return (
-        <form 
-            className="w-full flex justify-center py-6" 
+        <form
+            className="w-full flex justify-center py-6"
             onSubmit={handleSubmit(handleAddSiswa)}
         >
             <AnimatePresence>
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-2xl bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-sm overflow-hidden"
@@ -63,7 +63,7 @@ const AddSiswa = ({ setIsAddSiswa, kelasId }: { setIsAddSiswa: (value: boolean) 
                             onCancel={() => setIsAddSiswa(false)}
                             isPending={isPendingCreateManySiswa}
                             typeButton="submit"
-                            className="!py-0"
+                            className="py-0!"
                         />
                     </div>
                 </motion.div>

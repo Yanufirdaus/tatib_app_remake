@@ -31,12 +31,12 @@ const TambahPelanggaran = ({
     }
 
     return (
-        <form 
-            className="w-full flex justify-center py-6" 
+        <form
+            className="w-full flex justify-center py-6"
             onSubmit={handleSubmit(onSubmit)}
         >
             <AnimatePresence>
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-4xl bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-sm overflow-hidden"
@@ -56,7 +56,7 @@ const TambahPelanggaran = ({
 
                     <div className="flex flex-col gap-4">
                         {fields?.map((field, index) => (
-                            <motion.div 
+                            <motion.div
                                 key={field.id}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -67,7 +67,7 @@ const TambahPelanggaran = ({
                                         placeholder="01"
                                         {...register(`pelanggaran.${index}.nomor` as const)}
                                         error={errors?.pelanggaran?.[index]?.nomor?.message}
-                                        className="!py-2 text-sm text-center"
+                                        className="py-2! text-sm text-center"
                                     />
                                 </div>
                                 <div className="basis-5/12">
@@ -75,14 +75,14 @@ const TambahPelanggaran = ({
                                         placeholder="Contoh: Terlambat masuk sekolah"
                                         {...register(`pelanggaran.${index}.pelanggaran` as const)}
                                         error={errors?.pelanggaran?.[index]?.pelanggaran?.message}
-                                        className="!py-2 text-sm"
+                                        className="py-2! text-sm"
                                     />
                                 </div>
                                 <div className="basis-3/12">
                                     <SelectOption
                                         selectOption={options}
                                         {...register(`pelanggaran.${index}.jenisId` as const)}
-                                        className="!py-1"
+                                        className="py-1!"
                                     />
                                 </div>
                                 <div className="basis-1/12">
@@ -90,7 +90,7 @@ const TambahPelanggaran = ({
                                         placeholder="10"
                                         {...register(`pelanggaran.${index}.poin` as const)}
                                         error={errors?.pelanggaran?.[index]?.poin?.message}
-                                        className="!py-2 text-sm text-center"
+                                        className="py-2! text-sm text-center"
                                     />
                                 </div>
                                 <div className="basis-1/12 pt-2 flex justify-center">
@@ -113,7 +113,7 @@ const TambahPelanggaran = ({
                             onCancel={() => remove()}
                             isPending={isPending}
                             typeButton="submit"
-                            className="!py-0"
+                            className="py-0!"
                         />
                     </div>
                 </motion.div>

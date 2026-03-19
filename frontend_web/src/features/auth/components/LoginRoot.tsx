@@ -18,7 +18,7 @@ const LoginRoot = () => {
                     rotate: [0, -90, 0],
                 }}
                 transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                className="absolute -bottom-24 -right-24 w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"
+                className="absolute -bottom-24 -right-24 w-120 h-120 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"
             />
 
             <motion.div

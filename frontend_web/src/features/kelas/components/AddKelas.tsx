@@ -52,7 +52,7 @@ const AddKelas = ({
                                             {...register(`kelas.${index}.grade` as const)}
                                             placeholder="ex: 10"
                                             error={errors?.kelas?.[index]?.grade?.message}
-                                            className="!py-2.5 text-sm"
+                                            className="py-2.5! text-sm"
                                         />
                                     </div>
                                     <div className="basis-2/3">
@@ -60,7 +60,7 @@ const AddKelas = ({
                                             {...register(`kelas.${index}.name` as const)}
                                             placeholder="ex: XI SAINKES 1"
                                             error={errors?.kelas?.[index]?.name?.message}
-                                            className="!py-2.5 text-sm"
+                                            className="py-2.5! text-sm"
                                         />
                                     </div>
                                 </motion.div>
@@ -74,7 +74,7 @@ const AddKelas = ({
                                 submitText="Simpan Batch"
                                 loadingText="Menyimpan..."
                                 typeButton="submit"
-                                className="!py-0"
+                                className="py-0!"
                             />
                         </div>
                     </motion.div>

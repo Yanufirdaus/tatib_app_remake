@@ -52,7 +52,7 @@ const ListPelanggaran = ({ isLoadingPelanggaran, pelanggaran }: ListPelanggaranC
                             <thead className={TABLE_CLASSES.THEAD}>
                                 <tr>
                                     <th className={TABLE_CLASSES.TH}>No</th>
-                                    <th className={`${TABLE_CLASSES.TH} !text-left`}>Pelanggaran</th>
+                                    <th className={`${TABLE_CLASSES.TH} text-left!`}>Pelanggaran</th>
                                     <th className={TABLE_CLASSES.TH}>Poin</th>
                                     <th className={TABLE_CLASSES.TH}>{editId ? "Simpan" : "Edit"}</th>
                                     <th className={TABLE_CLASSES.TH}>{editId ? "Batal" : "Hapus"}</th>

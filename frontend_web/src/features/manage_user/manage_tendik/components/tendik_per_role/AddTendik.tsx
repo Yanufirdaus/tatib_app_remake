@@ -29,7 +29,7 @@ const AddTendikForm = ({
     if (fields.length === 0) return null;
 
     return (
-        <form 
+        <form
             className="w-full flex justify-center py-6"
             onSubmit={(e) => {
                 e.preventDefault();
@@ -37,7 +37,7 @@ const AddTendikForm = ({
             }}
         >
             <AnimatePresence>
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-4xl bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-sm overflow-hidden"
@@ -56,7 +56,7 @@ const AddTendikForm = ({
 
                     <div className="flex flex-col gap-4">
                         {fields.map((field, index) => (
-                            <motion.div 
+                            <motion.div
                                 key={field.id}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -67,7 +67,7 @@ const AddTendikForm = ({
                                         placeholder="Masukkan Nama"
                                         {...registerAdd(`tendik.${index}.name`)}
                                         error={errorAdd.tendik?.[index]?.name?.message}
-                                        className="!py-2 text-sm"
+                                        className="py-2! text-sm"
                                     />
                                 </div>
                                 <div className="basis-3/12">
@@ -75,14 +75,14 @@ const AddTendikForm = ({
                                         placeholder="Masukkan NIP"
                                         {...registerAdd(`tendik.${index}.nip`)}
                                         error={errorAdd.tendik?.[index]?.nip?.message}
-                                        className="!py-2 text-sm"
+                                        className="py-2! text-sm"
                                     />
                                 </div>
                                 <div className="basis-3/12">
                                     <Input
                                         {...registerAdd(`tendik.${index}.role`)}
                                         error={errorAdd.tendik?.[index]?.role?.message}
-                                        className="!py-2 text-sm bg-slate-100 !border-slate-300 font-bold text-slate-500"
+                                        className="py-2! text-sm bg-slate-100 border-slate-300! font-bold text-slate-500"
                                         readOnly
                                     />
                                 </div>
@@ -106,7 +106,7 @@ const AddTendikForm = ({
                             onCancel={() => reset()}
                             isPending={isPendingAddTendik}
                             typeButton="submit"
-                            className="!py-0"
+                            className="py-0!"
                         />
                     </div>
                 </motion.div>

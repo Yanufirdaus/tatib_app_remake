@@ -60,13 +60,13 @@ const BodyTable = (
                     <td className={TABLE_CLASSES.TD + " text-center"}>
                         {data.nomor}
                     </td>
-                    <td className={`${TABLE_CLASSES.TD} !text-left !whitespace-normal min-w-[300px]`}>
+                    <td className={`${TABLE_CLASSES.TD} text-left! whitespace-normal! min-w-[300px]`}>
                         {editId === data.id ? (
                             <Input
                                 {...register("pelanggaran")}
                                 defaultValue={data.pelanggaran}
                                 error={errors?.pelanggaran?.message}
-                                className="!py-1.5 text-sm"
+                                className="py-1.5! text-sm"
                             />
                         ) : (
                             <span className="text-slate-700 font-medium">{data.pelanggaran}</span>
@@ -78,7 +78,7 @@ const BodyTable = (
                                 {...register("poin")}
                                 defaultValue={String(data.poin)}
                                 error={errors?.poin?.message}
-                                className="!py-1.5 text-sm w-20 mx-auto"
+                                className="py-1.5! text-sm w-20 mx-auto"
                             />
                         ) : (
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">

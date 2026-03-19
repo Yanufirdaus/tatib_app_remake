@@ -75,7 +75,7 @@ const SiswaRow = ({
                         {...register("name")}
                         defaultValue={s.profileSiswa.name}
                         error={errors?.name?.message}
-                        className="!py-1 text-sm"
+                        className="py-1! text-sm"
                     />
                 ) : (
                     <span className="font-medium text-slate-700 text-start">{s.profileSiswa.name.toUpperCase()}</span>
@@ -87,7 +87,7 @@ const SiswaRow = ({
                         {...register("nisn")}
                         defaultValue={s.nisn}
                         error={errors?.nisn?.message}
-                        className="!py-1 text-sm"
+                        className="py-1! text-sm"
                     />
                 ) : (
                     <span className="text-slate-500 font-mono text-xs">{s.nisn}</span>
@@ -99,7 +99,7 @@ const SiswaRow = ({
                         selectOption={isLoadingKelas ? [] : options}
                         defaultValue={String(s.kelasId)}
                         {...register("kelasId")}
-                        className="!py-1"
+                        className="py-1!"
                     />
                 ) : (
                     fields.length > 0 ? (
@@ -113,7 +113,7 @@ const SiswaRow = ({
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
                                     ref={field.ref}
-                                    className="!py-1"
+                                    className="py-1!"
                                 />
                             )}
                         />

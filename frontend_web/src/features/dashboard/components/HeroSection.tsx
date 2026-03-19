@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <div className="relative overflow-hidden w-full flex flex-col md:flex-row items-center px-8 py-12 md:px-16 md:py-24 bg-gradient-to-br from-teal-400 to-teal-600 shadow-2xl shadow-teal-500/20">
+    <div className="relative overflow-hidden w-full flex flex-col md:flex-row items-center px-8 py-12 md:px-16 md:py-24 bg-linear-to-br from-teal-400 to-teal-600 shadow-2xl shadow-teal-500/20">
 
       {/* Decorative Blur Background */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-white/10 blur-3xl rounded-full" />
@@ -34,7 +34,7 @@ const HeroSection = () => {
         className="relative z-10 flex-1 flex justify-center"
       >
         <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-teal-300 to-white/30 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
+          <div className="absolute -inset-1 bg-linear-to-r from-teal-300 to-white/30 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
           <img
             src={dashboardImg}
             alt="Tatib Apps Dashboard Preview"
