@@ -3,7 +3,7 @@ export const ROLES = {
   KESISWAAN: "kesiswaan",
   BK: "bk",
   KEPSEK: "kepsek",
-  SISWA: "siswa", // Tambahan untuk mobile
+  SISWA: "siswa",
 } as const;
 
 export type UserRole = typeof ROLES[keyof typeof ROLES];
