@@ -81,7 +81,7 @@ const LoginForm = () => {
 
                 <button
                     type="submit"
-                    className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold text-sm tracking-widest uppercase shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="w-full mt-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold text-sm tracking-widest uppercase shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                     disabled={isPending}
                 >
                     {isPending ? (
