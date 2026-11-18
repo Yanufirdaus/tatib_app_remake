@@ -39,7 +39,9 @@ class AppRouter {
             state.matchedLocation == AppRoutes.register;
 
         // Not authenticated → force login (unless already heading there or example page).
-        if (!isLoggedIn && !loggingIn && state.matchedLocation != AppRoutes.example) {
+        if (!isLoggedIn &&
+            !loggingIn &&
+            state.matchedLocation != AppRoutes.example) {
           return AppRoutes.login;
         }
 
