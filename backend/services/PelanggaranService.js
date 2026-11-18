@@ -1,0 +1,56 @@
+import { prisma } from "../lib/prisma";
+import { AppError } from "../utils/AppError";
+export class PelanggaranService {
+    static async addPelanggaran(pelanggaran) {
+        const newPelanggaran = await prisma.pelanggaran.createMany({
+            data: pelanggaran.map(item => ({
+                jenisId: item.jenisId,
+                pelanggaran: item.pelanggaran,
+                poin: item.poin,
+                nomor: item.nomor
+            })),
+        });
+        return newPelanggaran;
+    }
+    static async getAllJenisPelanggaran() {
+        const jenisPelanggaran = await prisma.jenisPelanggaran.findMany({
+            orderBy: [
+                { id: "asc" },
+            ]
+        });
+        return jenisPelanggaran;
+    }
+    static async getPelanggaranByJenisId(jenisId) {
+        const pelanggaran = await prisma.pelanggaran.findMany({
+            where: { jenisId: jenisId },
+            orderBy: [
+                { nomor: "asc" }
+            ]
+        });
+        return pelanggaran;
+    }
+    static async updatePelanggaran(id, data) {
+        const pelanggaran = await prisma.pelanggaran.findUnique({ where: { id } });
+        if (!pelanggaran) {
+            throw new AppError("Pelanggaran not found", 404);
+        }
+        const updatedPelanggaran = await prisma.pelanggaran.update({
+            where: { id: id },
+            data: {
+                pelanggaran: data.pelanggaran,
+                poin: data.poin,
+            },
+        });
+        return updatedPelanggaran;
+    }
+    static async deletePelanggaran(id) {
+        const pelanggaran = await prisma.pelanggaran.findUnique({ where: { id } });
+        if (!pelanggaran) {
+            throw new AppError("Pelanggaran not found", 404);
+        }
+        const deletedPelanggaran = await prisma.pelanggaran.delete({
+            where: { id: id },
+        });
+        return deletedPelanggaran;
+    }
+}
