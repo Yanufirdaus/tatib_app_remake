@@ -1,6 +1,7 @@
 # 📱 Flutter Project Architecture
 ## APPS TEMPLATE WITH PROVIDER STATE MANAGEMENT
 
+> **Disclaimer**: This is AI Generated Template for developer to learn how to build apps with clean architecture
 > **Stack**: Flutter 3.16.5 · Provider 6.1.5 · flutter_screenutil 5.9.3 · google_fonts 6.2.0 · Dio 5.x · flutter_dotenv 5.1.0 · GoRouter 12.x · SharedPreferences 2.x · Sqflite 2.x · GetIt 7.x · Mockito 5.x
 > **Pattern**: Feature-first + Provider state management + ScreenUtil responsive sizing + Service Locator (GetIt)
 
