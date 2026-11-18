@@ -254,7 +254,7 @@ Semua API call di provider harus melalui service ini.
 
 **Konfigurasi `.env`:**
 ```env
-API_BASE_URL=http://localhost:3001/
+API_BASE_URL=type_your_base_url
 ```
 
 > ⚠️ File `.env` harus didaftarkan di `pubspec.yaml` → `flutter.assets` agar bisa dibaca oleh `flutter_dotenv`.
