@@ -105,6 +105,7 @@ export class UserService {
         if (!tendik) {
             throw new AppError("Tendik not found", 404);
         }
+        const hashedPassword = await hashPassword(String(data.nip));
 
         const updatedTendik = await prisma.tendik.update({
             where: { id: id },
@@ -114,7 +115,7 @@ export class UserService {
                     update: {
                         name: data.name.toLowerCase(),
                         role: data.role.toLowerCase(),
-                        password: data.nip
+                        password: hashedPassword,
                     },
                 },
             },
@@ -184,4 +185,4 @@ export class UserService {
             return { deletedTendik, deletedProfile };
         });
     }
-}
+}
