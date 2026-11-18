@@ -17,13 +17,17 @@ cloudinary.config({
   api_secret: appConfig.cloudinary.apiSecret
 });
 
+const originsList = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) 
+  : [];
+
 const app = express()
 
 app.use(express.json())
 app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || appConfig.allowedOrigins.includes(origin)) {
+    if (!origin || originsList.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
